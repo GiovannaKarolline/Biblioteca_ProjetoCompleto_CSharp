@@ -1,0 +1,10 @@
+﻿@model HomeViewModel
+
+<section>
+    <div class="row">
+        @if(Model.ObrasLiterarias is not null)
+        {
+            <partial name="_HomePartial" model="@Model.ObrasLiterarias" />
+        }
+    </div>
+</section>
