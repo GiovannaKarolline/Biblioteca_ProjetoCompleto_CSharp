@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Administração";
+}
+
+<h2>O que você deseja deletar?</h2>
+<hr />
+
+<h4>Registros disponíveis</h4>
+
+<ul>
+    <li>
+        <a asp-controller="Autor" asp-action="DeletarAutor">Autor</a>
+    </li>
+
+    <li>
+        <a asp-controller="Categoria" asp-action="DeletarCategoria">Categoria</a>
+    </li>
+
+    <li>
+        <a asp-controller="Copia" asp-action="DeletarCopia">Cópia</a>
+    </li>
+
+    <li>
+        <a asp-controller="Editora" asp-action="DeletarEditora">Editora</a>
+    </li>
+
+    <li>
+        <a asp-controller="Emprestimo" asp-action="DeletarEmprestimo">Empréstimo</a>
+    </li>
+
+    <li>
+        <a asp-controller="Endereco" asp-action="DeletarEndereço">Endereço</a>
+    </li>
+
+    <li>
+        <a asp-controller="ObraLiteraria" asp-action="DeletarObra">Obra literária</a>
+    </li>
+
+    <li>
+        <a asp-controller="Usuario" asp-action="DeletarUsuario">Usuário</a>
+    </li>
+</ul>
+
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Index">Voltar</a>

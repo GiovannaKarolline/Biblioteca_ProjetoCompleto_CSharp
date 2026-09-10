@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Object>
+
+<h2>Lista de registros do tipo @Model.FirstOrDefault().GetType().Name</h2>
+
+@foreach(Object item in Model)
+{
+    <div>
+         <h4 style="white-space: pre-line;">@item.ToString()</h4>
+    </div>
+}

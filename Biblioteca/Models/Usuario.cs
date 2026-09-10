@@ -36,5 +36,17 @@ namespace Biblioteca.Models
         public bool Deletado { get; set; } = false;
 
         public List<Emprestimo>? Emprestimos { get; set; }
+
+        public override string ToString()
+        {
+            return $"\nUsuário" +
+                $"\nId: {Id.ToString()}" +
+                $"\nNome de usuário: {UserName}" +
+                $"\nE-mail: {Email}" +
+                $"\nSenha: {Senha}" +
+                $"\nNúmero de Telefone: {PhoneNumber}" +
+                $"\nCargo: {Cargo.ToString()}" +
+                $"\nData de Nascimento: {DataNascimento.ToString()}\n";
+        }
     }
 }

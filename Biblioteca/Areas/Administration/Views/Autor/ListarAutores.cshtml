@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Autor>
+
+@{
+    ViewData["Title"] = "Listar autores";
+}
+
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Listar">Voltar</a>
+<br />
+
+<partial name="_ListarPartial" model="@Model"></partial>

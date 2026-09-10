@@ -16,5 +16,7 @@ namespace Biblioteca.Services.Interfaces
         public Task<Emprestimo> DeletarEmprestimo(Guid id);
 
         public Task<Emprestimo> AtualizarEmprestimo(Guid id, EmprestimoViewModel emprestimo);
+
+        public Task<Emprestimo> AdicionarCopia(Guid idCopia, Guid idEmprestimo);
     }
 }

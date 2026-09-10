@@ -1,0 +1,33 @@
+﻿@model EmprestimoViewModel
+
+@{
+    ViewData["Title"] = "Emprestimo";
+}
+
+<a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Voltar</a>
+
+<h2>Empréstimo</h2>
+<hr />
+
+<div class="container">
+    <form asp-controller="Emprestimo" asp-action="Index" method="post" role="form">
+
+        @if (Model.Copias is not null)
+        {
+            <partial name="_EmprestimoPartial" model="@Model.Copias" />
+
+            <div class="form-group">
+                <input type="submit" placeholder="Finalizar empréstimo" />
+            </div>
+        }
+        else
+        {
+            <h3>Você ainda não selecionou nenhum livro.</h3>
+        }
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Administração";
+}
+
+<h2>O que você deseja listar?</h2>
+<hr />
+
+<h4>Registros disponíveis</h4>
+
+<ul>
+    <li>
+        <a asp-controller="Autor" asp-action="ListarAutores">Autores</a>
+    </li>
+
+    <li>
+        <a asp-controller="Categoria" asp-action="ListarCategorias">Categorias</a>
+    </li>
+
+    <li>
+        <a asp-controller="Copia" asp-action="ListarCopias">Cópias</a>
+    </li>
+
+    <li>
+        <a asp-controller="Editora" asp-action="ListarEditoras">Editoras</a>
+    </li>
+
+    <li>
+        <a asp-controller="Emprestimo" asp-action="ListarEmprestimos">Empréstimos</a>
+    </li>
+
+    <li>
+        <a asp-controller="Endereco" asp-action="ListarEndereços">Endereços</a>
+    </li>
+
+    <li>
+        <a asp-controller="ObraLiteraria" asp-action="ListarObras">Obras literárias</a>
+    </li>
+
+    <li>
+        <a asp-controller="Usuario" asp-action="ListarUsuarios">Usuários</a>
+    </li>
+</ul>
+
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Index">Voltar</a>

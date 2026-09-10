@@ -18,7 +18,9 @@ namespace Biblioteca.ViewModels
         [DataType(DataType.Date)]
         public DateOnly DataPrevistaDevolucao { get; set; }
 
+        public Boolean Finalizado { get; set; } = false;
+
         [Required]
-        public List<Guid> Copias { get; set; }
+        public List<Copia> Copias { get; set; }
     }
 }

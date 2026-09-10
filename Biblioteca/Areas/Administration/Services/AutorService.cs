@@ -1,10 +1,10 @@
 ﻿using Biblioteca.Models;
 using Biblioteca.Repositories.Interfaces;
-using Biblioteca.Services.Interfaces;
-using Biblioteca.ViewModels;
+using Biblioteca.Areas.Administration.Services.Interfaces;
+using Biblioteca.Areas.Administration.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace Biblioteca.Services
+namespace Biblioteca.Areas.Administration.Services
 {
     public class AutorService : IAutorService
     {
@@ -15,11 +15,11 @@ namespace Biblioteca.Services
             _autorRepository = autorRepository;
         }
 
-        public async Task<Autor> AtualizarAutor(Guid id, AutorViewModel autorViewModel)
+        public async Task<Autor> AtualizarAutor(Guid id, AtualizarAutorViewModel autorViewModel)
         {
             var autor = await _autorRepository.GetAutorById(id);
 
-            if(autor is not null)
+            if (autor is not null)
             {
                 autor.PrimeiroNome = autorViewModel.PrimeiroNome;
                 autor.Sobrenome = autorViewModel.Sobrenome;
@@ -38,7 +38,7 @@ namespace Biblioteca.Services
                 Sobrenome = autorViewModel.Sobrenome
             };
 
-            if(novoAutor is not null)
+            if (novoAutor is not null)
             {
                 await _autorRepository.CriarAutor(novoAutor);
                 return await Task.FromResult(novoAutor);
@@ -60,14 +60,14 @@ namespace Biblioteca.Services
                 throw new ArgumentNullException("O autor não pôde ser deletado porque ele já não existe no banco de dados.");
             }
 
-            return await Task.FromResult(autor); 
+            return await Task.FromResult(autor);
         }
 
         public async Task<Autor> GetAutorById(Guid id)
         {
             Autor? autor = (await _autorRepository.GetAutorById(id));
 
-            if(autor is null || autor.Deletado == true)
+            if (autor is null || autor.Deletado == true)
             {
                 throw new ArgumentException("Não existe um autor com este Id.");
             }

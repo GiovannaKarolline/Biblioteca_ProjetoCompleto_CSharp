@@ -16,5 +16,7 @@ namespace Biblioteca.Services.Interfaces
         public Task<Copia> AtualizarCopia(Guid id, CopiaViewModel copia);
 
         public Task<Copia?> DeletarCopia(Guid id);
+
+        public Task<Copia> EmprestarCopia(Guid id);
     }
 }

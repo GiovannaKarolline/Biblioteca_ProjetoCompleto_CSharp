@@ -1,7 +1,7 @@
 ﻿using Biblioteca.Models;
-using Biblioteca.ViewModels;
+using Biblioteca.Areas.Administration.ViewModels;
 
-namespace Biblioteca.Services.Interfaces
+namespace Biblioteca.Areas.Administration.Services.Interfaces
 {
     public interface ICategoriaService
     {
@@ -11,7 +11,7 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<Categoria> CriarCategoria(CategoriaViewModel categoria);
 
-        public Task<Categoria> AtualizarCategoria(Guid id,  CategoriaViewModel categoria);
+        public Task<Categoria> AtualizarCategoria(Guid id, CategoriaViewModel categoria);
 
         public Task<Categoria?> DeletarCategoria(Guid id);
     }

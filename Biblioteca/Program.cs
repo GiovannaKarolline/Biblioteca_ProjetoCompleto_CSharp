@@ -1,3 +1,5 @@
+using Biblioteca.Areas.Administration.Services;
+using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Context;
 using Biblioteca.Models;
 using Biblioteca.Repositories;
@@ -30,8 +32,8 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IObraLiterariaService, ObraLiterariaService>();
 builder.Services.AddScoped<IAutorService, AutorService>();
-builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-builder.Services.AddScoped<IEditoraService, EditoraService>();
+//builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+//builder.Services.AddScoped<IEditoraService, EditoraService>();
 builder.Services.AddScoped<IEmprestimoService, EmprestimoService>();
 builder.Services.AddScoped<ICopiaService, CopiaService>();
 
@@ -66,6 +68,10 @@ app.UseAuthorization();
 //        pattern:"{controller=Home}/{action=Index}/{id?}"
 //    );
 //});
+
+app.MapControllerRoute(
+    name: "administration",
+    pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

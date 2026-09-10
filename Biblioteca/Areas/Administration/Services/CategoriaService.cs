@@ -1,11 +1,11 @@
 ﻿using Biblioteca.Context;
 using Biblioteca.Models;
 using Biblioteca.Repositories.Interfaces;
-using Biblioteca.Services.Interfaces;
-using Biblioteca.ViewModels;
+using Biblioteca.Areas.Administration.Services.Interfaces;
+using Biblioteca.Areas.Administration.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace Biblioteca.Services
+namespace Biblioteca.Areas.Administration.Services
 {
     public class CategoriaService : ICategoriaService
     {
@@ -17,7 +17,7 @@ namespace Biblioteca.Services
 
         public Task<Categoria> AtualizarCategoria(Guid id, CategoriaViewModel categoria)
         {
-            if(_categoriaRepository.GetCategoriaById(id) is not null)
+            if (_categoriaRepository.GetCategoriaById(id) is not null)
             {
                 Categoria categoriaAtualizada = new Categoria()
                 {
@@ -38,7 +38,7 @@ namespace Biblioteca.Services
                 Titulo = categoria.Titulo
             };
 
-            if(novaCategoria is not null)
+            if (novaCategoria is not null)
             {
                 _categoriaRepository.CriarCategoria(novaCategoria);
             }

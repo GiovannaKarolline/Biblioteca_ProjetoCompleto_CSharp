@@ -78,6 +78,14 @@ namespace Biblioteca.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8917733f-fe33-4f30-a0da-b96f13604a11"),
+                            Deletado = false,
+                            Titulo = "Terror"
+                        });
                 });
 
             modelBuilder.Entity("Biblioteca.Models.Copia", b =>
@@ -119,6 +127,14 @@ namespace Biblioteca.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Editoras");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b366f588-1a07-4c76-9637-48c9a718a2b4"),
+                            Deletado = false,
+                            Nome = "Saraiva"
+                        });
                 });
 
             modelBuilder.Entity("Biblioteca.Models.Emprestimo", b =>
@@ -137,6 +153,9 @@ namespace Biblioteca.Migrations
                         .HasColumnType("date");
 
                     b.Property<bool>("Deletado")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Finalizado")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("UsuarioId")
@@ -212,8 +231,9 @@ namespace Biblioteca.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ISBN")
-                        .HasColumnType("int");
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
@@ -227,6 +247,19 @@ namespace Biblioteca.Migrations
                     b.HasIndex("EditoraId");
 
                     b.ToTable("ObrasLiterarias");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4ff24196-23a0-4a3e-bf02-19c696de6d72"),
+                            AnoPublicacao = 2015,
+                            CategoriaId = new Guid("8917733f-fe33-4f30-a0da-b96f13604a11"),
+                            Deletado = false,
+                            EditoraId = new Guid("b366f588-1a07-4c76-9637-48c9a718a2b4"),
+                            FotoCapa = "https://static.skeelo.com/remote/320/480/100/https://skoob.s3.amazonaws.com/livros/122469134/APRENDA_INGLES_SOZINHO_COM_CON_1719414152122469134SK-V11719414153B.jpg",
+                            ISBN = "B09KNNYS6M",
+                            Titulo = "Aprenda Inglês Sozinho Com Contos de Terror"
+                        });
                 });
 
             modelBuilder.Entity("CopiaEmprestimo", b =>

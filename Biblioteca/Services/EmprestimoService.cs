@@ -8,11 +8,11 @@ namespace Biblioteca.Services
     public class EmprestimoService : IEmprestimoService
     {
         private readonly IEmprestimoRepository _emprestimoRepository;
-        private readonly ICopiaRepository _copiaRepository;
-        public EmprestimoService(IEmprestimoRepository emprestimoRepository, ICopiaRepository copiaRepository)
+        private readonly ICopiaService _copiaService;
+        public EmprestimoService(IEmprestimoRepository emprestimoRepository, ICopiaService copiaService)
         {
             _emprestimoRepository = emprestimoRepository;
-            _copiaRepository = copiaRepository;
+            _copiaService = copiaService;
         }
 
         public async Task<Emprestimo> AtualizarEmprestimo(Guid id, EmprestimoViewModel emprestimo)
@@ -26,9 +26,9 @@ namespace Biblioteca.Services
                 emprestimoRegistrado.DataPrevistaDevolucao = emprestimo.DataDevolucao;
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
                 
-                foreach(Guid id_copia in emprestimo.Copias)
+                foreach(Copia copia in emprestimo.Copias)
                 {
-                    emprestimoRegistrado.Copias.Add(await _copiaRepository.GetCopiaById(id_copia));
+                    emprestimoRegistrado.Copias.Add(await _copiaService.GetCopiaById(copia.Id));
                 }
 
                 await _emprestimoRepository.AtualizarEmprestimo(emprestimoRegistrado);
@@ -46,12 +46,13 @@ namespace Biblioteca.Services
                 UsuarioId = emprestimo.UsuarioId,
                 DataDevolucao = emprestimo.DataDevolucao,
                 DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao,
-                DataRetirada = emprestimo.DataRetirada
+                DataRetirada = emprestimo.DataRetirada,
+                Finalizado = false
             };
 
-            foreach(Guid id in emprestimo.Copias)
+            foreach(Copia copia in emprestimo.Copias)
             {
-                novoEmprestimo.Copias.Add(await _copiaRepository.GetCopiaById(id));
+                novoEmprestimo.Copias.Add(copia);
             }
 
             if(novoEmprestimo is not null)
@@ -108,5 +109,22 @@ namespace Biblioteca.Services
 
             return emprestimos;
         }
+
+        public async Task<Emprestimo> AdicionarCopia(Guid idCopia, Guid idEmprestimo)
+        {
+            Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
+
+            if(emprestimo is not null)
+            {
+                emprestimo.Copias.Add(await _copiaService.GetCopiaById(idCopia));
+
+                await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
+
+                return emprestimo;
+            }
+
+            throw new ArgumentException("Não existe um empréstimo com este Id no banco de dados.");
+        }
+
     }
 }

@@ -1,0 +1,48 @@
+﻿@model AutorViewModel
+
+@{
+    ViewData["Titulo"] = "Criar autor";
+}
+
+<h2>Criar autor</h2>
+<hr />
+
+<div class="container">
+
+    @if(ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    <form asp-controller="Autor" asp-action="CriarAutor" method="post" role="form">
+        <div class="form-group">
+            <label asp-for="PrimeiroNome">Primeiro nome do autor</label>
+            <input type="text" placeholder="Primeiro nome" asp-for="PrimeiroNome" />
+            <span asp-validation-for="PrimeiroNome"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Sobrenome">Sobrenome do autor</label>
+            <input type="text" placeholder="Sobrenome" asp-for="Sobrenome" />
+            <span asp-validation-for="Sobrenome"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" placeholder="Criar" />
+        </div>
+    </form>
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

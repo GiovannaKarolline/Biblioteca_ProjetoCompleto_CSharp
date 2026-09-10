@@ -1,7 +1,7 @@
 ﻿using Biblioteca.Models;
-using Biblioteca.ViewModels;
+using Biblioteca.Areas.Administration.ViewModels;
 
-namespace Biblioteca.Services.Interfaces
+namespace Biblioteca.Areas.Administration.Services.Interfaces
 {
     public interface IAutorService
     {
@@ -9,7 +9,7 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<Autor> DeletarAutor(Guid id);
 
-        public Task<Autor> AtualizarAutor(Guid id, AutorViewModel autorViewModel);
+        public Task<Autor> AtualizarAutor(Guid id, AtualizarAutorViewModel autorViewModel);
 
         public Task<IEnumerable<Autor>> GetAutores();
         public Task<Autor> GetAutorById(Guid id);

@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Administração";
+}
+
+<h2>Bem-vindo(a), Administrador(a) @User.Identity.Name</h2>
+<hr />
+
+<h4>O que você deseja fazer?</h4>
+
+<a asp-controller="Home" asp-action="Listar">Listar</a>
+
+<a asp-controller="Home" asp-action="Criar">Criar</a>
+
+<a asp-controller="Home" asp-action="Atualizar">Atualizar</a>
+
+<a asp-controller="Home" asp-action="Deletar">Deletar</a>

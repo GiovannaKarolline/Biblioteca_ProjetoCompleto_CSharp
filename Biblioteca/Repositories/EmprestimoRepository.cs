@@ -15,12 +15,12 @@ namespace Biblioteca.Repositories
             _context = context;
         }
 
-        public async Task<Emprestimo> AtualizarEmprestimo(Emprestimo emprestimo)
+        public Task<Emprestimo> AtualizarEmprestimo(Emprestimo emprestimo)
         {
             _context.Emprestimos.Update(emprestimo);
             _context.SaveChanges();
 
-            return emprestimo;
+            return Task.FromResult(emprestimo);
         }
 
         public Task<Emprestimo> CriarEmprestimo(Emprestimo emprestimo)

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Administração";
+}
+
+<h2>O que você deseja criar?</h2>
+<hr />
+
+<h4>Tipos disponíveis</h4>
+
+<ul>
+    <li>
+        <a asp-controller="Autor" asp-action="CriarAutor">Autor</a>
+    </li>
+
+    <li>
+        <a asp-controller="Categoria" asp-action="CriarCategoria">Categoria</a>
+    </li>
+
+    <li>
+        <a asp-controller="Copia" asp-action="CriarCopia">Cópia</a>
+    </li>
+
+    <li>
+        <a asp-controller="Editora" asp-action="CriarEditora">Editora</a>
+    </li>
+
+    <li>
+        <a asp-controller="Emprestimo" asp-action="CriarEmprestimo">Empréstimo</a>
+    </li>
+
+    <li>
+        <a asp-controller="Endereco" asp-action="CriarEndereço">Endereço</a>
+    </li>
+
+    <li>
+        <a asp-controller="ObraLiteraria" asp-action="CriarObra">Obra literária</a>
+    </li>
+
+    <li>
+        <a asp-controller="Usuario" asp-action="CriarUsuario">Usuário</a>
+    </li>
+</ul>
+
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Index">Voltar</a>

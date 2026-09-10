@@ -2,12 +2,20 @@
 
 @foreach(ObraLiteraria obra in Model)
 {
-    <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="@obra.FotoCapa" alt="Capa do livro">
-        <div class="card-body">
-            <h5 class="card-title">@obra.Titulo</h5>
-            <p class="card-text">@obra.Editora.Nome</p>
-            <a href="#" class="btn btn-primary">Pegar emprestado</a>
+    @if(obra.Copias?.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null)
+    {
+        <div class="card" style="width: 18rem;">
+
+            <img class="card-img-top" src="@obra.FotoCapa" alt="Capa do livro">
+
+            <div class="card-body">
+                <h5 class="card-title">@obra.Titulo</h5>
+                <p class="card-text">@obra.Editora.Nome</p>
+                <a class="btn btn-primary" asp-controller="Emprestimo" 
+                asp-action="AdicionarAoEmprestimo" asp-route-id="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id">Pegar emprestado</a>
+            </div>
+
         </div>
-    </div>
+    }
+    
 }

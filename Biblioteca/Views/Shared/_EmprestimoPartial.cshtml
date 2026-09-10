@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Copia>
+
+@foreach(Copia copia in Model)
+{
+    <fieldset>
+        <div class="form-group">
+            <img src="@copia.ObraLiteraria.FotoCapa"/>
+            <label >@copia.ObraLiteraria.Titulo</label>
+            <input type="button" placeholder="Remover" />
+        </div>
+    </fieldset>
+}

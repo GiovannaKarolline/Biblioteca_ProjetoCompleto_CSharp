@@ -22,5 +22,13 @@ namespace Biblioteca.Models
         public bool Deletado { get; set; } = false;
 
         public List<Emprestimo> Emprestimos { get; set; } = new List<Emprestimo>();
+
+        public override string ToString()
+        {
+            return $"\nCópia" +
+                $"\nId: {Id.ToString()}" +
+                $"\nId da Obra Referenciada: {ObraId.ToString()}" +
+                $"\nStatus de Disponibilidade (verdadeiro = disponível): {StatusDisponibilidade.ToString()}\n";
+        }
     }
 }

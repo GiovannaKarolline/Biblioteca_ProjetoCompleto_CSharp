@@ -48,5 +48,17 @@ namespace Biblioteca.Models
                     $"O ano deve estar entre 698 e {DateTime.Now.Year}.",
                     new[] { nameof(AnoPublicacao) });
         }
+
+        public override string ToString()
+        {
+            return $"\nObra Literária" +
+                $"\nId: {Id.ToString()}" +
+                $"\nTítulo: {Titulo}" +
+                $"\nFoto da Capa: {FotoCapa}" +
+                $"\nISBN: {ISBN}" +
+                $"\nAno de Publicação: {AnoPublicacao}" +
+                $"\nId da Editora: {EditoraId.ToString()}" +
+                $"\nId da Categoria: {CategoriaId.ToString()}\n";
+        }
     }
 }

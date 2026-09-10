@@ -16,7 +16,7 @@ namespace Biblioteca.Repositories
 
         public async Task<IEnumerable<ObraLiteraria>> GetObras()
         {
-            return await _context.ObrasLiterarias.ToListAsync();
+            return await _context.ObrasLiterarias.Include(obra => obra.Categoria).Include(obra => obra.Editora).ToListAsync();
         }
 
         public async Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByNome(string nome)

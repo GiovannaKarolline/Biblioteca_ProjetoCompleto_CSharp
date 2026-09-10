@@ -34,5 +34,16 @@ namespace Biblioteca.Models
 
         [Required]
         public Guid UsuarioId { get; set; }
+
+        public override string ToString()
+        {
+            return $"\nEndereço" +
+                $"\nId: {Id}" +
+                $"\nId do Usuário: {UsuarioId}" +
+                $"\nLogradouro: {TipoLogradouro.ToString() + " " +Logradouro}" +
+                $"\nNúmero: {Numero}" +
+                $"\nCEP: {Cep}" +
+                $"\nComplemento: {Complemento}\n";
+        }
     }
 }

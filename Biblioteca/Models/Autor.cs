@@ -24,5 +24,11 @@ namespace Biblioteca.Models
 
         public List<ObraLiteraria> ObrasLiterarias = new List<ObraLiteraria>();
 
+        public override string ToString()
+        {
+            return $"\nAutor" +
+                $"\nId do autor: {Id.ToString()}" +
+                $"\nNome do autor: {PrimeiroNome + " " + Sobrenome}\n";
+        }
     }
 }

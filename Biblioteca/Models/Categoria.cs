@@ -18,5 +18,12 @@ namespace Biblioteca.Models
         public bool Deletado { get; set; } = false;
 
         public List<ObraLiteraria> ObrasLiterarias { get; set; }
+
+        public override string ToString()
+        {
+            return $"\nCategoria" +
+                $"\nId: {Id.ToString()}" +
+                $"\nTítulo: {Titulo}\n";
+        }
     }
 }

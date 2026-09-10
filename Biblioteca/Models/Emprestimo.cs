@@ -15,7 +15,6 @@ namespace Biblioteca.Models
 
         public Usuario Usuario { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         public DateOnly DataRetirada { get; set; }
 
@@ -27,7 +26,19 @@ namespace Biblioteca.Models
 
         public bool Deletado { get; set; } = true;
 
+        public bool Finalizado { get; set; } = false;
+
         [Required]
         public List<Copia> Copias { get; set; } = new List<Copia>();
+
+        public override string ToString()
+        {
+            return $"\nEmpréstimo" +
+                $"\nId: {Id.ToString()}" +
+                $"\nId do Usuário: {UsuarioId.ToString()}" +
+                $"\nData de Retirada: {DataRetirada.ToString()}" +
+                $"\nData Prevista de Devolução: {DataPrevistaDevolucao.ToString()}" +
+                $"\nData da Devolução: {DataDevolucao.ToString()}\n";
+        }
     }
 }
