@@ -32,8 +32,8 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IObraLiterariaService, ObraLiterariaService>();
 builder.Services.AddScoped<IAutorService, AutorService>();
-//builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-//builder.Services.AddScoped<IEditoraService, EditoraService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IEditoraService, EditoraService>();
 builder.Services.AddScoped<IEmprestimoService, EmprestimoService>();
 builder.Services.AddScoped<ICopiaService, CopiaService>();
 

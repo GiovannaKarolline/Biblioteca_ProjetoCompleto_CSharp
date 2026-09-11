@@ -36,6 +36,8 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             if(resultadoCriacao == null)
             {
+                ViewData["Falha"] = "Não foi possível criar o autor (falha ao criar).";
+
                 return View(autor);
             }
 
@@ -113,6 +115,8 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Autor deletado com sucesso!";
 
+            autor.Autores = await _autorService.GetAutores();
+
             return View("DeletarAutor", autor);
         }
 
@@ -125,7 +129,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível listar os autores (lista vazia ou nula).";
 
-                return View();
+                return View(listaAutores);
             }
 
             ViewData["Sucesso"] = "Autores listados com sucesso!";

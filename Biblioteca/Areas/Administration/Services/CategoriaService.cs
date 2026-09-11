@@ -1,8 +1,9 @@
-﻿using Biblioteca.Context;
-using Biblioteca.Models;
-using Biblioteca.Repositories.Interfaces;
-using Biblioteca.Areas.Administration.Services.Interfaces;
+﻿using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels;
+using Biblioteca.Context;
+using Biblioteca.Models;
+using Biblioteca.Repositories;
+using Biblioteca.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Areas.Administration.Services
@@ -15,18 +16,17 @@ namespace Biblioteca.Areas.Administration.Services
             _categoriaRepository = categoriaRepository;
         }
 
-        public Task<Categoria> AtualizarCategoria(Guid id, CategoriaViewModel categoria)
+        public async Task<Categoria> AtualizarCategoria(Guid id, AtualizarCategoriaViewModel categoria)
         {
-            if (_categoriaRepository.GetCategoriaById(id) is not null)
+            var categoriaRegistrada = await _categoriaRepository.GetCategoriaById(id);
+
+            if (categoriaRegistrada is not null)
             {
-                Categoria categoriaAtualizada = new Categoria()
-                {
-                    Titulo = categoria.Titulo
-                };
+                categoriaRegistrada.Titulo = categoria.Titulo;
 
-                _categoriaRepository.AtualizarCategoria(categoriaAtualizada);
+                await _categoriaRepository.AtualizarCategoria(categoriaRegistrada);
 
-                return Task.FromResult(categoriaAtualizada);
+                return await Task.FromResult(categoriaRegistrada);
             }
             throw new ArgumentException("Não foi possível atualizar esta categoria porque não existe uma categoria com este Id.");
         }

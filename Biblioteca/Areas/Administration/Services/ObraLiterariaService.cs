@@ -20,7 +20,7 @@
 //        {
 //            ObraLiteraria? obra = await _obraRepository.GetObraLiterariaById(id);
 
-//            if(obra is not null)
+//            if (obra is not null)
 //            {
 //                obra.Titulo = obraViewModel.Titulo;
 //                obra.ISBN = obraViewModel.ISBN;
@@ -51,7 +51,7 @@
 //                FotoCapa = obra.FotoCapa
 //            };
 
-//            if(novaObra is not null)
+//            if (novaObra is not null)
 //            {
 //                await _obraRepository.CriarObraLiteraria(novaObra);
 //            }
@@ -60,7 +60,7 @@
 //                throw new ArgumentException("Não é possível criar essa obra literária porque ela é nula/inválida.");
 //            }
 
-//                return await Task.FromResult(novaObra);
+//            return await Task.FromResult(novaObra);
 //        }
 
 //        public async Task<ObraLiteraria> DeletarObraLiteraria(Guid id)
@@ -73,7 +73,7 @@
 
 //                return await Task.FromResult(obra);
 //            }
-            
+
 //            throw new ArgumentException("Esta obra não pôde ser apagada porque já não existe no banco de dados.");
 //        }
 
@@ -90,7 +90,7 @@
 //        {
 //            ObraLiteraria? obra = await _obraRepository.GetObraLiterariaById(id);
 
-//            if(obra is null || obra.Deletado == true)
+//            if (obra is null || obra.Deletado == true)
 //            {
 //                throw new ArgumentException("Não existe uma obra literária com este Id no banco de dados.");
 //            }

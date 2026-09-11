@@ -32,7 +32,7 @@ namespace Biblioteca.Controllers
             {
                 emprestimoViewModel.UsuarioId = emprestimo.UsuarioId;
                 emprestimoViewModel.DataPrevistaDevolucao = new DateOnly();
-                emprestimoViewModel.Copias.AddRange(emprestimo.Copias);
+                emprestimoViewModel.Copias.ToList().AddRange(emprestimo.Copias);
             }
             else
             {

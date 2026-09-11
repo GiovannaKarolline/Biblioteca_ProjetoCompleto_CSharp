@@ -1,0 +1,82 @@
+﻿@model AtualizarEmprestimoViewModel
+
+@{
+    ViewData["Titulo"] = "Atualizar empréstimo";
+}
+
+<h2>Atualizar empréstimo</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.CopiasExistentes is not null && Model.CopiasExistentes.Count() > 0 && Model.Emprestimos.Count() > 0)
+    {
+        <form asp-controller="Emprestimo" asp-action="AtualizarEmprestimo" method="post" role="form">
+
+            <input hidden asp-for="CopiasExistentes" value="@Model.CopiasExistentes" />
+
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="Id">Escolha o empréstimo que deseja editar: </label>
+                    <select asp-for="Id">
+                        @foreach (Emprestimo emprestimo in Model.Emprestimos)
+                        {
+                            <option value="@emprestimo.Id">@(emprestimo.ToString())</option>
+                        }
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="Id">Escolha quais cópias vão compor este empréstimo: </label>
+                    <select asp-for="Id">
+
+                        @foreach (Copia copia in Model.CopiasExistentes)
+                        {
+                            @if(Model.Copias.Contains(copia)){
+
+                                <option value="@copia.Id" selected>@(copia.ToString())</option>
+
+                            }else{
+
+                                <option value="@copia.Id">@(copia.ToString())</option>
+                            }
+
+                        }
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" placeholder="Atualizar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não é possível atualizar um empréstimo porque não há registros de empréstimos e/ou não existem registros de cópias.</h4>
+    }
+</div>
+
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Atualizar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

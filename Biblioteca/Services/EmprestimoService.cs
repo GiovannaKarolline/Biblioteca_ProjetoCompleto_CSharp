@@ -44,10 +44,10 @@ namespace Biblioteca.Services
             Emprestimo? novoEmprestimo = new Emprestimo()
             {
                 UsuarioId = emprestimo.UsuarioId,
-                DataDevolucao = emprestimo.DataDevolucao,
-                DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao,
-                DataRetirada = emprestimo.DataRetirada,
-                Finalizado = false
+                DataPrevistaDevolucao = DateOnly.Parse(DateTime.Now.ToShortDateString()).AddMonths(3),
+                DataRetirada = DateOnly.Parse(DateTime.Now.ToShortDateString()),
+                DataDevolucao = new DateOnly(),
+                Finalizado = true
             };
 
             foreach(Copia copia in emprestimo.Copias)

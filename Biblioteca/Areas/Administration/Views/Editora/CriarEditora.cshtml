@@ -1,0 +1,44 @@
+﻿@using Biblioteca.ViewModels
+@model EditoraViewModel
+
+@{
+    ViewData["Title"] = "Criar editora";
+}
+
+<h2>Criar editora</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    <form asp-controller="Editora" asp-action="CriarEditora" method="post" role="form">
+        <div class="form-group">
+            <label asp-for="Nome">Nome da editora</label>
+            <input type="text" placeholder="Nome" asp-for="Nome" />
+            <span asp-validation-for="Nome"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" placeholder="Criar" />
+        </div>
+    </form>
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,61 @@
+﻿@model DeletarEnderecoViewModel
+
+@{
+    ViewData["Titulo"] = "Deletar endereço";
+}
+
+<h2>Deletar endereço</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.Enderecos is not null)
+    {
+        <form asp-controller="Endereco" asp-action="DeletarEndereco" method="post" role="form">
+
+            <input hidden asp-for="Enderecos" value="@Model.Enderecos" />
+
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="Id">Escolha qual endereço deseja deletar: </label>
+                    <select asp-for="Id">
+                        @foreach (Endereco endereco in Model.Enderecos)
+                        {
+                            <option value="@endereco.Id">@(endereco.ToString())</option>
+                        }
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" placeholder="Deletar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não é possível deletar um endereço porque não há registros de endereços</h4>
+    }
+</div>
+
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Atualizar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

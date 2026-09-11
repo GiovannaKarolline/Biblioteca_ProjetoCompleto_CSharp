@@ -11,7 +11,7 @@ namespace Biblioteca.Areas.Administration.Services.Interfaces
 
         public Task<Categoria> CriarCategoria(CategoriaViewModel categoria);
 
-        public Task<Categoria> AtualizarCategoria(Guid id, CategoriaViewModel categoria);
+        public Task<Categoria> AtualizarCategoria(Guid id, AtualizarCategoriaViewModel categoria);
 
         public Task<Categoria?> DeletarCategoria(Guid id);
     }

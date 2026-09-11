@@ -1,0 +1,65 @@
+﻿@model AtualizarEditoraViewModel
+
+@{
+    ViewData["Titulo"] = "Atualizar editora";
+}
+
+<h2>Atualizar editora</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.Editoras is not null)
+    {
+        <form asp-controller="editora" asp-action="Atualizareditora" method="post" role="form">
+
+            <input hidden asp-for="Editoras" value="@Model.Editoras" />
+
+            <fieldset>
+                <label asp-for="Id">Escolha um editora para editar: </label>
+                <select asp-for="Id">
+                    @foreach (Editora editora in Model.Editoras)
+                    {
+                        <option value="@editora.Id">@(editora.Nome)</option>
+                    }
+                </select>
+            </fieldset>
+
+            <div class="form-group">
+                <label asp-for="Nome">Digite o novo nome da editora: </label>
+                <input type="text" placeholder="Nome" asp-for="Nome" />
+                <span asp-validation-for="Nome"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" placeholder="Atualizar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não é possível atualizar uma editora porque não há registros de editoras.</h4>
+    }
+</div>
+
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Atualizar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

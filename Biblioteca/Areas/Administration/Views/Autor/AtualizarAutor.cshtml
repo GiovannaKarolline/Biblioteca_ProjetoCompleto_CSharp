@@ -23,7 +23,7 @@
         </div>
     }
 
-    @if(Model.Autores is not null)
+    @if (Model is not null && Model.Autores is not null)
     {
         <form asp-controller="Autor" asp-action="AtualizarAutor" method="post" role="form">
 

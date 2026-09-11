@@ -4,7 +4,29 @@
     ViewData["Title"] = "Listar autores";
 }
 
+@if (ViewData["Sucesso"] is not null)
+{
+    <div class="alert alert-success">
+        @ViewData["Sucesso"]
+    </div>
+}
+
+@if (ViewData["Falha"] is not null)
+{
+    <div class="alert alert-danger">
+        @ViewData["Falha"]
+    </div>
+}
+
 <a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Listar">Voltar</a>
 <br />
+<br />
 
-<partial name="_ListarPartial" model="@Model"></partial>
+@if(Model is not null)
+{
+    <partial name="_ListarPartial" model="@Model"></partial>
+}
+else
+{
+    <h4>Não há autores para listar.</h4>
+}

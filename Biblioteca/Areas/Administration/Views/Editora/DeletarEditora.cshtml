@@ -1,0 +1,53 @@
+﻿@model DeletarEditoraViewModel
+
+@{
+    ViewData["Title"] = "Deletar editora";
+}
+
+<h2>Deletar editora</h2>
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.Editoras is not null && Model.Editoras.Count() > 0)
+    {
+        <form asp-area="Administration" asp-controller="Editora" asp-action="DeletarEditora" method="post" role="form">
+            <div class="form-group">
+                <label asp-for="Id">Escolha o editora:</label>
+                <select asp-for="Id">
+                    @foreach (Editora editora in Model.Editoras)
+                    {
+                        <option value="@editora.Id">@(editora.Nome)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" placeholder="Deletar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não há editoras registradas para deletar.</h4>
+    }
+
+    <br />
+    <a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Deletar">Voltar</a>
+
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

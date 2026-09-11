@@ -1,0 +1,73 @@
+﻿@model AtualizarCopiaViewModel
+
+@{
+    ViewData["Titulo"] = "Atualizar cópia";
+}
+
+<h2>Atualizar cópia</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.Copias is not null)
+    {
+        <form asp-controller="Copia" asp-action="AtualizarCopia" method="post" role="form">
+
+            <input hidden asp-for="Copias" value="@Model.Copias" />
+
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="Id">Escolha uma cópia para editar: </label>
+                    <select asp-for="Id">
+                        @foreach (Copia copia in Model.Copias)
+                        {
+                            <option value="@copia.Id">@(copia.ToString())</option>
+                        }
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="ObraId">Escolha a obra literária a ser representada pela cópia: </label>
+                    <select asp-for="ObraId">
+                        @foreach (ObraLiteraria obra in Model.Obras)
+                        {
+                            <option value="@obra.Id">@(obra.Titulo)</option>
+                        }
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" placeholder="Atualizar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não é possível atualizar uma cópia porque não há registros de cópias.</h4>
+    }
+</div>
+
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Atualizar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

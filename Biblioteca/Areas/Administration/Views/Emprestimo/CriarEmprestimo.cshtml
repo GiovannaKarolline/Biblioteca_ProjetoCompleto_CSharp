@@ -1,0 +1,60 @@
+﻿@model CriarEmprestimoViewModel
+
+@{
+    ViewData["Title"] = "Criar empréstimo";
+}
+
+<h2>Criar empréstimos</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model.CopiasExistentes is not null && Model.CopiasExistentes.Count() > 0)
+    {
+        <form asp-controller="Copia" asp-action="CriarCopia" method="post" role="form">
+            <div class="form-group">
+
+                <fieldset>
+                    <label asp-for="Copias">Escolha as cópias inclusas no empréstimo: </label>
+                    <select asp-for="Copias" multiple>
+                        @foreach (Copia copia in Model.CopiasExistentes)
+                        {
+                            <option  value="@copia.Id">@(copia.ToString())</option>
+                        }
+                    </select>
+                </fieldset>
+
+            </div>
+
+            <div class="form-group">
+                <br />
+                <input type="submit" placeholder="Criar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não existe uma cópia para que um empréstimo seja criado.</h4>
+    }
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

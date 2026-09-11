@@ -1,0 +1,93 @@
+﻿@using Biblioteca.Enums
+@model AtualizarEnderecoViewModel
+
+@{
+    ViewData["Title"] = "Atualizar endereço";
+}
+
+<h2>Atualizar endereço</h2>
+
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.Enderecos.Count() > 0)
+    {
+        <form asp-controller="Endereco" asp-action="AtualizarEndereco" method="post" role="form">
+            <div class="form-group">
+
+                <div class="form-group">
+                    <fieldset>
+                        <label asp-for="Id">Escolha o endereço que deseja editar: </label>
+                        <select asp-for="Id">
+                            @foreach (Endereco endereco in Model.Enderecos)
+                            {
+                                <option value="@endereco.Id">@(endereco.ToString())</option>
+                            }
+                        </select>
+                    </fieldset>
+                </div>
+
+                <fieldset>
+                    <label asp-for="TipoLogradouro">Tipo de logradouro: </label>
+                    <select asp-for="TipoLogradouro" asp-items="Html.GetEnumSelectList<TipoLogradouro>()">
+
+                        <option value="">Selecione um tipo de logradouro</option>
+
+                    </select>
+                </fieldset>
+
+                <div class="form-group">
+                    <label asp-for="Logradouro">Logradouro: </label>
+                    <input asp-for="Logradouro" type="text" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Numero">Número: </label>
+                    <input asp-for="Numero" type="text" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Complemento">Complemento: </label>
+                    <input asp-for="Complemento" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Cep">CEP: </label>
+                    <input asp-for="Cep" />
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <br />
+                <input type="submit" placeholder="Criar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>.</h4>
+    }
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,5 +1,7 @@
-﻿using Biblioteca.Areas.Administration.Services.Interfaces;
+﻿using Biblioteca.Areas.Administration.Services;
+using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels;
+using Biblioteca.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -25,6 +27,8 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewData["Falha"] = "Não foi possível criar a categoria (modelo/dados inválidos).";
+
                 return View(categoria);
             }
 
@@ -32,68 +36,88 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             if (resultadoCriacao == null)
             {
+                ViewData["Falha"] = "Não foi possível criar a categoria (falha ao criar).";
+
                 return View(categoria);
             }
 
-            ViewData["Sucesso"] = "Categoria criado com sucesso!";
+            ViewData["Sucesso"] = "Categoria criada com sucesso!";
 
             return View("CriarCategoria");
         }
 
         [HttpGet]
-        public IActionResult AtualizarCategoria()
+        public async Task<IActionResult> AtualizarCategoria()
         {
-            return View(new CategoriaViewModel());
+            AtualizarCategoriaViewModel categoria = new AtualizarCategoriaViewModel()
+            {
+                Categorias = await _categoriaService.GetCategorias()
+            };
+
+            return View(categoria);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> AtualizarCategoria(Guid id, CategoriaViewModel categoria)
+        [HttpPost]
+        public async Task<IActionResult> AtualizarCategoria(AtualizarCategoriaViewModel categoria)
         {
             if (!ModelState.IsValid)
             {
+                ViewData["Falha"] = "Não foi possível atualizar a categoria (modelo/dados inválidos).";
+
                 return View(categoria);
             }
 
-            var resultadoCriacao = await _categoriaService.AtualizarCategoria(id, categoria);
+            var resultadoCriacao = await _categoriaService.AtualizarCategoria(categoria.Id, categoria);
 
             if (resultadoCriacao == null)
             {
+                ViewData["Falha"] = "Não foi possível atualizar a categoria (falha ao atualizar).";
+
                 return View(categoria);
             }
 
-            ViewData["Sucesso"] = "Categoria atualizado com sucesso!";
+            ViewData["Sucesso"] = "Categoria atualizada com sucesso!";
 
-            return View("AtualizarCategoria");
+            categoria.Categorias = await _categoriaService.GetCategorias();
+
+            return View("AtualizarCategoria", categoria);
         }
 
         [HttpGet]
-        public IActionResult DeletarCategoria()
+        public async Task<IActionResult> DeletarCategoria()
         {
-            return View();
+            DeletarCategoriaViewModel categoria = new DeletarCategoriaViewModel()
+            {
+                Categorias = await _categoriaService.GetCategorias()
+            };
+
+            return View(categoria);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeletarCategoria(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> DeletarCategoria(DeletarCategoriaViewModel categoria)
         {
-            if (id == Guid.Empty)
+            if (categoria.Id == Guid.Empty)
             {
                 ViewData["Falha"] = "Não foi possível deletar a categoria (Guid inválido).";
 
-                return View();
+                return View(categoria);
             }
 
-            var resultadoCriacao = await _categoriaService.DeletarCategoria(id);
+            var resultadoCriacao = await _categoriaService.DeletarCategoria(categoria.Id);
 
             if (resultadoCriacao == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar a categoria (falha ao deletar).";
 
-                return View();
+                return View(categoria);
             }
 
             ViewData["Sucesso"] = "Categoria deletada com sucesso!";
 
-            return View("DeletarCategoria");
+            categoria.Categorias = await _categoriaService.GetCategorias();
+
+            return View("DeletarCategoria", categoria);
         }
 
         [HttpGet]
@@ -105,12 +129,12 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível listar as categorias (lista vazia ou nula).";
 
-                return View();
+                return View(listaCategorias);
             }
 
             ViewData["Sucesso"] = "Categorias listadas com sucesso!";
 
-            return RedirectToAction("ListarCategorias");
+            return View("ListarCategorias", listaCategorias);
         }
     }
 }

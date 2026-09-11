@@ -1,0 +1,75 @@
+﻿@using Biblioteca.ViewModels
+
+@model CriarCopiaViewModel
+
+@{
+    ViewData["Title"] = "Criar cópia";
+}
+
+<h2>Criar cópia</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if(Model.ObrasPossiveis is not null && Model.ObrasPossiveis.Count() > 0)
+    {
+        <form asp-controller="Copia" asp-action="CriarCopia" method="post" role="form">
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="ObraId">Escolha a obra a ser representada pela cópia: </label>
+                    <select asp-for="ObraId">
+                        @foreach (ObraLiteraria obra in Model.ObrasPossiveis)
+                        {
+                            <option value="@obra.Id">@(obra.Titulo)</option>
+                        }
+                    </select>
+                </fieldset>
+
+                <div class="form-group">
+                    <br />
+
+                    <p>A cópia está disponível para empréstimo?</p>
+
+                    <label asp-for="StatusDisponibilidade">Sim</label>
+                    <input asp-for="StatusDisponibilidade"  type="radio" value="@true" />
+
+                    <br />
+
+                    <label asp-for="StatusDisponibilidade">Não</label>
+                    <input asp-for="StatusDisponibilidade"  type="radio" value="@false" />
+                </div>
+
+            </div>
+        
+            <div class="form-group">
+                <br />
+                <input type="submit" placeholder="Criar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não existe uma obra literária para que uma cópia dela seja criada.</h4>
+    }
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
