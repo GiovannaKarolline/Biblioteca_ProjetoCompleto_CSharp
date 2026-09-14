@@ -1,0 +1,129 @@
+﻿@using Biblioteca.Areas.Administration.ViewModels.Criar
+@model CriarObraViewModel
+
+@{
+    ViewData["Title"] = "Criar obra literária";
+}
+
+<h2>Criar obra literária</h2>
+
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is null)
+    {
+        <h4>Não é possível criar uma obra literária porque não há como captar as informações dadas no formulário (modelo não dado).</h4>
+    }
+    else if (Model.EditorasExistentes is null || Model.EditorasExistentes.Count() < 1)
+    {
+        <h4>Não é possível criar uma obra literária porque não há editoras registradas.</h4>
+    }
+    else if (Model.CategoriasExistentes is null || Model.CategoriasExistentes.Count() < 1)
+    {
+        <h4>Não é possível criar uma obra literária porque não há categorias registradas.</h4>
+    }
+    else if (Model.AutoresExistentes is null || Model.AutoresExistentes.Count() < 1)
+    {
+        <h4>Não é possível criar uma obra literária porque não há autores registrados.</h4>
+    }
+    else
+    {
+        <form asp-controller="ObraLiteraria" asp-action="CriarObra" method="post" role="form">
+            <div class="form-group">
+
+                <div class="form-group">
+                    <label asp-for="Titulo">Título: </label>
+                    <input asp-for="Titulo" type="text" />
+                    <span asp-validation-for="Titulo"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CategoriaId">Categoria: </label>
+                    <select asp-for="CategoriaId">
+
+                        @foreach (Categoria categoria in Model.CategoriasExistentes)
+                        {
+                            <option value="@categoria.Id">@categoria.Titulo</option>
+                        }
+
+                    </select>
+                    <span asp-validation-for="CategoriaId"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ISBN">ISBN: </label>
+                    <input asp-for="ISBN" type="text" />
+                    <span asp-validation-for="ISBN"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AnoPublicacao">Ano de publicação: </label>
+                    <input asp-for="AnoPublicacao" type="number" />
+                    <span asp-validation-for="AnoPublicacao"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="EditoraId">Editora: </label>
+                    <select asp-for="EditoraId">
+
+                        @foreach (Editora editora in Model.EditorasExistentes)
+                        {
+                            <option value="@editora.Id">@editora.Nome</option>
+                        }
+
+                    </select>
+                    <span asp-validation-for="EditoraId"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Autores: </label>
+                    <fieldset >
+
+                        @foreach (Autor autor in Model.AutoresExistentes)
+                        {
+                            <input name="AutoresSelecionados" value="@autor.Id" type="checkbox" />
+                            <label>@(autor.PrimeiroNome + " " + @autor.Sobrenome)</label>
+                            <br />
+                        }
+
+                    </fieldset>
+                    <span asp-validation-for="Autores"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FotoCapa">Link da foto da capa: </label>
+                    <input asp-for="FotoCapa" type="url" />
+                    <span asp-validation-for="FotoCapa"></span>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <br />
+                <input type="submit" placeholder="Criar" />
+            </div>
+        </form>
+    }
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -43,7 +43,7 @@ namespace Biblioteca.Repositories
 
         public async Task<IEnumerable<Endereco>> GetEnderecos() 
         { 
-            return await _context.Enderecos.Include(endereco => endereco.Usuario).Include(endereco => endereco.TipoLogradouro).ToListAsync(); 
+            return await _context.Enderecos.Include(endereco => endereco.Usuario).ToListAsync(); 
         }
     }
 }

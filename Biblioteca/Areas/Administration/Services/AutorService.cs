@@ -3,6 +3,7 @@ using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 
 namespace Biblioteca.Areas.Administration.Services
 {

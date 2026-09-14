@@ -1,6 +1,6 @@
 ﻿using Biblioteca.Models;
 
-namespace Biblioteca.Areas.Administration.ViewModels
+namespace Biblioteca.Areas.Administration.ViewModels.Atualizar
 {
     public class AtualizarCategoriaViewModel : CategoriaViewModel
     {

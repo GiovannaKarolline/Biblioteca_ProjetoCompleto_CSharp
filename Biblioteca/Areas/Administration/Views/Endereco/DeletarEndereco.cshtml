@@ -1,4 +1,5 @@
-﻿@model DeletarEnderecoViewModel
+﻿@using Biblioteca.Areas.Administration.ViewModels.Deletar
+@model DeletarEnderecoViewModel
 
 @{
     ViewData["Titulo"] = "Deletar endereço";
@@ -23,7 +24,7 @@
         </div>
     }
 
-    @if (Model is not null && Model.Enderecos is not null)
+    @if (Model is not null && Model.Enderecos.Count() > 0)
     {
         <form asp-controller="Endereco" asp-action="DeletarEndereco" method="post" role="form">
 
@@ -48,7 +49,7 @@
     }
     else
     {
-        <h4>Não é possível deletar um endereço porque não há registros de endereços</h4>
+        <h4>Não é possível deletar um endereço porque não há registros de endereços.</h4>
     }
 </div>
 

@@ -1,11 +1,10 @@
 ﻿using Biblioteca.Models;
 
-namespace Biblioteca.Areas.Administration.ViewModels
+namespace Biblioteca.Areas.Administration.ViewModels.Deletar
 {
-    public class AtualizarAutorViewModel : AutorViewModel
+    public class DeletarAutorViewModel
     {
         public Guid Id { get; set; }
-
         public IEnumerable<Autor>? Autores { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Biblioteca.Models;
 using Biblioteca.Areas.Administration.ViewModels;
+using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 
 namespace Biblioteca.Areas.Administration.Services.Interfaces
 {

@@ -34,11 +34,11 @@ namespace Biblioteca.Models
         public override string ToString()
         {
             return $"\nEmpréstimo" +
-                $"\nId: {Id.ToString()}" +
-                $"\nId do Usuário: {UsuarioId.ToString()}" +
-                $"\nData de Retirada: {DataRetirada.ToString()}" +
-                $"\nData Prevista de Devolução: {DataPrevistaDevolucao.ToString()}" +
-                $"\nData da Devolução: {DataDevolucao.ToString()}\n";
+                $"\n* Id: {Id.ToString()}" +
+                $"\n* Id do Usuário: {UsuarioId.ToString()}" +
+                $"\n* Data de Retirada: {DataRetirada.ToString()}" +
+                $"\n* Data Prevista de Devolução: {DataPrevistaDevolucao.ToString()}" +
+                $"\n* Data da Devolução: {DataDevolucao.ToString()}\n";
         }
     }
 }

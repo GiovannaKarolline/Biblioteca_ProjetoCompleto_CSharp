@@ -38,12 +38,12 @@ namespace Biblioteca.Models
         public override string ToString()
         {
             return $"\nEndereço" +
-                $"\nId: {Id}" +
-                $"\nId do Usuário: {UsuarioId}" +
-                $"\nLogradouro: {TipoLogradouro.ToString() + " " +Logradouro}" +
-                $"\nNúmero: {Numero}" +
-                $"\nCEP: {Cep}" +
-                $"\nComplemento: {Complemento}\n";
+                $"\n* Id: {Id}" +
+                $"\n* Id do Usuário: {UsuarioId}" +
+                $"\n* Logradouro: {TipoLogradouro.ToString() + " " +Logradouro}" +
+                $"\n* Número: {Numero}" +
+                $"\n* CEP: {Cep}" +
+                $"\n* Complemento: {Complemento}\n";
         }
     }
 }

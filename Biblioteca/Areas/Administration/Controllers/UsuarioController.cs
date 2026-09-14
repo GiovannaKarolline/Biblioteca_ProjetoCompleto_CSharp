@@ -1,4 +1,5 @@
-﻿using Biblioteca.Areas.Administration.ViewModels;
+﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
+using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
@@ -37,7 +38,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             //if (resultadoCriacao == null)
             //{
-            //    ViewData["Falha"] = "Não foi possível criar a Usuario literária (falha ao criar).";
+            //    ViewData["Falha"] = "Não foi possível criar o usuário (falha ao criar).";
 
             //    return View(usuario);
             //}

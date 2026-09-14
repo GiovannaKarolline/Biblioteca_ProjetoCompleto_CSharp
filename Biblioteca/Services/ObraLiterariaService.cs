@@ -69,6 +69,8 @@ namespace Biblioteca.Services
 
             if (obra is not null)
             {
+                obra.Deletado = true;
+
                 await _obraRepository.DeletarObraLiteraria(obra);
 
                 return await Task.FromResult(obra);

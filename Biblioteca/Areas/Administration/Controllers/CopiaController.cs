@@ -1,9 +1,11 @@
 ﻿using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Biblioteca.Models;
-using Biblioteca.Areas.Administration.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Biblioteca.Areas.Administration.ViewModels.Atualizar;
+using Biblioteca.Areas.Administration.ViewModels.Deletar;
+using Biblioteca.Areas.Administration.ViewModels.Criar;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {

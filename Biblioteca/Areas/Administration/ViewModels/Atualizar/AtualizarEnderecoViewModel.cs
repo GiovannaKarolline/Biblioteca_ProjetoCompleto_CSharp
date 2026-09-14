@@ -1,7 +1,7 @@
 ﻿using Biblioteca.Models;
 using Biblioteca.ViewModels;
 
-namespace Biblioteca.Areas.Administration.ViewModels
+namespace Biblioteca.Areas.Administration.ViewModels.Atualizar
 {
     public class AtualizarEnderecoViewModel : EnderecoViewModel
     {

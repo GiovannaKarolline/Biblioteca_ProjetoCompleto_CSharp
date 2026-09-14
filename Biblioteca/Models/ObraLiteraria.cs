@@ -15,11 +15,10 @@ namespace Biblioteca.Models
         public string Titulo { get; set; }
 
         [Required]
-        [Range(10, 17)]
+        [Length(10, 17)]
         public string ISBN { get; set; }
 
         [Required]
-        [MinLength(698)]
         public int AnoPublicacao { get; set; }
 
         [Required]
@@ -52,13 +51,13 @@ namespace Biblioteca.Models
         public override string ToString()
         {
             return $"\nObra Literária" +
-                $"\nId: {Id.ToString()}" +
-                $"\nTítulo: {Titulo}" +
-                $"\nFoto da Capa: {FotoCapa}" +
-                $"\nISBN: {ISBN}" +
-                $"\nAno de Publicação: {AnoPublicacao}" +
-                $"\nId da Editora: {EditoraId.ToString()}" +
-                $"\nId da Categoria: {CategoriaId.ToString()}\n";
+                $"\n* Id: {Id.ToString()}" +
+                $"\n* Título: {Titulo}" +
+                $"\n* Foto da Capa: {FotoCapa}" +
+                $"\n* ISBN: {ISBN}" +
+                $"\n* Ano de Publicação: {AnoPublicacao}" +
+                $"\n* Id da Editora: {EditoraId.ToString()}" +
+                $"\n* Id da Categoria: {CategoriaId.ToString()}\n";
         }
     }
 }
