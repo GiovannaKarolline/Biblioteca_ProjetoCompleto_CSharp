@@ -17,5 +17,7 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<ObraLiteraria?> GetObraLiterariaByISBN(string ISBN);
 
+        public Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByTitulo(string titulo);
+
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Biblioteca.Models;
-using Biblioteca.Repositories;
-using Biblioteca.Repositories.Interfaces;
+using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -9,19 +8,26 @@ namespace Biblioteca.Controllers
 {
     public class HomeController : Controller
     {
-        private IObraLiterariaRepository _obraLiterariaRepository;
+        private IObraLiterariaService _obraLiterariaService;
 
-        public HomeController(IObraLiterariaRepository obraLiterariaRepository)
+        public HomeController(IObraLiterariaService obraLiterariaService)
         {
-            _obraLiterariaRepository = obraLiterariaRepository;
+            _obraLiterariaService = obraLiterariaService;
         }
 
         public async Task<IActionResult> Index()
         {
             var obras = new HomeViewModel
             {
-                ObrasLiterarias = await _obraLiterariaRepository.GetObras() ?? new List<ObraLiteraria>()
+                ObrasLiterarias = await _obraLiterariaService.GetObras() ?? new List<ObraLiteraria>()
             };
+
+            return View(obras);
+        }
+
+        public async Task<IActionResult> PesquisarObra(string titulo)
+        {
+            IEnumerable<ObraLiteraria> obras = await _obraLiterariaService.GetObrasLiterariasByTitulo(titulo);
 
             return View(obras);
         }

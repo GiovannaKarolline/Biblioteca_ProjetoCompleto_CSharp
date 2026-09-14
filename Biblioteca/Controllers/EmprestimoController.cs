@@ -68,15 +68,38 @@ namespace Biblioteca.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarAoEmprestimo(Guid id)
         {
-            Emprestimo? emprestimo = (await _emprestimoService.GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User)))).FirstOrDefault(emprestimo => emprestimo.Finalizado == false);
+            Emprestimo? emprestimo = (await _emprestimoService
+                .GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User))))
+                .FirstOrDefault(emprestimo => emprestimo.Finalizado == false);
 
-            if(emprestimo is not null)
+            EmprestimoViewModel emprestimoViewModel = new EmprestimoViewModel();
+
+            if(emprestimo is null)
             {
-                Copia copia = await _copiaService.GetCopiaById(id);
-                await _emprestimoService.AdicionarCopia(copia.Id, emprestimo.Id);
+                EmprestimoViewModel novoEmprestimo = new EmprestimoViewModel()
+                {
+                    UsuarioId = Guid.Parse(_userManager.GetUserId(User))
+                };
+
+                await _emprestimoService.CriarEmprestimo(novoEmprestimo);
+
+                emprestimoViewModel.Id = novoEmprestimo.Id;
+                emprestimoViewModel.UsuarioId = novoEmprestimo.UsuarioId;
+                emprestimoViewModel.DataRetirada = novoEmprestimo.DataRetirada;
+                emprestimoViewModel.Finalizado = novoEmprestimo.Finalizado;
+                emprestimoViewModel.DataDevolucao = novoEmprestimo.DataDevolucao;
+                emprestimoViewModel.DataPrevistaDevolucao = novoEmprestimo.DataPrevistaDevolucao;
+
+            }
+            else
+            {
+                emprestimoViewModel.Id = emprestimo.Id;
             }
 
-            return View("Emprestimo");
+            Copia copia = await _copiaService.GetCopiaById(id);
+            await _emprestimoService.AdicionarCopia(copia.Id, emprestimoViewModel.Id);
+            
+            return View("Emprestimo", emprestimoViewModel);
         }
     }
 }

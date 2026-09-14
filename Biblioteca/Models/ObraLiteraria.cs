@@ -37,7 +37,7 @@ namespace Biblioteca.Models
         public bool Deletado { get; set; } = false;
 
         public List<Autor> Autores { get; set; }
-        public List<Copia> Copias { get; set; }
+        public List<Copia>? Copias { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ObraLiteraria>
+
+@{
+    ViewData["Title"] = "Pesquisa de obra";
+}
+
+@if(Model is not null && Model.Count() > 0)
+{
+    <h2>Obras literárias encontradas</h2>
+
+    <div class="row">
+        <partial name="_HomePartial" model="@Model" />
+    </div>
+}
+else
+{
+    <h2>Não foram encontradas obras relacionadas à sua pesquisa.</h2>
+}

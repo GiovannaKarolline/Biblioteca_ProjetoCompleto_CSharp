@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Perfil de usuário";
+}
+
+@if(User.Identity is not null)
+{
+    <h2>Olá, @(User.Identity.Name)!</h2>
+
+}
+else
+{
+    <h2>Olá! Aqui aparecerá o seu perfil quando estiver logado(a).</h2>
+}

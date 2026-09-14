@@ -16,12 +16,21 @@ namespace Biblioteca.Repositories
 
         public async Task<IEnumerable<ObraLiteraria>> GetObras()
         {
-            return await _context.ObrasLiterarias.Include(obra => obra.Categoria).Include(obra => obra.Editora).ToListAsync();
+            return await _context.ObrasLiterarias.Include(obra => obra.Editora)
+                .Include(obra => obra.Categoria)
+                .Include(obra => obra.Copias)
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByNome(string nome)
+        public async Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByTitulo(string titulo)
         {
-            return await _context.ObrasLiterarias.Where(obraLiteraria => obraLiteraria.Titulo.Contains(nome)).ToListAsync();
+            return await _context.ObrasLiterarias
+                .Where(obraLiteraria => obraLiteraria.Titulo
+                .Contains(titulo))
+                .Include(obra => obra.Editora)
+                .Include(obra => obra.Categoria)
+                .Include(obra => obra.Copias)
+                .ToListAsync();
         }
 
         public async Task<ObraLiteraria> CriarObraLiteraria(ObraLiteraria obra)
@@ -49,12 +58,20 @@ namespace Biblioteca.Repositories
 
         public async Task<ObraLiteraria?> GetObraLiterariaById(Guid id)
         {
-            return await _context.ObrasLiterarias.Where(obra => obra.Id == id).FirstOrDefaultAsync();
+            return await _context.ObrasLiterarias.Where(obra => obra.Id == id)
+                .Include(obra => obra.Editora)
+                .Include(obra => obra.Categoria)
+                .Include(obra => obra.Copias)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<ObraLiteraria?> GetObraLiterariaByISBN(string ISBN)
         {
-            return await _context.ObrasLiterarias.Where(obra => obra.ISBN == ISBN).FirstOrDefaultAsync();
+            return await _context.ObrasLiterarias
+                .Include(obra => obra.Editora)
+                .Include(obra => obra.Categoria)
+                .Include(obra => obra.Copias)
+                .Where(obra => obra.ISBN == ISBN).FirstOrDefaultAsync();
         }
     }
 }

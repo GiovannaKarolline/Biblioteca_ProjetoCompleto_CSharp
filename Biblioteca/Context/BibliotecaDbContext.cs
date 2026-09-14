@@ -8,7 +8,7 @@ using System.Data.Common;
 
 namespace Biblioteca.Context
 {
-    public class BibliotecaDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class BibliotecaDbContext : IdentityDbContext<Usuario, IdentityRole<Guid>, Guid>
     {
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Autor> Autores { get; set; }

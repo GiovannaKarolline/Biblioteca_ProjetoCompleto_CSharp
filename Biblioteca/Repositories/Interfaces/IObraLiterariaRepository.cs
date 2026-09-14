@@ -7,7 +7,7 @@ namespace Biblioteca.Repositories.Interfaces
     {
         public Task<IEnumerable<ObraLiteraria>> GetObras();
 
-        public Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByNome(string nome);
+        public Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByTitulo(string titulo);
 
         public Task<ObraLiteraria?> GetObraLiterariaById(Guid id);
 

@@ -11,7 +11,5 @@ namespace Biblioteca.ViewModels
         [Required]
         [DataType(DataType.Password)]
         public string Senha { get; set; }
-
-        //public string ReturnUrl { get; set; } //para voltar para a tela em que estava antes de logar
     }
 }

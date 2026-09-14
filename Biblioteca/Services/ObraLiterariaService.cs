@@ -111,5 +111,14 @@ namespace Biblioteca.Services
 
             return obra;
         }
+
+        public async Task<IEnumerable<ObraLiteraria>> GetObrasLiterariasByTitulo(string titulo)
+        {
+            IEnumerable<ObraLiteraria> obras = await _obraRepository.GetObrasLiterariasByTitulo(titulo);
+
+            obras = obras.Except(obras.Where(obra => obra.Deletado == true));
+
+            return obras;
+        }
     }
 }

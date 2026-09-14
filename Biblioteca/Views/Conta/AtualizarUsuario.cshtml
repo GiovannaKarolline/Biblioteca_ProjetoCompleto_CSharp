@@ -1,0 +1,53 @@
+﻿@model AtualizarUsuarioViewModel
+
+@{
+    ViewData["Titulo"] = "Atualizar usuário";
+}
+
+<h2>Atualizar editora</h2>
+<hr />
+
+<div class="container">
+
+    @if (ViewData["Sucesso"] is not null)
+    {
+        <div class="alert alert-success">
+            @ViewData["Sucesso"]
+        </div>
+    }
+
+    @if (ViewData["Falha"] is not null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Falha"]
+        </div>
+    }
+
+    @if (Model is not null && Model.Usuarios is not null)
+    {
+        <form asp-controller="Usuario" asp-action="AtualizarUsuario" method="post" role="form">
+
+            <div class="form-group">
+                <label asp-for="NomeUsuario">Digite o novo nome de usuário: </label>
+                <input type="text" placeholder="Nome" asp-for="NomeUsuario" />
+                <span asp-validation-for="NomeUsuario"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" placeholder="Atualizar" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>Não é possível atualizar um usuário porque não há registros de usuários.</h4>
+    }
+</div>
+
+
+<br />
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Atualizar">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

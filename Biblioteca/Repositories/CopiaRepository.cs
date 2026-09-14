@@ -28,6 +28,7 @@ namespace Biblioteca.Repositories
         public async Task<Copia> CriarCopia(Copia copia)
         {
             await _context.Copias.AddAsync(copia);
+            _context.SaveChanges();
 
             return await Task.FromResult(copia);
         }

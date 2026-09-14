@@ -1,5 +1,6 @@
 ﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
+using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
@@ -16,36 +17,6 @@ namespace Biblioteca.Areas.Administration.Controllers
         public UsuarioController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
-        }
-
-        [HttpGet]
-        public IActionResult CriarUsuario()
-        {
-            return View(new UsuarioViewModel());
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CriarUsuario(UsuarioViewModel usuario)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewData["Falha"] = "Não foi possível criar a Usuario literária (modelo/dados inválidos).";
-
-                return View(usuario);
-            }
-
-            // var resultadoCriacao = await _usuarioService.CadastrarUsuario(usuario); ainda usa CadastroViewModel
-
-            //if (resultadoCriacao == null)
-            //{
-            //    ViewData["Falha"] = "Não foi possível criar o usuário (falha ao criar).";
-
-            //    return View(usuario);
-            //}
-
-            ViewData["Sucesso"] = "Usuario literária criada com sucesso!";
-
-            return View("CriarUsuario", usuario);
         }
 
         [HttpGet]
@@ -97,29 +68,33 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletarUsuario(DeletarUsuarioViewModel Usuario)
+        public async Task<IActionResult> DeletarUsuario(DeletarUsuarioViewModel usuario)
         {
-            if (Usuario.Id == Guid.Empty)
+            if (usuario.Id == Guid.Empty)
             {
-                ViewData["Falha"] = "Não foi possível deletar a Usuario literária (Guid inválido).";
+                ViewData["Falha"] = "Não foi possível deletar o usuário (Guid inválido).";
 
-                return View(Usuario);
+                usuario.Usuarios = await _usuarioService.GetUsuarios();
+
+                return View(usuario);
             }
 
-            var resultadoCriacao = await _usuarioService.DeletarUsuario(Usuario.Id);
+            var resultadoCriacao = await _usuarioService.DeletarUsuario(usuario.Id);
 
             if (resultadoCriacao == null)
             {
-                ViewData["Falha"] = "Não foi possível deletar a Usuario literária (falha ao deletar).";
+                ViewData["Falha"] = "Não foi possível deletar o usuário (falha ao deletar).";
 
-                return View(Usuario);
+                usuario.Usuarios = await _usuarioService.GetUsuarios();
+
+                return View(usuario);
             }
 
-            ViewData["Sucesso"] = "Usuario deletado com sucesso!";
+            ViewData["Sucesso"] = "Usuário deletado com sucesso!";
 
-            Usuario.Usuarios = await _usuarioService.GetUsuarios();
+            usuario.Usuarios = await _usuarioService.GetUsuarios();
 
-            return View("DeletarUsuario", Usuario);
+            return View("DeletarUsuario", usuario);
         }
 
         [HttpGet]

@@ -6,6 +6,9 @@ namespace Biblioteca.ViewModels
     public class EmprestimoViewModel
     {
         [Required]
+        public Guid Id { get; set; }
+
+        [Required]
         public Guid UsuarioId { get; set; }
 
         [Required]

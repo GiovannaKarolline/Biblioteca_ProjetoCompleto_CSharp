@@ -9,7 +9,7 @@ namespace Biblioteca.Services.Interfaces
 
         public Task DeslogarUsuario();
 
-        public Task<Usuario?> CadastrarUsuario(CadastroViewModel usuario);
+        public Task<Usuario?> CadastrarUsuario(UsuarioViewModel usuario);
 
         public Task<Usuario> DeletarUsuario(Guid id);
 

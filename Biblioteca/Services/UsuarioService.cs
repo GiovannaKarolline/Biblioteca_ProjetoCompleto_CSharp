@@ -17,7 +17,7 @@ namespace Biblioteca.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public async Task<Usuario?> CadastrarUsuario(CadastroViewModel usuario)
+        public async Task<Usuario?> CadastrarUsuario(UsuarioViewModel usuario)
         {
             if(usuario.Email.Substring(usuario.Email.IndexOf("@")) == "@admin.com.br")
             {

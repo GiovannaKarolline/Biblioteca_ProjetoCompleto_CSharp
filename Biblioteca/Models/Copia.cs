@@ -13,7 +13,7 @@ namespace Biblioteca.Models
         [Required]
         public Guid ObraId { get; set; }
 
-        public ObraLiteraria ObraLiteraria { get; set; }
+        public ObraLiteraria? ObraLiteraria { get; set; }
 
         [Required]
         [Display(Name = "Status de Disponibilidade")]
@@ -21,7 +21,7 @@ namespace Biblioteca.Models
 
         public bool Deletado { get; set; } = false;
 
-        public List<Emprestimo> Emprestimos { get; set; } = new List<Emprestimo>();
+        public List<Emprestimo>? Emprestimos { get; set; }
 
         public override string ToString()
         {

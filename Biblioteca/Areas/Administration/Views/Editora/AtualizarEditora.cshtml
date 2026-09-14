@@ -26,12 +26,12 @@
 
     @if (Model is not null && Model.Editoras is not null)
     {
-        <form asp-controller="editora" asp-action="Atualizareditora" method="post" role="form">
+        <form asp-controller="Editora" asp-action="AtualizarEditora" method="post" role="form">
 
             <input hidden asp-for="Editoras" value="@Model.Editoras" />
 
             <fieldset>
-                <label asp-for="Id">Escolha um editora para editar: </label>
+                <label asp-for="Id">Escolha uma editora para editar: </label>
                 <select asp-for="Id">
                     @foreach (Editora editora in Model.Editoras)
                     {
@@ -47,7 +47,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" placeholder="Atualizar" />
+                <input type="submit" value="Atualizar" />
             </div>
         </form>
     }
