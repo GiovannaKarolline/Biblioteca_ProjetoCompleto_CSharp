@@ -13,11 +13,14 @@
 
                 @if (obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null)
                 {
-                    <a class="btn btn-primary" asp-controller="Emprestimo" 
-                    asp-action="AdicionarAoEmprestimo" 
-                    asp-route-id="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id">
+                <form asp-controller="Emprestimo"
+                      asp-action="AdicionarAoEmprestimo"
+                      asp-route-id="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id">
+                    <button class="btn btn-primary" type="submit">
                         Pegar emprestado
-                    </a>
+                    </button>
+                </form>
+                    
                 }
                 else
                 {

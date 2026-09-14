@@ -76,12 +76,12 @@ namespace Biblioteca.Controllers
 
             if(emprestimo is null)
             {
-                EmprestimoViewModel novoEmprestimo = new EmprestimoViewModel()
+                EmprestimoViewModel novoEmprestimoViewModel = new EmprestimoViewModel()
                 {
                     UsuarioId = Guid.Parse(_userManager.GetUserId(User))
                 };
 
-                await _emprestimoService.CriarEmprestimo(novoEmprestimo);
+                Emprestimo novoEmprestimo = await _emprestimoService.CriarEmprestimo(novoEmprestimoViewModel);
 
                 emprestimoViewModel.Id = novoEmprestimo.Id;
                 emprestimoViewModel.UsuarioId = novoEmprestimo.UsuarioId;
@@ -89,11 +89,11 @@ namespace Biblioteca.Controllers
                 emprestimoViewModel.Finalizado = novoEmprestimo.Finalizado;
                 emprestimoViewModel.DataDevolucao = novoEmprestimo.DataDevolucao;
                 emprestimoViewModel.DataPrevistaDevolucao = novoEmprestimo.DataPrevistaDevolucao;
-
             }
             else
             {
                 emprestimoViewModel.Id = emprestimo.Id;
+                emprestimoViewModel.UsuarioId = emprestimo.UsuarioId;
             }
 
             Copia copia = await _copiaService.GetCopiaById(id);

@@ -47,12 +47,15 @@ namespace Biblioteca.Services
                 DataPrevistaDevolucao = DateOnly.Parse(DateTime.Now.ToShortDateString()).AddMonths(3),
                 DataRetirada = DateOnly.Parse(DateTime.Now.ToShortDateString()),
                 DataDevolucao = new DateOnly(),
-                Finalizado = true
+                Finalizado = false
             };
 
-            foreach(Copia copia in emprestimo.Copias)
+            if(emprestimo.Copias is not null && emprestimo.Copias.Count() > 0)
             {
-                novoEmprestimo.Copias.Add(copia);
+                foreach(Copia copia in emprestimo.Copias)
+                {
+                    novoEmprestimo.Copias.Add(copia);
+                }
             }
 
             if(novoEmprestimo is not null)
@@ -116,6 +119,11 @@ namespace Biblioteca.Services
 
             if(emprestimo is not null)
             {
+                if(emprestimo.Copias is null)
+                {
+                    emprestimo.Copias = new List<Copia>();
+                }
+
                 emprestimo.Copias.Add(await _copiaService.GetCopiaById(idCopia));
 
                 await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
