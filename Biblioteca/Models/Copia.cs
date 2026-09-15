@@ -11,9 +11,9 @@ namespace Biblioteca.Models
         public Guid Id { get; set; }
 
         [Required]
-        public Guid ObraId { get; set; }
+        public Guid ObraLiterariaId { get; set; }
 
-        public ObraLiteraria? ObraLiteraria { get; set; }
+        public ObraLiteraria ObraLiteraria { get; set; }
 
         [Required]
         [Display(Name = "Status de Disponibilidade")]
@@ -27,7 +27,7 @@ namespace Biblioteca.Models
         {
             return $"\nCópia" +
                 $"\n* Id: {Id.ToString()}" +
-                $"\n* Id da Obra Referenciada: {ObraId.ToString()}" +
+                $"\n* Id da Obra Referenciada: {ObraLiterariaId.ToString()}" +
                 $"\n* Status de Disponibilidade (verdadeiro = disponível): {StatusDisponibilidade.ToString()}\n";
         }
     }

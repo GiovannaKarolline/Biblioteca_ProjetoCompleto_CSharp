@@ -18,5 +18,11 @@ namespace Biblioteca.Services.Interfaces
         public Task<Emprestimo> AtualizarEmprestimo(Guid id, EmprestimoViewModel emprestimo);
 
         public Task<Emprestimo> AdicionarCopia(Guid idCopia, Guid idEmprestimo);
+
+        public Task<Emprestimo> RemoverCopia(Guid idCopia, Guid idUsuario);
+
+        public Task<Emprestimo?> FinalizarEmprestimo(Guid idEmprestimo);
+
+        public Task<Emprestimo?> RealizarDevolucao(Guid idEmprestimo);
     }
 }

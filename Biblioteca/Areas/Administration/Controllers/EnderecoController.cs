@@ -73,9 +73,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(endereco);
             }
 
-            var resultadoCriacao = await _enderecoService.AtualizarEndereco(endereco.Id, endereco);
+            var resultadoAtualizacao = await _enderecoService.AtualizarEndereco(endereco.Id, endereco);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
 
@@ -110,9 +110,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(endereco);
             }
 
-            var resultadoCriacao = await _enderecoService.DeletarEndereco(endereco.Id);
+            var resultadoDeletar = await _enderecoService.DeletarEndereco(endereco.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o empréstimo (falha ao deletar).";
 

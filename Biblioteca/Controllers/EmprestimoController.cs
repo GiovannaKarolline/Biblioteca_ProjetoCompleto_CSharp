@@ -31,13 +31,22 @@ namespace Biblioteca.Controllers
             if (emprestimo is not null)
             {
                 emprestimoViewModel.UsuarioId = emprestimo.UsuarioId;
-                emprestimoViewModel.DataPrevistaDevolucao = new DateOnly();
-                emprestimoViewModel.Copias.ToList().AddRange(emprestimo.Copias);
+                emprestimoViewModel.DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                emprestimoViewModel.DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day);
+                emprestimoViewModel.Copias = new List<Copia>();
+
+                if(emprestimo.Copias is not null)
+                {
+                    emprestimoViewModel.Copias = emprestimo.Copias;
+                }
             }
             else
             {
-                emprestimoViewModel.DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day); //apenas para evitar erro de required
+                emprestimoViewModel.DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                 emprestimoViewModel.DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day);
+                emprestimoViewModel.Copias = new List<Copia>();
+                emprestimoViewModel.Finalizado = false;
+                emprestimoViewModel.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
             }
 
             return View("Emprestimo", emprestimoViewModel);
@@ -50,8 +59,6 @@ namespace Biblioteca.Controllers
             {
                 return View("Emprestimo", emprestimo);
             }
-
-            emprestimo.Finalizado = true;
 
             var resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
 
@@ -76,30 +83,65 @@ namespace Biblioteca.Controllers
 
             if(emprestimo is null)
             {
-                EmprestimoViewModel novoEmprestimoViewModel = new EmprestimoViewModel()
-                {
-                    UsuarioId = Guid.Parse(_userManager.GetUserId(User))
-                };
+                emprestimoViewModel.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
 
-                Emprestimo novoEmprestimo = await _emprestimoService.CriarEmprestimo(novoEmprestimoViewModel);
+                Emprestimo novoEmprestimo = await _emprestimoService.CriarEmprestimo(emprestimoViewModel);
 
-                emprestimoViewModel.Id = novoEmprestimo.Id;
-                emprestimoViewModel.UsuarioId = novoEmprestimo.UsuarioId;
-                emprestimoViewModel.DataRetirada = novoEmprestimo.DataRetirada;
-                emprestimoViewModel.Finalizado = novoEmprestimo.Finalizado;
-                emprestimoViewModel.DataDevolucao = novoEmprestimo.DataDevolucao;
-                emprestimoViewModel.DataPrevistaDevolucao = novoEmprestimo.DataPrevistaDevolucao;
+                emprestimoViewModel.Copias = novoEmprestimo.Copias;
+
+                emprestimo = novoEmprestimo;
             }
             else
             {
-                emprestimoViewModel.Id = emprestimo.Id;
-                emprestimoViewModel.UsuarioId = emprestimo.UsuarioId;
+                emprestimoViewModel.Copias = emprestimo.Copias;
             }
+
+            emprestimoViewModel.Id = emprestimo.Id;
+            emprestimoViewModel.DataRetirada = emprestimo.DataRetirada;
+            emprestimoViewModel.Finalizado = emprestimo.Finalizado;
+            emprestimoViewModel.DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao;
 
             Copia copia = await _copiaService.GetCopiaById(id);
             await _emprestimoService.AdicionarCopia(copia.Id, emprestimoViewModel.Id);
-            
+
             return View("Emprestimo", emprestimoViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoverDoEmprestimo(Guid idCopia)
+        {
+            Guid idUsuario = Guid.Parse(_userManager.GetUserId(User));
+
+            Emprestimo? resultadoDeletar = await _emprestimoService.RemoverCopia(idCopia, idUsuario);
+
+            if (resultadoDeletar is null)
+            {
+                ViewData["Falha"] = "Cópia não removida. Falha ao tentar remover.";
+            }
+
+            return RedirectToAction("Index"); //para ir para o get e atualizar a lista de empréstimos
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RealizarDevolucao(Guid idEmprestimo)
+        {
+            Emprestimo? emprestimo = await _emprestimoService.GetEmprestimoById(idEmprestimo);
+
+            if (emprestimo is null)
+            {
+                ViewData["Falha"] = "Não existe um empréstimo com este Id.";
+
+                return View();
+            }
+
+            Emprestimo? resultadoAtualizacao = await _emprestimoService.RealizarDevolucao(idEmprestimo);
+
+            if(resultadoAtualizacao is null)
+            {
+                ViewData["Falha"] = "Não foi possível realizar a devolução do empréstimo.";
+            }
+
+            return View();
         }
     }
 }

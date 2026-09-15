@@ -69,9 +69,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(categoria);
             }
 
-            var resultadoCriacao = await _categoriaService.AtualizarCategoria(categoria.Id, categoria);
+            var resultadoAtualizacao = await _categoriaService.AtualizarCategoria(categoria.Id, categoria);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a categoria (falha ao atualizar).";
 
@@ -106,9 +106,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(categoria);
             }
 
-            var resultadoCriacao = await _categoriaService.DeletarCategoria(categoria.Id);
+            var resultadoDeletar = await _categoriaService.DeletarCategoria(categoria.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar a categoria (falha ao deletar).";
 

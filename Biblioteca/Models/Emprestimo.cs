@@ -19,12 +19,12 @@ namespace Biblioteca.Models
         public DateOnly DataRetirada { get; set; }
 
         [DataType(DataType.Date)]
-        public DateOnly DataDevolucao { get; set; }
+        public DateOnly? DataDevolucao { get; set; }
 
         [DataType(DataType.Date)]
         public DateOnly DataPrevistaDevolucao { get; set; }
 
-        public bool Deletado { get; set; } = true;
+        public bool Deletado { get; set; } = false;
 
         public bool Finalizado { get; set; } = false;
 

@@ -109,9 +109,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(obra);
             }
 
-            var resultadoCriacao = await _obraLiterariaService.AtualizarObraLiteraria(obra.Id, obra);
+            var resultadoAtualizacao = await _obraLiterariaService.AtualizarObraLiteraria(obra.Id, obra);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a obra literária (falha ao atualizar).";
 
@@ -159,9 +159,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(obra);
             }
 
-            var resultadoCriacao = await _obraLiterariaService.DeletarObraLiteraria(obra.Id);
+            var resultadoDeletar = await _obraLiterariaService.DeletarObraLiteraria(obra.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar a obra literária (falha ao deletar).";
 

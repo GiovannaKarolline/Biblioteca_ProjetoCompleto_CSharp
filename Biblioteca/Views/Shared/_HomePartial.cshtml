@@ -11,16 +11,27 @@
                 <h5 class="card-title">@obra.Titulo</h5>
                 <p class="card-text">@obra.Editora.Nome</p>
 
-                @if (obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null)
+                @if (obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null) //se existe uma cópia disponível
                 {
-                <form asp-controller="Emprestimo"
-                      asp-action="AdicionarAoEmprestimo"
-                      asp-route-id="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id">
-                    <button class="btn btn-primary" type="submit">
-                        Pegar emprestado
-                    </button>
-                </form>
-                    
+                    @if(User.Identity is null || !User.Identity.IsAuthenticated) //se o usuário está deslogado
+                    {
+                        <form asp-controller="Conta"
+                              asp-action="Login">
+                            <button class="btn btn-primary" type="submit">
+                                Pegar emprestado
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="Emprestimo"
+                              asp-action="AdicionarAoEmprestimo"
+                              asp-route-id="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id">
+                            <button class="btn btn-primary" type="submit">
+                                Pegar emprestado
+                            </button>
+                        </form>
+                    }
                 }
                 else
                 {

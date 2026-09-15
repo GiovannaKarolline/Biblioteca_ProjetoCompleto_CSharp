@@ -4,6 +4,7 @@ using Biblioteca.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteca.Migrations
 {
     [DbContext(typeof(BibliotecaDbContext))]
-    partial class BibliotecaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260915124245_ApenasRolesPadraoNoSeed")]
+    partial class ApenasRolesPadraoNoSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace Biblioteca.Migrations
                     b.Property<bool>("Deletado")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ObraLiterariaId")
+                    b.Property<Guid>("ObraId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("StatusDisponibilidade")
@@ -97,7 +100,7 @@ namespace Biblioteca.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ObraLiterariaId");
+                    b.HasIndex("ObraId");
 
                     b.ToTable("Copias");
                 });
@@ -522,7 +525,7 @@ namespace Biblioteca.Migrations
                 {
                     b.HasOne("Biblioteca.Models.ObraLiteraria", "ObraLiteraria")
                         .WithMany("Copias")
-                        .HasForeignKey("ObraLiterariaId")
+                        .HasForeignKey("ObraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

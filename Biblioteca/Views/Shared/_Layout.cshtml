@@ -30,7 +30,7 @@
                             </li>
                         }
 
-                        @if(User.Identity is null)
+                        @if(!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Conta" asp-action="Cadastro">Cadastro</a>
@@ -46,14 +46,16 @@
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
                     </form>
 
-                    <a asp-controller="Emprestimo" asp-action="Index">
-                        <img class="btn" src="https://static.thenounproject.com/png/2551-200.png" width="73"/>
-                    </a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-area="" asp-controller="Emprestimo" asp-action="Index">
+                            <img class="btn" src="https://static.thenounproject.com/png/2551-200.png" width="73"/>
+                        </a>
 
-                    <a asp-controller="Conta" asp-action="VisualizarPerfil">
-                        <img class="btn" src="https://marketplace.canva.com/Wkt1s/MACg40Wkt1s/2/tl/canva-user-profile-icon-MACg40Wkt1s.png" width="70" alt="Perfil de usuário" />
-                    </a>
-                    
+                        <a asp-area="" asp-controller="Conta" asp-action="VisualizarPerfil">
+                            <img class="btn" src="https://marketplace.canva.com/Wkt1s/MACg40Wkt1s/2/tl/canva-user-profile-icon-MACg40Wkt1s.png" width="70" alt="Perfil de usuário" />
+                        </a>
+                    }
                 </div>
             </div>
         </nav>

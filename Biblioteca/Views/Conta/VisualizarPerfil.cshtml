@@ -1,11 +1,36 @@
-﻿@{
+﻿@model IEnumerable<Emprestimo>
+
+@{
     ViewData["Title"] = "Perfil de usuário";
 }
 
-@if(User.Identity is not null)
+@if(User.Identity is not null && User.Identity.IsAuthenticated)
 {
     <h2>Olá, @(User.Identity.Name)!</h2>
 
+    <a class="btn btn-outline-secondary" asp-controller="Conta" asp-action="Deslogar">Clique aqui para deslogar</a>
+
+    <br />
+
+    @if(Model is null)
+    {
+        <h4>Não há devoluções pendentes.</h4>
+    }
+    else
+    {
+       <h4>Devoluções pendentes:</h4>
+
+        <br />
+
+        @foreach(Emprestimo emprestimo in Model)
+        {
+            @if(emprestimo.DataDevolucao is null)
+            {
+                <h6>@emprestimo.DataPrevistaDevolucao.ToShortDateString()</h6>
+            }
+
+        } 
+    }
 }
 else
 {

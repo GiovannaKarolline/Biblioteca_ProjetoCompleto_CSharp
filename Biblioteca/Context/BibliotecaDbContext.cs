@@ -36,7 +36,7 @@ namespace Biblioteca.Context
             modelBuilder.Entity<Copia>()
                 .HasOne(copia => copia.ObraLiteraria)
                 .WithMany(obra => obra.Copias)
-                .HasForeignKey(copia => copia.ObraId);
+                .HasForeignKey(copia => copia.ObraLiterariaId);
 
             modelBuilder.Entity<ObraLiteraria>()
                 .HasOne(obra => obra.Categoria)

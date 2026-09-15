@@ -15,10 +15,14 @@ namespace Biblioteca.Controllers
     public class ContaController : Controller
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IEmprestimoService _emprestimoService;
+        private readonly UserManager<Usuario> _userManager;
 
-        public ContaController(IUsuarioService usuarioService)
+        public ContaController(IUsuarioService usuarioService, IEmprestimoService emprestimoService, UserManager<Usuario> userManager)
         {
             _usuarioService = usuarioService;
+            _emprestimoService = emprestimoService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -70,6 +74,14 @@ namespace Biblioteca.Controllers
         }
 
         [HttpGet]
+        public IActionResult Deslogar()
+        {
+            _usuarioService.DeslogarUsuario();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AtualizarUsuario()
         {
             AtualizarUsuarioViewModel Usuario = new AtualizarUsuarioViewModel()
@@ -107,8 +119,10 @@ namespace Biblioteca.Controllers
         }
 
         [HttpGet]
-        public IActionResult VisualizarPerfil()
+        public async Task<IActionResult> VisualizarPerfil()
         {
+            IEnumerable<Emprestimo> emprestimosUsuario = await _emprestimoService.GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User)));
+
             return View();
         }
 

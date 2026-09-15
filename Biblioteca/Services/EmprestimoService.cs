@@ -23,7 +23,7 @@ namespace Biblioteca.Services
             {
                 emprestimoRegistrado.UsuarioId = emprestimo.UsuarioId;
                 emprestimoRegistrado.DataRetirada = emprestimo.DataRetirada;
-                emprestimoRegistrado.DataPrevistaDevolucao = emprestimo.DataDevolucao;
+                emprestimoRegistrado.DataPrevistaDevolucao = (DateOnly)emprestimo.DataDevolucao;
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
                 
                 foreach(Copia copia in emprestimo.Copias)
@@ -116,16 +116,27 @@ namespace Biblioteca.Services
         public async Task<Emprestimo> AdicionarCopia(Guid idCopia, Guid idEmprestimo)
         {
             Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
+            Copia? copia = await _copiaService.GetCopiaById(idCopia);
 
             if(emprestimo is not null)
             {
-                if(emprestimo.Copias is null)
+                if(copia is not null)
                 {
-                    emprestimo.Copias = new List<Copia>();
+                    if(emprestimo.Copias is null)
+                    {
+                        emprestimo.Copias = new List<Copia>();
+
+                        emprestimo.Copias.Add(copia);
+                    }
+                    else
+                    {
+                        if(emprestimo.Copias.FirstOrDefault(copia => copia.Id == idCopia) is null)
+                        {
+                            emprestimo.Copias.Add(copia);
+                        }
+                    }
                 }
-
-                emprestimo.Copias.Add(await _copiaService.GetCopiaById(idCopia));
-
+                
                 await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
 
                 return emprestimo;
@@ -134,5 +145,65 @@ namespace Biblioteca.Services
             throw new ArgumentException("Não existe um empréstimo com este Id no banco de dados.");
         }
 
+        public async Task<Emprestimo> RemoverCopia(Guid idCopia, Guid idUsuario)
+        {
+            Emprestimo? emprestimo = (await GetEmprestimosByUsuarioId(idUsuario)).FirstOrDefault(emprestimo => emprestimo.Finalizado == false);
+
+            Copia? copia = await _copiaService.GetCopiaById(idCopia);
+
+            if(copia is null)
+            {
+                throw new ArgumentException("Não existe registro de uma cópia com este Id.");
+            }
+
+            if(emprestimo is null)
+            {
+                throw new ArgumentException("Não existe registro de um empréstimo com este Id que não esteja finalizado.");
+            }
+
+            if (emprestimo.Copias.Contains(copia))
+            {
+                emprestimo.Copias.Remove(copia);
+            }
+
+            await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
+
+            return emprestimo;
+        }
+
+        public async Task<Emprestimo> FinalizarEmprestimo(Guid idEmprestimo)
+        {
+            Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
+
+            emprestimo.Finalizado = true;
+
+            foreach(Copia copia in emprestimo.Copias)
+            {
+                copia.StatusDisponibilidade = false;
+            }
+
+            await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
+
+            return emprestimo;
+        }
+
+        public async Task<Emprestimo?> RealizarDevolucao(Guid idEmprestimo)
+        {
+            Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
+
+            if (emprestimo.Copias is not null)
+            {
+                foreach (Copia copia in emprestimo.Copias)
+                {
+                    copia.StatusDisponibilidade = true;
+                }
+            }
+
+            emprestimo.DataDevolucao = DateOnly.Parse(DateTime.Now.Date.ToShortTimeString());
+
+            await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
+
+            return emprestimo;
+        }
     }
 }

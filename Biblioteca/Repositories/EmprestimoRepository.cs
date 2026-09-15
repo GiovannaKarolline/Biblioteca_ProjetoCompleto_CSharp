@@ -40,17 +40,30 @@ namespace Biblioteca.Repositories
 
         public Task<Emprestimo?> GetEmprestimoById(Guid id)
         {
-            return Task.FromResult(_context.Emprestimos.FirstOrDefault(emprestimo => emprestimo.Id == id));
+            return Task.FromResult(_context.Emprestimos
+                .Include(emprestimo => emprestimo.Usuario)
+                .Include(emprestimo => emprestimo.Copias)
+                .ThenInclude(copia => copia.ObraLiteraria)
+                .FirstOrDefault(emprestimo => emprestimo.Id == id));
         }
 
         public async Task<IEnumerable<Emprestimo>> GetEmprestimos()
         {
-            return await _context.Emprestimos.ToListAsync();
+            return await _context.Emprestimos
+                .Include(emprestimo => emprestimo.Usuario)
+                .Include(emprestimo => emprestimo.Copias)
+                .ThenInclude(copia => copia.ObraLiteraria)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Emprestimo>> GetEmprestimosByUsuarioId(Guid id)
         {
-            return await _context.Emprestimos.Where(emprestimo => emprestimo.UsuarioId == id).ToListAsync();
+            return await _context.Emprestimos
+                .Where(emprestimo => emprestimo.UsuarioId == id)
+                .Include(emprestimo => emprestimo.Usuario)
+                .Include(emprestimo => emprestimo.Copias)
+                .ThenInclude(copia => copia.ObraLiteraria)
+                .ToListAsync();
         }
     }
 }

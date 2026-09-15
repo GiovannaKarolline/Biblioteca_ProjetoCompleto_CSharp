@@ -40,9 +40,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(usuario);
             }
 
-            var resultadoCriacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+            var resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a Usuario literária (falha ao atualizar).";
 
@@ -79,9 +79,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(usuario);
             }
 
-            var resultadoCriacao = await _usuarioService.DeletarUsuario(usuario.Id);
+            var resultadoDeletar = await _usuarioService.DeletarUsuario(usuario.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o usuário (falha ao deletar).";
 

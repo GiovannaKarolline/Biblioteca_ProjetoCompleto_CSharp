@@ -21,7 +21,7 @@ namespace Biblioteca.Services
 
             if(copiaRegistrada is not null)
             {
-                copiaRegistrada.ObraId = copia.ObraId;
+                copiaRegistrada.ObraLiterariaId = copia.ObraId;
                 copiaRegistrada.StatusDisponibilidade = copia.StatusDisponibilidade;
 
                 await _copiaRepository.AtualizarCopia(copiaRegistrada);
@@ -36,7 +36,7 @@ namespace Biblioteca.Services
         {
             Copia? novaCopia = new Copia()
             {
-                ObraId = copia.ObraId,
+                ObraLiterariaId = copia.ObraId,
                 StatusDisponibilidade = copia.StatusDisponibilidade
             };
 

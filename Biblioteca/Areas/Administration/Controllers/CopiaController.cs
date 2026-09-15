@@ -80,9 +80,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(copia);
             }
 
-            var resultadoCriacao = await _copiaService.AtualizarCopia(copia.Id, copia);
+            var resultadoAtualizacao = await _copiaService.AtualizarCopia(copia.Id, copia);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a cópia (falha ao atualizar).";
 
@@ -117,9 +117,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(copia);
             }
 
-            var resultadoCriacao = await _copiaService.DeletarCopia(copia.Id);
+            var resultadoDeletar = await _copiaService.DeletarCopia(copia.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar a cópia (falha ao deletar).";
 

@@ -16,7 +16,7 @@ namespace Biblioteca.ViewModels
         public DateOnly DataRetirada { get; set; }
 
         [DataType(DataType.Date)]
-        public DateOnly DataDevolucao { get; set; }
+        public DateOnly? DataDevolucao { get; set; }
 
         [DataType(DataType.Date)]
         public DateOnly DataPrevistaDevolucao { get; set; }

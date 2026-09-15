@@ -69,9 +69,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(autor);
             }
 
-            var resultadoCriacao = await _autorService.AtualizarAutor(autor.Id, autor);
+            var resultadoAtualizacao = await _autorService.AtualizarAutor(autor.Id, autor);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o autor (falha ao atualizar).";
 
@@ -106,9 +106,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(autor);
             }
 
-            var resultadoCriacao = await _autorService.DeletarAutor(autor.Id);
+            var resultadoDeletar = await _autorService.DeletarAutor(autor.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o autor (falha ao deletar).";
 

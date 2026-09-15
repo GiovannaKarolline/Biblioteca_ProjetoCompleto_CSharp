@@ -1,6 +1,7 @@
 ﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Criar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
+using Biblioteca.Models;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +67,8 @@ namespace Biblioteca.Areas.Administration.Controllers
             AtualizarEmprestimoViewModel emprestimo = new AtualizarEmprestimoViewModel()
             {
                 CopiasExistentes = await _copiaService.GetCopias(),
-                Emprestimos = await _emprestimoService.GetEmprestimos()
+                Emprestimos = await _emprestimoService.GetEmprestimos(),
+                Copias = new List<Copia>()
             };
 
             return View(emprestimo);
@@ -82,9 +84,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(emprestimo);
             }
 
-            var resultadoCriacao = await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimo);
+            var resultadoAtualizar = await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimo);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizar == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
 
@@ -101,12 +103,12 @@ namespace Biblioteca.Areas.Administration.Controllers
         [HttpGet]
         public async Task<IActionResult> DeletarEmprestimo()
         {
-            DeletarEmprestimoViewModel Emprestimo = new DeletarEmprestimoViewModel()
+            DeletarEmprestimoViewModel emprestimo = new DeletarEmprestimoViewModel()
             {
                 Emprestimos = await _emprestimoService.GetEmprestimos()
             };
 
-            return View(Emprestimo);
+            return View(emprestimo);
         }
 
         [HttpPost]
@@ -116,14 +118,18 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o empréstimo (Guid inválido).";
 
+                emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
+
                 return View(emprestimo);
             }
 
-            var resultadoCriacao = await _emprestimoService.DeletarEmprestimo(emprestimo.Id);
+            var resultadoDeletar = await _emprestimoService.DeletarEmprestimo(emprestimo.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o empréstimo (falha ao deletar).";
+
+                emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
 
                 return View(emprestimo);
             }

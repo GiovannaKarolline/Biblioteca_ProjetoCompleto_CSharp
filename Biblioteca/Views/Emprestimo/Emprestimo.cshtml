@@ -10,22 +10,22 @@
 <hr />
 
 <div class="container">
-    <form asp-controller="Emprestimo" asp-action="Index" method="post" role="form">
-
-        @if (Model.Copias is not null)
+    
+        @if (Model.Copias is not null && Model.Copias.Count() > 0)
         {
             <partial name="_EmprestimoPartial" model="@Model.Copias" />
 
-            <div class="form-group">
-                <input type="submit" placeholder="Finalizar empréstimo" />
-            </div>
+            <form asp-controller="Emprestimo" asp-action="Index" method="post" role="form">
+                <div class="form-group">
+                    <br />
+                    <input type="submit" value="Finalizar empréstimo" />
+                </div>
+            </form>
         }
         else
         {
             <h3>Você ainda não selecionou nenhum livro.</h3>
         }
-
-    </form>
 </div>
 
 @section Scripts {

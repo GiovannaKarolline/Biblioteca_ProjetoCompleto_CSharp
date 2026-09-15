@@ -15,7 +15,10 @@ namespace Biblioteca.Repositories
 
         public async Task<IEnumerable<Copia>> GetCopiasDisponiveis()
         {
-            return await _context.Copias.Where(copia => copia.StatusDisponibilidade == true).ToListAsync();
+            return await _context.Copias
+                .Where(copia => copia.StatusDisponibilidade == true)
+                .Include(copia => copia.ObraLiteraria)
+                .ToListAsync();
         }
 
         public Task<Copia> AtualizarCopia(Copia copia)
@@ -43,12 +46,16 @@ namespace Biblioteca.Repositories
 
         public async Task<Copia?> GetCopiaById(Guid id)
         {
-            return await _context.Copias.FirstOrDefaultAsync(copia => copia.Id == id);
+            return await _context.Copias
+                .Include(copia => copia.ObraLiteraria)
+                .FirstOrDefaultAsync(copia => copia.Id == id);
         }
 
         public async Task<IEnumerable<Copia>> GetCopias()
         {
-            return await _context.Copias.Include(copia => copia.ObraLiteraria).ThenInclude(obra => obra.Categoria).ToListAsync();
+            return await _context.Copias
+                .Include(copia => copia.ObraLiteraria)
+                .ThenInclude(obra => obra.Categoria).ToListAsync();
         }
     }
 }

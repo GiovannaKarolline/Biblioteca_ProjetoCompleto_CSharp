@@ -68,9 +68,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(Editora);
             }
 
-            var resultadoCriacao = await _editoraService.AtualizarEditora(Editora.Id, Editora);
+            var resultadoAtualizar = await _editoraService.AtualizarEditora(Editora.Id, Editora);
 
-            if (resultadoCriacao == null)
+            if (resultadoAtualizar == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a cópia (falha ao atualizar).";
 
@@ -105,9 +105,9 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(editora);
             }
 
-            var resultadoCriacao = await _editoraService.DeletarEditora(editora.Id);
+            var resultadoDeletar = await _editoraService.DeletarEditora(editora.Id);
 
-            if (resultadoCriacao == null)
+            if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar a editora (falha ao deletar).";
 
