@@ -26,7 +26,7 @@ namespace Biblioteca.Services
                 emprestimoRegistrado.DataPrevistaDevolucao = (DateOnly)emprestimo.DataDevolucao;
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
                 
-                foreach(Copia copia in emprestimo.Copias)
+                foreach(Copia copia in emprestimo.Copias.ToList())
                 {
                     emprestimoRegistrado.Copias.Add(await _copiaService.GetCopiaById(copia.Id));
                 }

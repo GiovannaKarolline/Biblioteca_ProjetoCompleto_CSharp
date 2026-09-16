@@ -13,13 +13,16 @@
     
         @if (Model.Copias is not null && Model.Copias.Count() > 0)
         {
+
             <partial name="_EmprestimoPartial" model="@Model.Copias" />
 
-            <form asp-controller="Emprestimo" asp-action="Index" method="post" role="form">
+            <form asp-controller="Emprestimo" asp-action="FinalizarEmprestimo" method="post" role="form">
+
                 <div class="form-group">
                     <br />
                     <input class="btn btn-outline-primary" type="submit" value="Finalizar empréstimo" />
                 </div>
+
             </form>
         }
         else

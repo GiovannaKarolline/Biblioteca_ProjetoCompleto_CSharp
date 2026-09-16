@@ -17,6 +17,6 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<Copia?> DeletarCopia(Guid id);
 
-        public Task<Copia> EmprestarCopia(Guid id);
+        public Task<IEnumerable<Copia>> EmprestarCopias(IEnumerable<Copia> copias);
     }
 }

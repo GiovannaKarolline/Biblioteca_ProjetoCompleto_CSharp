@@ -91,27 +91,29 @@ namespace Biblioteca.Services
             return await _copiaRepository.GetCopiasDisponiveis();
         }
 
-        public async Task<Copia> EmprestarCopia(Guid id)
+        public async Task<IEnumerable<Copia>> EmprestarCopias(IEnumerable<Copia> copias)
         {
-            Copia? copia = await GetCopiaById(id);
 
-            if(copia is not null)
+            if(copias is not null)
             {
-                if(copia.StatusDisponibilidade == true)
+                foreach(Copia copia in copias)
                 {
-                    copia.StatusDisponibilidade = false;
-                    await _copiaRepository.AtualizarCopia(copia);
+                    if(copia.StatusDisponibilidade == true)
+                    {
+                        copia.StatusDisponibilidade = false;
+                        await _copiaRepository.AtualizarCopia(copia);
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Cópia indisponível: uma cópia já está emprestada");
+                    }
+                }
 
-                    return copia;
-                }
-                else
-                {
-                    throw new ArgumentException("Cópia indisponível: esta cópia já está emprestada");
-                }
+                return copias;
             }
             else
             {
-                throw new ArgumentException("Não existe uma cópia com este Id no banco de dados.");
+                throw new ArgumentException("Lista de cópias nula.");
             }
         }
     }

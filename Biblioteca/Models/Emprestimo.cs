@@ -38,7 +38,8 @@ namespace Biblioteca.Models
                 $"\n* Id do Usuário: {UsuarioId.ToString()}" +
                 $"\n* Data de Retirada: {DataRetirada.ToString()}" +
                 $"\n* Data Prevista de Devolução: {DataPrevistaDevolucao.ToString()}" +
-                $"\n* Data da Devolução: {DataDevolucao.ToString()}\n";
+                $"\n* Data da Devolução: {DataDevolucao.ToString()}" +
+                $"\n* Finalizado: {Finalizado.ToString()}\n";
         }
     }
 }

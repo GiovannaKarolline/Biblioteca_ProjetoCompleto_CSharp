@@ -5,8 +5,10 @@ using Biblioteca.Models;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Biblioteca.Areas.Administration.Controllers
@@ -17,11 +19,13 @@ namespace Biblioteca.Areas.Administration.Controllers
     {
         private readonly IEmprestimoService _emprestimoService;
         private readonly ICopiaService _copiaService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public EmprestimoController(IEmprestimoService emprestimoService, ICopiaService copiaService)
+        public EmprestimoController(IEmprestimoService emprestimoService, ICopiaService copiaService, UserManager<IdentityUser> userManager)
         {
             _emprestimoService = emprestimoService;
             _copiaService = copiaService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -73,28 +77,47 @@ namespace Biblioteca.Areas.Administration.Controllers
                 Copias = new List<Copia>()
             };
 
-            return View(emprestimo);
+            return View("AtualizarEmprestimo", emprestimo);
         }
 
         [HttpPost]
         public async Task<IActionResult> AtualizarEmprestimo(AtualizarEmprestimoViewModel emprestimo)
         {
+            Emprestimo? emprestimoRegistrado = await _emprestimoService.GetEmprestimoById(emprestimo.Id);
+
+            if(emprestimoRegistrado is not null)
+            {
+                foreach (Guid idCopia in emprestimo.IdCopias)
+                {
+                    if(!emprestimoRegistrado.Copias.Any(copia => copia.Id == idCopia))
+                    {
+                        await _emprestimoService.AdicionarCopia(emprestimo.Id, idCopia);
+                    }
+
+                        if (emprestimo.DataDevolucao is null)
+                    {
+                        (await _copiaService.GetCopiaById(idCopia)).StatusDisponibilidade = false;
+                    }
+                }
+
+                foreach(Copia copia in emprestimoRegistrado.Copias)
+                {
+                    if (!emprestimo.IdCopias.Any(id => id == copia.Id))
+                    {
+                        //é preciso criar uma nova função para retirar itens de um empréstimo já finalizado.
+                    }
+                }
+
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
 
-                return View(emprestimo);
+                return View("AtualizarEmprestimo", emprestimo);
             }
 
             List<Copia> novaListaCopias = emprestimo.Copias.ToList();
-
-            foreach(Guid id in emprestimo.IdCopias)
-            {
-                if((await _copiaService.GetCopiaById(id)) is not null)
-                {
-                    novaListaCopias.Add(await _copiaService.GetCopiaById(id));
-                }
-            }
 
             emprestimo.Copias = novaListaCopias;
 
@@ -104,7 +127,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
 
-                return View(emprestimo);
+                return View("AtualizarEmprestimo", emprestimo);
             }
 
             ViewData["Sucesso"] = "Empréstimo atualizado com sucesso!";
@@ -126,33 +149,27 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletarEmprestimo(DeletarEmprestimoViewModel emprestimo)
+        public async Task<IActionResult> DeletarEmprestimo(Guid id)
         {
-            if (emprestimo.Id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 ViewData["Falha"] = "Não foi possível deletar o empréstimo (Guid inválido).";
 
-                emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
-
-                return View(emprestimo);
+                return RedirectToAction("DeletarEmprestimo");
             }
 
-            var resultadoDeletar = await _emprestimoService.DeletarEmprestimo(emprestimo.Id);
+            var resultadoDeletar = await _emprestimoService.DeletarEmprestimo(id);
 
             if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o empréstimo (falha ao deletar).";
 
-                emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
-
-                return View(emprestimo);
+                return RedirectToAction("DeletarEmprestimo");
             }
 
             ViewData["Sucesso"] = "empréstimo deletado com sucesso!";
 
-            emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
-
-            return View("DeletarEmprestimo", emprestimo);
+            return RedirectToAction("DeletarEmprestimo");
         }
 
         [HttpGet]

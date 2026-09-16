@@ -1,4 +1,5 @@
 ﻿using Biblioteca.Models;
+using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,8 @@ namespace Biblioteca.Controllers
                 {
                     emprestimoViewModel.Copias = emprestimo.Copias;
                 }
+
+                //atualizar emprestimo
             }
             else
             {
@@ -53,26 +56,6 @@ namespace Biblioteca.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(EmprestimoViewModel emprestimo)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("Emprestimo", emprestimo);
-            }
-
-            var resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
-
-            if(resultadoCriacao is null)
-            {
-                ModelState.AddModelError("_emprestimoService.CriarEmprestimo", "Falha ao criar empréstimo.");
-
-                return View("Emprestimo", emprestimo);
-            }
-
-            return RedirectToAction("Home", "Index");
-        }
-
-        [HttpPost]
         public async Task<IActionResult> AdicionarAoEmprestimo(Guid idCopia)
         {
             Emprestimo? emprestimo = (await _emprestimoService
@@ -81,24 +64,28 @@ namespace Biblioteca.Controllers
 
             EmprestimoViewModel emprestimoViewModel = new EmprestimoViewModel();
 
-            if(emprestimo is null)
+            emprestimoViewModel.Copias = new List<Copia>();
+
+            if (emprestimo is null)
             {
                 emprestimoViewModel.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
-                
-                emprestimoViewModel.Copias = new List<Copia>();
 
                 Emprestimo novoEmprestimo = await _emprestimoService.CriarEmprestimo(emprestimoViewModel);
+
+                if (novoEmprestimo is null)
+                {
+                    ViewData["Falha"] = "Falha ao tentar criar empréstimo. Não será possível finalizá-lo.";
+                }
 
                 emprestimo = novoEmprestimo;
             }
 
-            emprestimoViewModel.Copias = emprestimo.Copias;
             emprestimoViewModel.Id = emprestimo.Id;
             emprestimoViewModel.DataRetirada = emprestimo.DataRetirada;
             emprestimoViewModel.Finalizado = emprestimo.Finalizado;
             emprestimoViewModel.DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao;
 
-            Copia copia = await _copiaService.GetCopiaById(idCopia);
+            Copia? copia = await _copiaService.GetCopiaById(idCopia);
 
             if(copia is null)
             {
@@ -107,7 +94,9 @@ namespace Biblioteca.Controllers
                 return View("Emprestimo", emprestimoViewModel);
             }
 
-            await _emprestimoService.AdicionarCopia(copia.Id, emprestimoViewModel.Id);
+            emprestimo = await _emprestimoService.AdicionarCopia(copia.Id, emprestimoViewModel.Id);
+
+            emprestimoViewModel.Copias = emprestimo.Copias;
 
             return View("Emprestimo", emprestimoViewModel);
         }
@@ -125,6 +114,61 @@ namespace Biblioteca.Controllers
             }
 
             return RedirectToAction("Index"); //para ir para o get e atualizar a lista de empréstimos
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FinalizarEmprestimo()
+        {
+            Emprestimo? emprestimo = (await _emprestimoService.GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User))))
+                .FirstOrDefault(emprestimo => emprestimo.Finalizado == false);
+
+            if(emprestimo is null)
+            {
+                ViewData["Falha"] = "Empréstimo inexistente ou vazio. Não é possível finalizar.";
+
+                return View("Emprestimo", new EmprestimoViewModel());
+            }
+
+            EmprestimoViewModel emprestimoViewModel = new EmprestimoViewModel()
+            {
+                Copias = emprestimo.Copias,
+                DataDevolucao = emprestimo.DataDevolucao,
+                DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao,
+                DataRetirada = emprestimo.DataRetirada,
+                Finalizado = emprestimo.Finalizado,
+                UsuarioId = emprestimo.UsuarioId,
+                Id = emprestimo.Id
+            };
+
+            if (emprestimo is null)
+            {
+                ViewData["Falha"] = "O empréstimo não pôde ser finalizado porque não existe.";
+
+                return View("Emprestimo", emprestimoViewModel);
+            }
+
+            if (emprestimo.Copias is null || emprestimo.Copias.Count() < 1)
+            {
+                ViewData["Falha"] = "O empréstimo não pôde ser finalizado porque não possui cópias.";
+
+                return View("Emprestimo", emprestimoViewModel);
+            }
+
+            emprestimo.Finalizado = true;
+            await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimoViewModel);
+
+            try
+            {
+                await _copiaService.EmprestarCopias(emprestimo.Copias);
+            }
+            catch (Exception excecao)
+            {
+                ViewData["Falha"] = excecao.Message;
+
+                return View("Emprestimo", emprestimoViewModel);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -148,5 +192,7 @@ namespace Biblioteca.Controllers
 
             return View();
         }
+
+
     }
 }
