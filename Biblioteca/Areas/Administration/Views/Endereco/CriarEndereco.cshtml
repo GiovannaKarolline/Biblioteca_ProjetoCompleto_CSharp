@@ -32,38 +32,46 @@
             <div class="form-group">
                 <fieldset>
                     <label asp-for="TipoLogradouro">Tipo de logradouro: </label>
-                    <select asp-for="TipoLogradouro" asp-items="Html.GetEnumSelectList<TipoLogradouro>()">
+                    <select class="form-select" asp-for="TipoLogradouro" asp-items="Html.GetEnumSelectList<TipoLogradouro>()">
 
                         <option value="">Selecione um tipo de logradouro</option>
 
                     </select>
                 </fieldset>
 
+                <br />
+
                 <div class="form-group">
                     <label asp-for="Logradouro">Logradouro: </label>
-                    <input asp-for="Logradouro" type="text"/>
+                    <input class="form-control" asp-for="Logradouro" type="text"/>
                 </div>
+
+                <br/>
 
                 <div class="form-group">
                     <label asp-for="Numero">Número: </label>
-                    <input asp-for="Numero" type="text" />
+                    <input class="form-control" asp-for="Numero" type="text" />
                 </div>
+
+                <br/>
 
                 <div class="form-group">
                     <label asp-for="Complemento">Complemento: </label>
-                    <input asp-for="Complemento"/>
+                    <input class="form-control" asp-for="Complemento"/>
                 </div>
+
+                <br/>
 
                 <div class="form-group">
                     <label asp-for="Cep">CEP: </label>
-                    <input asp-for="Cep" />
+                    <input class="form-control" asp-for="Cep" />
                 </div>
 
             </div>
 
             <div class="form-group">
                 <br />
-                <input type="submit" placeholder="Criar" />
+                <input class="btn btn-primary" type="submit" value="Criar" />
             </div>
         </form>
     }

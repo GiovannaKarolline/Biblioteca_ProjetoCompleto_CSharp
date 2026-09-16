@@ -3,6 +3,7 @@ using Biblioteca.Areas.Administration.ViewModels;
 using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class AutorController : Controller
     {
         private readonly IAutorService _autorService;

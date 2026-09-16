@@ -1,4 +1,5 @@
 ﻿using Biblioteca.Models;
+using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +20,16 @@ namespace Biblioteca.Controllers
         {
             var obras = new HomeViewModel
             {
-                ObrasLiterarias = await _obraLiterariaService.GetObras() ?? new List<ObraLiteraria>()
+                ObrasLiterarias = (await _obraLiterariaService.GetObras()) ?? new List<ObraLiteraria>()
             };
+
+            foreach (var obra in obras.ObrasLiterarias)
+            {
+                if(obra.Copias is not null)
+                {
+                    obra.Copias = obra.Copias.Where(obra => obra.Deletado == false).ToList(); //para que as cópias deletadas não sejam passadas para a view.
+                }
+            }
 
             return View(obras);
         }

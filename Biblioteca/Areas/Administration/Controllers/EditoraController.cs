@@ -3,12 +3,14 @@ using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class EditoraController : Controller
     {
         private readonly IEditoraService _editoraService;

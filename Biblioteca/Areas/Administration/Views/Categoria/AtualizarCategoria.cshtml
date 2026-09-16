@@ -32,7 +32,7 @@
 
             <fieldset>
                 <label asp-for="Id">Escolha uma categoria para editar: </label>
-                <select asp-for="Id">
+                <select class="form-select" asp-for="Id">
                     @foreach (Categoria categoria in Model.Categorias)
                     {
                         <option value="@categoria.Id">@(categoria.Titulo)</option>
@@ -40,13 +40,16 @@
                 </select>
             </fieldset>
 
+            <br />
+
             <div class="form-group">
                 <label asp-for="Titulo">Digite o novo título da categoria: </label>
-                <input type="text" placeholder="Título" asp-for="Titulo" />
+                <input class="form-control" type="text" placeholder="Título" asp-for="Titulo" />
                 <span asp-validation-for="Titulo"></span>
             </div>
             <div class="form-group">
-                <input type="submit" placeholder="Atualizar" />
+                <br />
+                <input class="btn btn-primary" type="submit" value="Atualizar" />
             </div>
         </form>
     }

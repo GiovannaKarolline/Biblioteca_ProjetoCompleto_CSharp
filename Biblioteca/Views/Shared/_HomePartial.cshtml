@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<ObraLiteraria>
 
-@foreach(ObraLiteraria obra in Model)
-{
+<div class="row gap-3 justify-content-center">
 
-        <div class="card" style="width: 18rem;">
+    @foreach(ObraLiteraria obra in Model)
+    {
+        <div class="card col-sm-4 col-md-4 col-lg-2">
 
             <img class="card-img-top" src="@obra.FotoCapa" alt="Capa do livro">
 
@@ -11,12 +12,12 @@
                 <h5 class="card-title">@obra.Titulo</h5>
                 <p class="card-text">@obra.Editora.Nome</p>
 
-                @if (obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null) //se existe uma cópia disponível
+                @if (obra.Copias is not null && obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null) //se existe uma cópia disponível
                 {
                     @if(User.Identity is null || !User.Identity.IsAuthenticated) //se o usuário está deslogado
                     {
                         <form asp-controller="Conta"
-                              asp-action="Login">
+                              asp-action="Login" method="get">
                             <button class="btn btn-primary" type="submit">
                                 Pegar emprestado
                             </button>
@@ -26,7 +27,7 @@
                     {
                         <form asp-controller="Emprestimo"
                               asp-action="AdicionarAoEmprestimo"
-                              asp-route-id="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id">
+                              asp-route-idCopia="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id" method="post">
                             <button class="btn btn-primary" type="submit">
                                 Pegar emprestado
                             </button>
@@ -42,4 +43,5 @@
             </div>
 
         </div>
-}
+    }
+</div>

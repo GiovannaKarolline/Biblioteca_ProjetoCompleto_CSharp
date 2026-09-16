@@ -126,11 +126,14 @@ namespace Biblioteca.Services
                     {
                         emprestimo.Copias = new List<Copia>();
 
-                        emprestimo.Copias.Add(copia);
+                        if(emprestimo.Copias.Select(copias => copias.Id == idCopia) is null)
+                        {
+                            emprestimo.Copias.Add(copia);
+                        }
                     }
                     else
                     {
-                        if(emprestimo.Copias.FirstOrDefault(copia => copia.Id == idCopia) is null)
+                        if(emprestimo.Copias.FirstOrDefault(copias => copias.Id == idCopia) is null)
                         {
                             emprestimo.Copias.Add(copia);
                         }
@@ -175,10 +178,22 @@ namespace Biblioteca.Services
         {
             Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
 
+            if(emprestimo is null)
+            {
+                throw new ArgumentException("Não existe um empréstimo com este Id.");
+            }
+
             emprestimo.Finalizado = true;
 
             foreach(Copia copia in emprestimo.Copias)
             {
+                if(copia.StatusDisponibilidade == false)
+                {
+                    emprestimo.Copias.Remove(copia);
+
+                    throw new ArgumentException("Não foi possível realizar o empréstimo. O empréstimo possuia cópias já emprestadas (agora removidas).");
+                }
+
                 copia.StatusDisponibilidade = false;
             }
 

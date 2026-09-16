@@ -2,6 +2,7 @@
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class EnderecoController : Controller
     {
         private readonly IEnderecoService _enderecoService;

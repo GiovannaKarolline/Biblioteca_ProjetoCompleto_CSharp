@@ -33,7 +33,7 @@
             <div class="form-group">
                 <fieldset>
                     <label asp-for="Id">Escolha qual endereço deseja deletar: </label>
-                    <select asp-for="Id">
+                    <select class="form-select" asp-for="Id">
                         @foreach (Endereco endereco in Model.Enderecos)
                         {
                             <option value="@endereco.Id">@(endereco.ToString())</option>
@@ -43,7 +43,8 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" placeholder="Deletar" />
+                <br />
+                <input class="btn btn-primary" type="submit" value="Deletar" />
             </div>
         </form>
     }

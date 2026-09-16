@@ -7,6 +7,7 @@ using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -14,6 +15,7 @@ using System.Security.Claims;
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class ObraLiterariaController : Controller
     {
         private readonly IObraLiterariaService _obraLiterariaService;

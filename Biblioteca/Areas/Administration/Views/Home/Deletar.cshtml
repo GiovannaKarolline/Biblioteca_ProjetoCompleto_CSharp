@@ -7,38 +7,24 @@
 
 <h4>Registros disponíveis</h4>
 
-<ul>
-    <li>
-        <a asp-controller="Autor" asp-action="DeletarAutor">Autor</a>
-    </li>
+<div class="list-group">
 
-    <li>
-        <a asp-controller="Categoria" asp-action="DeletarCategoria">Categoria</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Autor" asp-action="DeletarAutor">Autor</a>
 
-    <li>
-        <a asp-controller="Copia" asp-action="DeletarCopia">Cópia</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Categoria" asp-action="DeletarCategoria">Categoria</a>
 
-    <li>
-        <a asp-controller="Editora" asp-action="DeletarEditora">Editora</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Copia" asp-action="DeletarCopia">Cópia</a>
 
-    <li>
-        <a asp-controller="Emprestimo" asp-action="DeletarEmprestimo">Empréstimo</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Editora" asp-action="DeletarEditora">Editora</a>
 
-    <li>
-        <a asp-controller="Endereco" asp-action="DeletarEndereco">Endereço</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Emprestimo" asp-action="DeletarEmprestimo">Empréstimo</a>
 
-    <li>
-        <a asp-controller="ObraLiteraria" asp-action="DeletarObra">Obra literária</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Endereco" asp-action="DeletarEndereco">Endereço</a>
 
-    <li>
-        <a asp-controller="Usuario" asp-action="DeletarUsuario">Usuário</a>
-    </li>
-</ul>
+    <a class="list-group-item list-group-item-action" asp-controller="ObraLiteraria" asp-action="DeletarObra">Obra literária</a>
+
+</div>
+
+<br />
 
 <a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Index">Voltar</a>

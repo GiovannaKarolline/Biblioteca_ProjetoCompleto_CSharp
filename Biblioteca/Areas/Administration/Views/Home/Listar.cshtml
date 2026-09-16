@@ -7,38 +7,26 @@
 
 <h4>Registros disponíveis</h4>
 
-<ul>
-    <li>
-        <a asp-controller="Autor" asp-action="ListarAutores">Autores</a>
-    </li>
+<div class="list-group">
 
-    <li>
-        <a asp-controller="Categoria" asp-action="ListarCategorias">Categorias</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Autor" asp-action="ListarAutores">Autores</a>
 
-    <li>
-        <a asp-controller="Copia" asp-action="ListarCopias">Cópias</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Categoria" asp-action="ListarCategorias">Categorias</a>
 
-    <li>
-        <a asp-controller="Editora" asp-action="ListarEditoras">Editoras</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Copia" asp-action="ListarCopias">Cópias</a>
 
-    <li>
-        <a asp-controller="Emprestimo" asp-action="ListarEmprestimos">Empréstimos</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Editora" asp-action="ListarEditoras">Editoras</a>
 
-    <li>
-        <a asp-controller="Endereco" asp-action="ListarEnderecos">Endereços</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Emprestimo" asp-action="ListarEmprestimos">Empréstimos</a>
 
-    <li>
-        <a asp-controller="ObraLiteraria" asp-action="ListarObras">Obras literárias</a>
-    </li>
+    <a class="list-group-item list-group-item-action" asp-controller="Endereco" asp-action="ListarEnderecos">Endereços</a>
 
-    <li>
-        <a asp-controller="Usuario" asp-action="ListarUsuarios">Usuários</a>
-    </li>
-</ul>
+    <a class="list-group-item list-group-item-action" asp-controller="ObraLiteraria" asp-action="ListarObras">Obras literárias</a>
+
+    <a class="list-group-item list-group-item-action" asp-controller="Usuario" asp-action="ListarUsuarios">Usuários</a>
+
+</div>
+
+<br />
 
 <a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Index">Voltar</a>

@@ -73,7 +73,7 @@ namespace Biblioteca.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarAoEmprestimo(Guid id)
+        public async Task<IActionResult> AdicionarAoEmprestimo(Guid idCopia)
         {
             Emprestimo? emprestimo = (await _emprestimoService
                 .GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User))))
@@ -84,24 +84,29 @@ namespace Biblioteca.Controllers
             if(emprestimo is null)
             {
                 emprestimoViewModel.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
+                
+                emprestimoViewModel.Copias = new List<Copia>();
 
                 Emprestimo novoEmprestimo = await _emprestimoService.CriarEmprestimo(emprestimoViewModel);
 
-                emprestimoViewModel.Copias = novoEmprestimo.Copias;
-
                 emprestimo = novoEmprestimo;
             }
-            else
-            {
-                emprestimoViewModel.Copias = emprestimo.Copias;
-            }
 
+            emprestimoViewModel.Copias = emprestimo.Copias;
             emprestimoViewModel.Id = emprestimo.Id;
             emprestimoViewModel.DataRetirada = emprestimo.DataRetirada;
             emprestimoViewModel.Finalizado = emprestimo.Finalizado;
             emprestimoViewModel.DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao;
 
-            Copia copia = await _copiaService.GetCopiaById(id);
+            Copia copia = await _copiaService.GetCopiaById(idCopia);
+
+            if(copia is null)
+            {
+                ViewData["Falha"] = "A cópia não pôde ser adicionada porque não existe.";
+
+                return View("Emprestimo", emprestimoViewModel);
+            }
+
             await _emprestimoService.AdicionarCopia(copia.Id, emprestimoViewModel.Id);
 
             return View("Emprestimo", emprestimoViewModel);

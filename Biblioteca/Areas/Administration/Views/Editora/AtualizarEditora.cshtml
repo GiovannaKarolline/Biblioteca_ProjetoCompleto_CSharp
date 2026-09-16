@@ -32,13 +32,15 @@
 
             <fieldset>
                 <label asp-for="Id">Escolha uma editora para editar: </label>
-                <select asp-for="Id">
+                <select class="form-select" asp-for="Id">
                     @foreach (Editora editora in Model.Editoras)
                     {
                         <option value="@editora.Id">@(editora.Nome)</option>
                     }
                 </select>
             </fieldset>
+
+            <br />
 
             <div class="form-group">
                 <label asp-for="Nome">Digite o novo nome da editora: </label>
@@ -47,7 +49,8 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Atualizar" />
+                <br />
+                <input class="btn btn-primary" type="submit" value="Atualizar" />
             </div>
         </form>
     }

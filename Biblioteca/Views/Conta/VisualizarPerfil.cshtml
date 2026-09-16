@@ -7,9 +7,13 @@
 @if(User.Identity is not null && User.Identity.IsAuthenticated)
 {
     <h2>Olá, @(User.Identity.Name)!</h2>
+    <hr />
+
+    <br />
 
     <a class="btn btn-outline-secondary" asp-controller="Conta" asp-action="Deslogar">Clique aqui para deslogar</a>
 
+    <br />
     <br />
 
     @if(Model is null)

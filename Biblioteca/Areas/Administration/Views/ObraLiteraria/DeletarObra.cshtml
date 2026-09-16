@@ -33,7 +33,7 @@
             <div class="form-group">
                 <fieldset>
                     <label asp-for="Id">Escolha qual obra literária você deseja deletar: </label>
-                    <select asp-for="Id">
+                    <select class="form-select" asp-for="Id">
                         @foreach (ObraLiteraria obra in Model.ObrasLiterarias)
                         {
                             <option value="@obra.Id">@(obra.Titulo + " - Id: " + obra.Id)</option>
@@ -44,7 +44,7 @@
 
             <div class="form-group">
                 <br />
-                <input type="submit" placeholder="Deletar" />
+                <input class="btn btn-primary" type="submit" value="Deletar" />
             </div>
         </form>
     }

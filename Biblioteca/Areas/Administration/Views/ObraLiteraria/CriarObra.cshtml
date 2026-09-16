@@ -48,13 +48,15 @@
 
                 <div class="form-group">
                     <label asp-for="Titulo">Título: </label>
-                    <input asp-for="Titulo" type="text" />
+                    <input class="form-control" asp-for="Titulo" type="text" />
                     <span asp-validation-for="Titulo"></span>
                 </div>
 
+                <br />
+
                 <div class="form-group">
                     <label asp-for="CategoriaId">Categoria: </label>
-                    <select asp-for="CategoriaId">
+                    <select class ="form-select" asp-for="CategoriaId">
 
                         @foreach (Categoria categoria in Model.CategoriasExistentes)
                         {
@@ -65,21 +67,27 @@
                     <span asp-validation-for="CategoriaId"></span>
                 </div>
 
+                <br />
+
                 <div class="form-group">
                     <label asp-for="ISBN">ISBN: </label>
-                    <input asp-for="ISBN" type="text" />
+                    <input class="form-control" asp-for="ISBN" type="text" />
                     <span asp-validation-for="ISBN"></span>
                 </div>
 
+                <br />
+
                 <div class="form-group">
                     <label asp-for="AnoPublicacao">Ano de publicação: </label>
-                    <input asp-for="AnoPublicacao" type="number" />
+                    <input class="form-control" asp-for="AnoPublicacao" type="number" />
                     <span asp-validation-for="AnoPublicacao"></span>
                 </div>
 
+                <br />
+
                 <div class="form-group">
                     <label asp-for="EditoraId">Editora: </label>
-                    <select asp-for="EditoraId">
+                    <select class="form-select" asp-for="EditoraId">
 
                         @foreach (Editora editora in Model.EditorasExistentes)
                         {
@@ -89,6 +97,8 @@
                     </select>
                     <span asp-validation-for="EditoraId"></span>
                 </div>
+
+                <br />
 
                 <div class="form-group">
                     <label>Autores: </label>
@@ -105,9 +115,11 @@
                     <span asp-validation-for="Autores"></span>
                 </div>
 
+                <br />
+
                 <div class="form-group">
                     <label asp-for="FotoCapa">Link da foto da capa: </label>
-                    <input asp-for="FotoCapa" type="url" />
+                    <input class="form-control" asp-for="FotoCapa" type="url" />
                     <span asp-validation-for="FotoCapa"></span>
                 </div>
 
@@ -115,7 +127,7 @@
 
             <div class="form-group">
                 <br />
-                <input type="submit" placeholder="Criar" />
+                <input class="btn btn-primary" type="submit" value="Criar" />
             </div>
         </form>
     }

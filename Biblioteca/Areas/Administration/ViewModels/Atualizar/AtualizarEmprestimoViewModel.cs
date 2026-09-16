@@ -8,5 +8,7 @@ namespace Biblioteca.Areas.Administration.ViewModels.Atualizar
         public Guid Id { get; set; }
         public IEnumerable<Copia> CopiasExistentes { get; set; }
         public IEnumerable<Emprestimo> Emprestimos { get; set; }
+
+        public List<Guid> IdCopias { get; set; }
     }
 }

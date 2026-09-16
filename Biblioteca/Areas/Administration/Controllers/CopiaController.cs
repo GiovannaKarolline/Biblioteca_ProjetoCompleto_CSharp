@@ -1,15 +1,17 @@
-﻿using Biblioteca.Services.Interfaces;
-using Biblioteca.ViewModels;
+﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
+using Biblioteca.Areas.Administration.ViewModels.Criar;
+using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Models;
+using Biblioteca.Services.Interfaces;
+using Biblioteca.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
-using Biblioteca.Areas.Administration.ViewModels.Criar;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class CopiaController : Controller
     {
         private readonly ICopiaService _copiaService;

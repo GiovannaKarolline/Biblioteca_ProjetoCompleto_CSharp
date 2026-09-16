@@ -4,6 +4,7 @@ using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Models;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -11,6 +12,7 @@ using System.Security.Claims;
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class EmprestimoController : Controller
     {
         private readonly IEmprestimoService _emprestimoService;
@@ -83,6 +85,18 @@ namespace Biblioteca.Areas.Administration.Controllers
 
                 return View(emprestimo);
             }
+
+            List<Copia> novaListaCopias = emprestimo.Copias.ToList();
+
+            foreach(Guid id in emprestimo.IdCopias)
+            {
+                if((await _copiaService.GetCopiaById(id)) is not null)
+                {
+                    novaListaCopias.Add(await _copiaService.GetCopiaById(id));
+                }
+            }
+
+            emprestimo.Copias = novaListaCopias;
 
             var resultadoAtualizar = await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimo);
 

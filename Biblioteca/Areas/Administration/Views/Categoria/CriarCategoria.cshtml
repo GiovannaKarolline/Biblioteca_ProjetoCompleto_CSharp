@@ -26,11 +26,13 @@
     <form asp-controller="Categoria" asp-action="CriarCategoria" method="post" role="form">
         <div class="form-group">
             <label asp-for="Titulo">Título da categoria</label>
-            <input type="text" placeholder="Título" asp-for="Titulo" />
+            <input class="form-control" type="text" placeholder="Título" asp-for="Titulo" />
             <span asp-validation-for="Titulo"></span>
         </div>
+
         <div class="form-group">
-            <input type="submit" placeholder="Criar" />
+            <br />
+            <input class="btn btn-primary" type="submit" value="Criar" />
         </div>
     </form>
 </div>

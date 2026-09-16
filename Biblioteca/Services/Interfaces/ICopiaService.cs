@@ -9,7 +9,7 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<IEnumerable<Copia>> GetCopias();
 
-        public Task<Copia> GetCopiaById(Guid id);
+        public Task<Copia?> GetCopiaById(Guid id);
 
         public Task<Copia> CriarCopia(CopiaViewModel copia);
 

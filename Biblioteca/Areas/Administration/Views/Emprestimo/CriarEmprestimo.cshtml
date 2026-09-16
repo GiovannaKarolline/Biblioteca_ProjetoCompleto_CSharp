@@ -31,7 +31,7 @@
 
                 <fieldset>
                     <label asp-for="Copias">Escolha as cópias inclusas no empréstimo: </label>
-                    <select asp-for="Copias" multiple>
+                    <select class="form-select" asp-for="Copias" multiple>
                         @foreach (Copia copia in Model.CopiasExistentes)
                         {
                             <option  value="@copia.Id">@(copia.ToString())</option>
@@ -43,7 +43,7 @@
 
             <div class="form-group">
                 <br />
-                <input type="submit" placeholder="Criar" />
+                <input class="btn btn-primary" type="submit" value="Criar" />
             </div>
         </form>
     }

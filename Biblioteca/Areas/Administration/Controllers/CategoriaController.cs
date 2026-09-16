@@ -4,12 +4,14 @@ using Biblioteca.Areas.Administration.ViewModels;
 using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class CategoriaController : Controller
     {
         private readonly ICategoriaService _categoriaService;

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Biblioteca.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 </head>
 <body>
     <header>
@@ -49,11 +51,11 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <a asp-area="" asp-controller="Emprestimo" asp-action="Index">
-                            <img class="btn" src="https://static.thenounproject.com/png/2551-200.png" width="73"/>
+                            <span class="material-symbols-rounded" style="font-size: 48px; color: #000000">personal_bag</span>
                         </a>
 
                         <a asp-area="" asp-controller="Conta" asp-action="VisualizarPerfil">
-                            <img class="btn" src="https://marketplace.canva.com/Wkt1s/MACg40Wkt1s/2/tl/canva-user-profile-icon-MACg40Wkt1s.png" width="70" alt="Perfil de usuário" />
+                            <span class="material-symbols-rounded" style="font-size: 48px; color: #000000">account_circle</span>
                         </a>
                     }
                 </div>

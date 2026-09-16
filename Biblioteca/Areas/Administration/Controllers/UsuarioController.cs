@@ -4,12 +4,14 @@ using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
     [Area("Administration")]
+    [Authorize(Roles = "Administrador")]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioService _usuarioService;

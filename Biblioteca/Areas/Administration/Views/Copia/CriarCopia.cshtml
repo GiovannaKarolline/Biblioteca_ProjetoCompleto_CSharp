@@ -32,7 +32,7 @@
             <div class="form-group">
                 <fieldset>
                     <label asp-for="ObraId">Escolha a obra a ser representada pela cópia: </label>
-                    <select asp-for="ObraId">
+                    <select class="form-select" asp-for="ObraId">
                         @foreach (ObraLiteraria obra in Model.ObrasPossiveis)
                         {
                             <option value="@obra.Id">@(obra.Titulo)</option>
@@ -40,25 +40,25 @@
                     </select>
                 </fieldset>
 
-                <div class="form-group">
+                <div class="form-group form-check">
                     <br />
 
                     <p>A cópia está disponível para empréstimo?</p>
 
-                    <label asp-for="StatusDisponibilidade">Sim</label>
-                    <input asp-for="StatusDisponibilidade"  type="radio" value="@true" />
+                    <label class="form-check-label" asp-for="StatusDisponibilidade">Sim</label>
+                    <input class="form-check-input" asp-for="StatusDisponibilidade" type="radio" value="@true" />
 
                     <br />
 
-                    <label asp-for="StatusDisponibilidade">Não</label>
-                    <input asp-for="StatusDisponibilidade"  type="radio" value="@false" />
+                    <label class="form-check-label" asp-for="StatusDisponibilidade">Não</label>
+                    <input class="form-check-input" asp-for="StatusDisponibilidade"  type="radio" value="@false" />
                 </div>
 
             </div>
         
             <div class="form-group">
                 <br />
-                <input type="submit" placeholder="Criar" />
+                <input class="btn btn-primary" type="submit" value="Criar" />
             </div>
         </form>
     }
