@@ -37,7 +37,7 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nEndereço" +
+            return $"\nEndereço:\n" +
                 $"\n* Id: {Id}" +
                 $"\n* Id do Usuário: {UsuarioId}" +
                 $"\n* Logradouro: {TipoLogradouro.ToString() + " " +Logradouro}" +

@@ -36,7 +36,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(categoria);
             }
 
-            var resultadoCriacao = await _categoriaService.CriarCategoria(categoria);
+            Categoria? resultadoCriacao;
+
+            try
+            {
+
+                resultadoCriacao = await _categoriaService.CriarCategoria(categoria);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(categoria);
+            }
 
             if (resultadoCriacao == null)
             {
@@ -71,7 +84,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(categoria);
             }
 
-            var resultadoAtualizacao = await _categoriaService.AtualizarCategoria(categoria.Id, categoria);
+            Categoria? resultadoAtualizacao;
+
+            try
+            {
+
+                resultadoAtualizacao = await _categoriaService.AtualizarCategoria(categoria.Id, categoria);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(categoria);
+            }
 
             if (resultadoAtualizacao == null)
             {
@@ -108,7 +134,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(categoria);
             }
 
-            var resultadoDeletar = await _categoriaService.DeletarCategoria(categoria.Id);
+            Categoria? resultadoDeletar;
+
+            try
+            {
+
+                resultadoDeletar = await _categoriaService.DeletarCategoria(categoria.Id);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(categoria);
+            }
 
             if (resultadoDeletar == null)
             {

@@ -26,7 +26,7 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nAutor" +
+            return $"\nAutor:\n" +
                 $"\n* Id do autor: {Id.ToString()}" +
                 $"\n* Nome do autor: {PrimeiroNome + " " + Sobrenome}\n";
         }

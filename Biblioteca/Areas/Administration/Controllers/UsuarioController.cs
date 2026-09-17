@@ -42,7 +42,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(usuario);
             }
 
-            var resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+            Usuario? resultadoAtualizacao;
+
+            try
+            {
+                resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(usuario);
+            }
 
             if (resultadoAtualizacao == null)
             {
@@ -81,7 +92,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(usuario);
             }
 
-            var resultadoDeletar = await _usuarioService.DeletarUsuario(usuario.Id);
+            Usuario? resultadoDeletar;
+
+            try
+            {
+                resultadoDeletar = await _usuarioService.DeletarUsuario(usuario.Id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(usuario);
+            }
 
             if (resultadoDeletar == null)
             {

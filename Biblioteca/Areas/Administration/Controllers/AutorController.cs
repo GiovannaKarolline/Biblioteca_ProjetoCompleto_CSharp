@@ -36,9 +36,23 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(autor);
             }
 
-            var resultadoCriacao = await _autorService.CriarAutor(autor);
+            Autor? resultadoCriacao;
 
-            if(resultadoCriacao == null)
+            try
+            {
+
+                resultadoCriacao = await _autorService.CriarAutor(autor);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(autor);
+            }
+
+
+            if (resultadoCriacao == null)
             {
                 ViewData["Falha"] = "Não foi possível criar o autor (falha ao criar).";
 
@@ -71,7 +85,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(autor);
             }
 
-            var resultadoAtualizacao = await _autorService.AtualizarAutor(autor.Id, autor);
+            Autor? resultadoAtualizacao;
+
+            try
+            {
+
+                resultadoAtualizacao = await _autorService.AtualizarAutor(autor.Id, autor);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(autor);
+            }
 
             if (resultadoAtualizacao == null)
             {
@@ -108,7 +135,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(autor);
             }
 
-            var resultadoDeletar = await _autorService.DeletarAutor(autor.Id);
+            Autor? resultadoDeletar;
+
+            try
+            {
+
+                resultadoDeletar = await _autorService.DeletarAutor(autor.Id);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(autor);
+            }
 
             if (resultadoDeletar == null)
             {

@@ -5,25 +5,25 @@ namespace Biblioteca.ViewModels
 {
     public class ObraLiterariaViewModel
     {
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "O título da obra literária precisa ser preenchido.")]
+        [StringLength(50, ErrorMessage = "O título precisa ter entre 1 e 50 caracteres.")]
         public string Titulo { get; set; }
 
-        [Required]
-        [Length(10, 17)]
+        [Required(ErrorMessage = "O código ISBN da obra literária precisa ser preenchido.")]
+        [Length(10, 17, ErrorMessage = "Códigos ISBN possuem entre 10 a 17 caracteres.")]
         public string ISBN { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O ano de publicação dessa edição de obra literária precisa ser preenchido.")]
         public int AnoPublicacao { get; set; }
 
-        [Required]
-        [Url]
+        [Required(ErrorMessage = "O link para a foto de capa da obra literária precisa ser preenchido.")]
+        [Url(ErrorMessage = "A foto de capa da obra literária precisa ser um link válido.")]
         public string FotoCapa { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A categoria a qual a obra literária pertence precisa ser definida.")]
         public Guid CategoriaId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A editora que publicou a obra literária precisa ser posta.")]
         public Guid EditoraId { get; set; }
 
         public List<Autor> Autores { get; set; } = new List<Autor>();

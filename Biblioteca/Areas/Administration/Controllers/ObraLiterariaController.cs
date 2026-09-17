@@ -60,7 +60,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(obra);
             }
 
-            var resultadoCriacao = await _obraLiterariaService.CriarObraLiteraria(obra);
+            ObraLiteraria? resultadoCriacao;
+
+            try
+            {
+                resultadoCriacao = await _obraLiterariaService.CriarObraLiteraria(obra);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(obra);
+            }
 
             if (resultadoCriacao == null)
             {
@@ -111,7 +122,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(obra);
             }
 
-            var resultadoAtualizacao = await _obraLiterariaService.AtualizarObraLiteraria(obra.Id, obra);
+            ObraLiteraria? resultadoAtualizacao;
+
+            try
+            {
+                resultadoAtualizacao = await _obraLiterariaService.AtualizarObraLiteraria(obra.Id, obra);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(obra);
+            }
 
             if (resultadoAtualizacao == null)
             {
@@ -161,7 +183,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(obra);
             }
 
-            var resultadoDeletar = await _obraLiterariaService.DeletarObraLiteraria(obra.Id);
+            ObraLiteraria? resultadoDeletar;
+
+            try
+            {
+                resultadoDeletar = await _obraLiterariaService.DeletarObraLiteraria(obra.Id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(obra);
+            }
 
             if (resultadoDeletar == null)
             {

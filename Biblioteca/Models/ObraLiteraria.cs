@@ -50,7 +50,7 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nObra Literária" +
+            return $"\nObra Literária:\n" +
                 $"\n* Id: {Id.ToString()}" +
                 $"\n* Título: {Titulo}" +
                 $"\n* Foto da Capa: {FotoCapa}" +

@@ -33,7 +33,7 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nEmpréstimo" +
+            return $"\nEmpréstimo:\n" +
                 $"\n* Id: {Id.ToString()}" +
                 $"\n* Id do Usuário: {UsuarioId.ToString()}" +
                 $"\n* Data de Retirada: {DataRetirada.ToString()}" +

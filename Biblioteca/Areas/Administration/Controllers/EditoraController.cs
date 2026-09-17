@@ -1,6 +1,8 @@
 ﻿using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
+using Biblioteca.Models;
+using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -26,27 +28,38 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarEditora(EditoraViewModel Editora)
+        public async Task<IActionResult> CriarEditora(EditoraViewModel editora)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível criar a editora (modelo/dados inválidos).";
 
-                return View(Editora);
+                return View(editora);
             }
 
-            var resultadoCriacao = await _editoraService.CriarEditora(Editora);
+            Editora? resultadoCriacao;
+
+            try
+            {
+                resultadoCriacao = await _editoraService.CriarEditora(editora);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(editora);
+            }
 
             if (resultadoCriacao == null)
             {
                 ViewData["Falha"] = "Não foi possível criar a editora (falha ao criar).";
 
-                return View(Editora);
+                return View(editora);
             }
 
             ViewData["Sucesso"] = "Editora criada com sucesso!";
 
-            return View("CriarEditora", Editora);
+            return View("CriarEditora", editora);
         }
 
         [HttpGet]
@@ -61,29 +74,40 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AtualizarEditora(AtualizarEditoraViewModel Editora)
+        public async Task<IActionResult> AtualizarEditora(AtualizarEditoraViewModel editora)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a cópia (modelo/dados inválidos).";
 
-                return View(Editora);
+                return View(editora);
             }
 
-            var resultadoAtualizar = await _editoraService.AtualizarEditora(Editora.Id, Editora);
+            Editora? resultadoAtualizar;
+
+            try
+            {
+                resultadoAtualizar = await _editoraService.AtualizarEditora(editora.Id, editora);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(editora);
+            }
 
             if (resultadoAtualizar == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a cópia (falha ao atualizar).";
 
-                return View(Editora);
+                return View(editora);
             }
 
             ViewData["Sucesso"] = "Cópia atualizada com sucesso!";
 
-            Editora.Editoras = await _editoraService.GetEditoras();
+            editora.Editoras = await _editoraService.GetEditoras();
 
-            return View("AtualizarEditora", Editora);
+            return View("AtualizarEditora", editora);
         }
 
         [HttpGet]
@@ -107,7 +131,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(editora);
             }
 
-            var resultadoDeletar = await _editoraService.DeletarEditora(editora.Id);
+            Editora? resultadoDeletar;
+
+            try
+            {
+                resultadoDeletar = await _editoraService.DeletarEditora(editora.Id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(editora);
+            }
 
             if (resultadoDeletar == null)
             {

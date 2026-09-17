@@ -14,7 +14,7 @@
 
     @if (Model is not null && Model.ObrasLiterarias is not null && Model.ObrasLiterarias.Count() > 0)
     {
-        <form asp-controller="Emprestimo" asp-action="AtualizarEmprestimo" method="post" role="form">
+        <form asp-controller="ObraLiteraria" asp-action="AtualizarObra" method="post" role="form">
 
             <input hidden asp-for="ObrasLiterarias" value="@Model.ObrasLiterarias" />
 

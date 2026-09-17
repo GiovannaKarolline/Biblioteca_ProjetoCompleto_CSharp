@@ -7,21 +7,26 @@
 <partial name="_AvisosPartial" />
 
 <h2>Login</h2>
+<br />
 
 <div class="container">
     <form asp-controller="Conta" asp-action="Login" method="post" role="form">
         <div class="form-group">
             <label asp-for="NomeUsuario">Usuário</label>
-            <input type="text" placeholder="Usuário" asp-for="NomeUsuario" />
+            <input class="form-control" type="text" placeholder="Usuário" asp-for="NomeUsuario" />
             <span asp-validation-for="NomeUsuario"></span>
         </div>
+
+        <br />
+
         <div class="form-group">
             <label asp-for="Senha"></label>
-            <input type="password" placeholder="Senha" asp-for="Senha" />
+            <input class="form-control" type="password" placeholder="Senha" asp-for="Senha" />
             <span asp-validation-for="Senha"></span>
         </div>
         <div class="form-group">
-            <input type="submit" placeholder="Logar" />
+            <br />
+            <input class="btn btn-primary" type="submit" value="Logar" />
         </div>
     </form>
 </div>

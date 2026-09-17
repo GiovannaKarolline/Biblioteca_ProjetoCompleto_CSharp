@@ -12,7 +12,7 @@
 
     <partial name="_AvisosPartial" />
 
-    @if (Model is not null && Model.ObrasLiterarias is not null)
+    @if (Model is not null && Model.ObrasLiterarias is not null && Model.ObrasLiterarias.Count() > 0)
     {
         <form asp-controller="ObraLiteraria" asp-action="DeletarObra" method="post" role="form">
 

@@ -25,10 +25,10 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nCópia" +
+            return $"\nCópia:\n" +
                 $"\n* Id: {Id.ToString()}" +
                 $"\n* Id da Obra Referenciada: {ObraLiterariaId.ToString()}" +
-                $"\n* Status de Disponibilidade (verdadeiro = disponível): {StatusDisponibilidade.ToString()}\n";
+                $"\n* Status de Disponibilidade: {StatusDisponibilidade.ToString()}\n";
         }
     }
 }

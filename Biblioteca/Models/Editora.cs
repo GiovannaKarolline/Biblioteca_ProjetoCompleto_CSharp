@@ -20,7 +20,7 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nEditora" +
+            return $"\nEditora:\n" +
                 $"\n* Id: {Id.ToString()}" +
                 $"\n* Nome da editora: {Nome}\n";
         }

@@ -44,7 +44,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(copia);
             }
 
-            var resultadoCriacao = await _copiaService.CriarCopia(copia);
+            Copia? resultadoCriacao;
+
+            try
+            {
+
+                resultadoCriacao = await _copiaService.CriarCopia(copia);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(copia);
+            }
 
             if (resultadoCriacao == null)
             {
@@ -82,7 +95,20 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(copia);
             }
 
-            var resultadoAtualizacao = await _copiaService.AtualizarCopia(copia.Id, copia);
+            Copia? resultadoAtualizacao;
+
+            try
+            {
+
+                resultadoAtualizacao = await _copiaService.AtualizarCopia(copia.Id, copia);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(copia);
+            }
 
             if (resultadoAtualizacao == null)
             {
@@ -119,7 +145,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(copia);
             }
 
-            var resultadoDeletar = await _copiaService.DeletarCopia(copia.Id);
+            Copia? resultadoDeletar;
+
+            try
+            {
+                resultadoDeletar = await _copiaService.DeletarCopia(copia.Id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(copia);
+            }
 
             if (resultadoDeletar == null)
             {

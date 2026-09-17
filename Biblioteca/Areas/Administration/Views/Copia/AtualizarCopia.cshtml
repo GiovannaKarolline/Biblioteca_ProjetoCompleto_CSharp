@@ -12,7 +12,7 @@
 
     <partial name="_AvisosPartial" />
 
-    @if (Model is not null && Model.Copias is not null)
+    @if (Model is not null && Model.Copias is not null && Model.Obras is not null && Model.Obras.Count() > 0)
     {
         <form asp-controller="Copia" asp-action="AtualizarCopia" method="post" role="form">
 
@@ -52,7 +52,7 @@
     }
     else
     {
-        <h4>Não é possível atualizar uma cópia porque não há registros de cópias.</h4>
+        <h4>Não é possível atualizar uma cópia porque não há registros de cópias ou não há obras literárias.</h4>
     }
 </div>
 

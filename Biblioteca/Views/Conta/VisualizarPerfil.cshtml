@@ -18,7 +18,7 @@
     <br />
     <br />
 
-    @if(Model is null)
+    @if(Model is null || Model.Count() < 1 || !Model.Any(emprestimo => emprestimo.DataDevolucao is null))
     {
         <h4>Não há devoluções pendentes.</h4>
     }

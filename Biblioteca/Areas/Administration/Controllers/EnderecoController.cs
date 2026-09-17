@@ -1,5 +1,7 @@
 ﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Areas.Administration.ViewModels.Deletar;
+using Biblioteca.Models;
+using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +42,18 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             endereco.UsuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var resultadoCriacao = await _enderecoService.CriarEndereco(endereco);
+            Endereco? resultadoCriacao;
+
+            try
+            {
+                resultadoCriacao = await _enderecoService.CriarEndereco(endereco);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View("CriarEndereco", endereco);
+            }
 
             if (resultadoCriacao == null)
             {
@@ -75,7 +88,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(endereco);
             }
 
-            var resultadoAtualizacao = await _enderecoService.AtualizarEndereco(endereco.Id, endereco);
+            Endereco? resultadoAtualizacao;
+
+            try
+            {
+                resultadoAtualizacao = await _enderecoService.AtualizarEndereco(endereco.Id, endereco);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View("CriarEndereco", endereco);
+            }
 
             if (resultadoAtualizacao == null)
             {
@@ -112,7 +136,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View(endereco);
             }
 
-            var resultadoDeletar = await _enderecoService.DeletarEndereco(endereco.Id);
+            Endereco? resultadoDeletar;
+
+            try
+            {
+                resultadoDeletar = await _enderecoService.DeletarEndereco(endereco.Id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View("CriarEndereco", endereco);
+            }
 
             if (resultadoDeletar == null)
             {

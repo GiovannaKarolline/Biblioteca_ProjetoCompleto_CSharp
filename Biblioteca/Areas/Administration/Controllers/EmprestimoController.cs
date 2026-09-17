@@ -51,7 +51,18 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             emprestimo.UsuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
+            Emprestimo? resultadoCriacao;
+
+            try
+            {
+                resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View("CriarEmprestimo", emprestimo);
+            }
 
             if (resultadoCriacao == null)
             {
@@ -121,7 +132,18 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             emprestimo.Copias = novaListaCopias;
 
-            var resultadoAtualizar = await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimo);
+            Emprestimo? resultadoAtualizar;
+
+            try
+            {
+                resultadoAtualizar = await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimo);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View("AtualizarEmprestimo", emprestimo);
+            }
 
             if (resultadoAtualizar == null)
             {
@@ -163,7 +185,18 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return RedirectToAction("DeletarEmprestimo");
             }
 
-            var resultadoDeletar = await _emprestimoService.DeletarEmprestimo(id);
+            Emprestimo? resultadoDeletar;
+
+            try
+            {
+                resultadoDeletar = await _emprestimoService.DeletarEmprestimo(id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return RedirectToAction("DeletarEmprestimo");
+            }
 
             if (resultadoDeletar == null)
             {
