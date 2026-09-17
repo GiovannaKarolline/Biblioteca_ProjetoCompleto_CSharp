@@ -4,6 +4,8 @@
     ViewData["Title"] = "Perfil de usuário";
 }
 
+<partial name="_AvisosPartial" />
+
 @if(User.Identity is not null && User.Identity.IsAuthenticated)
 {
     <h2>Olá, @(User.Identity.Name)!</h2>
@@ -22,15 +24,14 @@
     }
     else
     {
-       <h4>Devoluções pendentes:</h4>
+       <h4>Prazos de devoluções pendentes:</h4>
 
-        <br />
 
         @foreach(Emprestimo emprestimo in Model)
         {
             @if(emprestimo.DataDevolucao is null)
             {
-                <h6>@emprestimo.DataPrevistaDevolucao.ToShortDateString()</h6>
+                <h6>• @emprestimo.DataPrevistaDevolucao.ToShortDateString() - <a asp-controller="Emprestimo" asp-action="VisualizarEmprestimos">Realizar devolução</a></h6>
             }
 
         } 

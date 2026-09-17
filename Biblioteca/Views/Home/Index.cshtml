@@ -4,6 +4,8 @@
     ViewData["Title"] = "Início";
 }
 
+<partial name="_AvisosPartial" />
+
 @if(Model.ObrasLiterarias is not null)
 {
     <partial name="_HomePartial" model="@Model.ObrasLiterarias" />

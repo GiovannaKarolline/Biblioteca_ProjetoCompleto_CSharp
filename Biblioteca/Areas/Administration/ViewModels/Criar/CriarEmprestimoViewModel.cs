@@ -6,5 +6,7 @@ namespace Biblioteca.Areas.Administration.ViewModels.Criar
     public class CriarEmprestimoViewModel : EmprestimoViewModel
     {
         public IEnumerable<Copia>? CopiasExistentes { get; set; }
+
+        public IEnumerable<Guid> idCopias { get; set; }
     }
 }

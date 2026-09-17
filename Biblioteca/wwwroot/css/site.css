@@ -1,5 +1,5 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
@@ -18,5 +18,85 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    font-family: Poppins, sans-serif;
+    background: linear-gradient(to bottom, #dbe4e8ff, #85aabbff);
+    color: #3b485c;
+}
+
+.navbar-dark {
+    background-color: #313946 !important;
+}
+
+.emprestimo-container {
+    display: flex;
+    align-items: center;
+}
+
+.emprestimo, .listar-container {
+    background-color: #f1f8ff;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px;
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+}
+
+.card {
+    padding: 10px;
+    border-radius: 10px;
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+}
+
+.card img{
+    border-radius: 10px
+}
+
+.card button{
+    border-radius: 5px;
+}
+
+.material-symbols-rounded {
+    color: #5b879d;
+}
+
+.btn-outline-success, .btn-outline-primary {
+    color: #5b879d;
+    border-color: #5b879d;
+}
+
+.btn-outline-success:hover, .btn-outline-primary:hover{
+    background-color: #5b879d;
+    border-color: #5b879d;
+}
+
+.btn-primary {
+    background-color: #5b879d;
+    border-color: #cbdae1ff;
+}
+
+.btn-primary:hover {
+    background-color: #6eadcb;
+    border-color: #50656fff;
+}
+
+.btn-outline-dark {
+    border-color: #4f5d72;
+    color: #313946;
+}
+
+.btn-outline-dark:hover {
+    background-color: #313946;
+}
+
+.form-control, .form-select {
+    background-color: #e9f0f3;
+}
+
+.list-group-item {
+    background-color: #e0e9ed;
+    border-color: #cbdae1ff;
+}
+
+.list-group-item:hover {
+    background-color: #e9f4f8;
 }

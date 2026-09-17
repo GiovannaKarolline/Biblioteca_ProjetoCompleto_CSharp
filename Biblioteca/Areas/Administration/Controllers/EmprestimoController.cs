@@ -19,9 +19,9 @@ namespace Biblioteca.Areas.Administration.Controllers
     {
         private readonly IEmprestimoService _emprestimoService;
         private readonly ICopiaService _copiaService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
 
-        public EmprestimoController(IEmprestimoService emprestimoService, ICopiaService copiaService, UserManager<IdentityUser> userManager)
+        public EmprestimoController(IEmprestimoService emprestimoService, ICopiaService copiaService, UserManager<Usuario> userManager)
         {
             _emprestimoService = emprestimoService;
             _copiaService = copiaService;
@@ -83,6 +83,13 @@ namespace Biblioteca.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> AtualizarEmprestimo(AtualizarEmprestimoViewModel emprestimo)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
+
+                return View("AtualizarEmprestimo", emprestimo);
+            }
+
             Emprestimo? emprestimoRegistrado = await _emprestimoService.GetEmprestimoById(emprestimo.Id);
 
             if(emprestimoRegistrado is not null)
@@ -104,17 +111,10 @@ namespace Biblioteca.Areas.Administration.Controllers
                 {
                     if (!emprestimo.IdCopias.Any(id => id == copia.Id))
                     {
-                        //é preciso criar uma nova função para retirar itens de um empréstimo já finalizado.
+                        await _emprestimoService.RemoverCopiaEmprestimoFinalizado(copia.Id, emprestimo.Id);
                     }
                 }
 
-            }
-
-            if (!ModelState.IsValid)
-            {
-                ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
-
-                return View("AtualizarEmprestimo", emprestimo);
             }
 
             List<Copia> novaListaCopias = emprestimo.Copias.ToList();
@@ -142,7 +142,12 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             DeletarEmprestimoViewModel emprestimo = new DeletarEmprestimoViewModel()
             {
-                Emprestimos = await _emprestimoService.GetEmprestimos()
+                Emprestimos = (await _emprestimoService
+                .GetEmprestimosByUsuarioId(
+                    Guid.Parse(_userManager.GetUserId(User))
+                )
+                ).Where(emprestimo => emprestimo.Finalizado == true)
+                .ToList()
             };
 
             return View(emprestimo);

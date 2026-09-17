@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Emprestimo>
+
+<partial name="_AvisosPartial" />
+
+@if(Model is null || Model.Count() < 1)
+{
+    <h2>Não há empréstimos registrados</h2>
+}
+else
+{
+    @foreach(Emprestimo emprestimo in Model)
+    {
+        <div class="container emprestimo">
+            <h4>Empréstimo</h4>
+            <h5>Cópias inclusas:</h5>
+            @foreach(Copia copia in emprestimo.Copias)
+            {
+                <h5>• @copia.ObraLiteraria.Titulo</h5>
+            }
+            <h5>Data de Retirada dos Livros: @emprestimo.DataRetirada.ToString()</h5>
+            <h5>Data Prevista de Devolução: @emprestimo.DataPrevistaDevolucao.ToString()</h5>
+            @if(emprestimo.DataDevolucao is null)
+            {
+                <h5>Devolução: <strong>Pendente</strong></h5>
+
+                <br />
+
+                <form asp-controller="Emprestimo" asp-action="RealizarDevolucao" asp-route-id="@emprestimo.Id" method="post" role="form">
+
+                    <div class="form-group">
+                        <br />
+                        <input class="btn btn-outline-primary" type="submit" value="Realizar devolução" />
+                    </div>
+
+                </form>
+            }
+            else
+            {
+                <h5>Data da devolução: @emprestimo.DataDevolucao</h5>
+            }
+        </div>
+    }
+}

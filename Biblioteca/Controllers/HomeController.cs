@@ -27,7 +27,8 @@ namespace Biblioteca.Controllers
             {
                 if(obra.Copias is not null)
                 {
-                    obra.Copias = obra.Copias.Where(obra => obra.Deletado == false).ToList(); //para que as cópias deletadas não sejam passadas para a view.
+                    obra.Copias = obra.Copias.Where(copia => copia.Deletado == false).ToList(); //para que as cópias deletadas não sejam passadas para a view.
+                    obra.Copias = obra.Copias.Where(copia => copia.StatusDisponibilidade == true).ToList(); //para que cópias emprestadas não sejam passadas para a view.
                 }
             }
 

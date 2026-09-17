@@ -6,6 +6,10 @@
 
 <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Voltar</a>
 
+<br />
+
+<partial name="_AvisosPartial" />
+
 <h2>Empréstimo</h2>
 <hr />
 
@@ -13,7 +17,6 @@
     
         @if (Model.Copias is not null && Model.Copias.Count() > 0)
         {
-
             <partial name="_EmprestimoPartial" model="@Model.Copias" />
 
             <form asp-controller="Emprestimo" asp-action="FinalizarEmprestimo" method="post" role="form">

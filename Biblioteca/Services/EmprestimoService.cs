@@ -23,7 +23,7 @@ namespace Biblioteca.Services
             {
                 emprestimoRegistrado.UsuarioId = emprestimo.UsuarioId;
                 emprestimoRegistrado.DataRetirada = emprestimo.DataRetirada;
-                emprestimoRegistrado.DataPrevistaDevolucao = (DateOnly)emprestimo.DataDevolucao;
+                emprestimoRegistrado.DataPrevistaDevolucao = (DateOnly)emprestimo.DataPrevistaDevolucao;
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
                 
                 foreach(Copia copia in emprestimo.Copias.ToList())
@@ -46,7 +46,7 @@ namespace Biblioteca.Services
                 UsuarioId = emprestimo.UsuarioId,
                 DataPrevistaDevolucao = DateOnly.Parse(DateTime.Now.ToShortDateString()).AddMonths(3),
                 DataRetirada = DateOnly.Parse(DateTime.Now.ToShortDateString()),
-                DataDevolucao = new DateOnly(),
+                DataDevolucao = null,
                 Finalizado = false
             };
 
@@ -174,6 +174,32 @@ namespace Biblioteca.Services
             return emprestimo;
         }
 
+        public async Task<Emprestimo> RemoverCopiaEmprestimoFinalizado(Guid idCopia, Guid idEmprestimo)
+        {
+            Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
+
+            Copia? copia = await _copiaService.GetCopiaById(idCopia);
+
+            if (copia is null)
+            {
+                throw new ArgumentException("Não existe registro de uma cópia com este Id.");
+            }
+
+            if (emprestimo is null)
+            {
+                throw new ArgumentException("Não existe registro de um empréstimo com este Id.");
+            }
+
+            if (emprestimo.Copias.Contains(copia))
+            {
+                emprestimo.Copias.Remove(copia);
+            }
+
+            await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
+
+            return emprestimo;
+        }
+
         public async Task<Emprestimo> FinalizarEmprestimo(Guid idEmprestimo)
         {
             Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
@@ -214,7 +240,7 @@ namespace Biblioteca.Services
                 }
             }
 
-            emprestimo.DataDevolucao = DateOnly.Parse(DateTime.Now.Date.ToShortTimeString());
+            emprestimo.DataDevolucao = DateOnly.Parse(DateTime.Now.ToShortDateString());
 
             await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
 

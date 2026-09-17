@@ -21,6 +21,8 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<Emprestimo> RemoverCopia(Guid idCopia, Guid idUsuario);
 
+        public Task<Emprestimo> RemoverCopiaEmprestimoFinalizado(Guid idCopia, Guid idEmprestimo);
+
         public Task<Emprestimo?> FinalizarEmprestimo(Guid idEmprestimo);
 
         public Task<Emprestimo?> RealizarDevolucao(Guid idEmprestimo);

@@ -2,46 +2,54 @@
 
 <div class="row gap-3 justify-content-center">
 
-    @foreach(ObraLiteraria obra in Model)
+    @if(Model is null || Model.Count() < 1)
     {
-        <div class="card col-sm-4 col-md-4 col-lg-3">
+        <h2>Nosso acervo ainda não possui obras literárias...</h2>
+    }
+    else
+    {
+        @foreach (ObraLiteraria obra in Model)
+        {
+            <div class="card col-sm-4 col-md-4 col-lg-3">
 
-            <img class="card-img-top" src="@obra.FotoCapa" alt="Capa do livro">
+                <img class="card-img-top" src="@obra.FotoCapa" alt="Capa do livro">
 
-            <div class="card-body">
-                <h5 class="card-title">@obra.Titulo</h5>
-                <p class="card-text">@obra.Editora.Nome</p>
+                <div class="card-body">
+                    <h5 class="card-title">@obra.Titulo</h5>
+                    <p class="card-text">@obra.Editora.Nome</p>
 
-                @if (obra.Copias is not null && obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null) //se existe uma cópia disponível
-                {
-                    @if(User.Identity is null || !User.Identity.IsAuthenticated) //se o usuário está deslogado
+                    @if (obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null) //se existe uma cópia disponível
                     {
-                        <form asp-controller="Conta"
-                              asp-action="Login" method="get">
-                            <button class="btn btn-primary" type="submit">
-                                Pegar emprestado
-                            </button>
-                        </form>
+                        @if (User.Identity is null || !User.Identity.IsAuthenticated) //se o usuário está deslogado
+                        {
+                            <form asp-controller="Conta"
+                                  asp-action="Login" method="get">
+                                <button class="btn btn-primary" type="submit">
+                                    Pegar emprestado
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-controller="Emprestimo"
+                                  asp-action="AdicionarAoEmprestimo"
+                                  asp-route-idCopia="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id" method="post">
+                                <button class="btn btn-primary" type="submit">
+                                    Pegar emprestado
+                                </button>
+                            </form>
+                        }
                     }
                     else
                     {
-                        <form asp-controller="Emprestimo"
-                              asp-action="AdicionarAoEmprestimo"
-                              asp-route-idCopia="@obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true).Id" method="post">
-                            <button class="btn btn-primary" type="submit">
-                                Pegar emprestado
-                            </button>
-                        </form>
+                        <a class="btn btn-danger">
+                            Esgotado
+                        </a>
                     }
-                }
-                else
-                {
-                    <a class="btn btn-danger">
-                        Esgotado
-                    </a>
-                }
-            </div>
+                </div>
 
-        </div>
+            </div>
+        }
     }
+
 </div>

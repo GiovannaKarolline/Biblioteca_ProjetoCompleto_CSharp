@@ -12,19 +12,7 @@
 
 <div class="container">
 
-    @if (ViewData["Sucesso"] is not null)
-    {
-        <div class="alert alert-success">
-            @ViewData["Sucesso"]
-        </div>
-    }
-
-    @if (ViewData["Falha"] is not null)
-    {
-        <div class="alert alert-danger">
-            @ViewData["Falha"]
-        </div>
-    }
+    <partial name="_AvisosPartial" />
 
     @if (Model is not null && Model.Enderecos.Count() > 0)
     {
@@ -84,7 +72,7 @@
 
             <div class="form-group">
                 <br />
-                <input class="btn btn-primary" type="submit" value="Criar" />
+                <input class="btn btn-primary" type="submit" value="Atualizar" />
             </div>
         </form>
     }
@@ -95,7 +83,7 @@
 </div>
 
 <br />
-<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Criar">Voltar</a>
+<a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Atualizar">Voltar</a>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

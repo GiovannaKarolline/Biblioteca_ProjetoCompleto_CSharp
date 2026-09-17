@@ -10,34 +10,27 @@
 
 <div class="container">
 
-    @if (ViewData["Sucesso"] is not null)
-    {
-        <div class="alert alert-success">
-            @ViewData["Sucesso"]
-        </div>
-    }
-
-    @if (ViewData["Falha"] is not null)
-    {
-        <div class="alert alert-danger">
-            @ViewData["Falha"]
-        </div>
-    }
+    <partial name="_AvisosPartial" />
 
     @if (Model.CopiasExistentes is not null && Model.CopiasExistentes.Count() > 0)
     {
         <form asp-controller="Copia" asp-action="CriarCopia" method="post" role="form">
+
             <div class="form-group">
 
+                <label>Escolha quais cópias serão inclusas: </label>
                 <fieldset>
-                    <label asp-for="Copias">Escolha as cópias inclusas no empréstimo: </label>
-                    <select class="form-select" asp-for="Copias" multiple>
-                        @foreach (Copia copia in Model.CopiasExistentes)
-                        {
-                            <option  value="@copia.Id">@(copia.ToString())</option>
-                        }
-                    </select>
+
+                    @foreach (Copia copia in Model.CopiasExistentes.Where(copia => copia.StatusDisponibilidade == true))
+                    {
+                        <input class="form-check-input" name="idCopias" value="@copia.Id" type="checkbox" />
+                        <label class="form-check-label">@(copia.ObraLiteraria.Titulo + " " + @copia.Id)</label>
+                        <br />
+                    }
+
                 </fieldset>
+
+                <span asp-validation-for="idCopias"></span>
 
             </div>
 
@@ -45,6 +38,7 @@
                 <br />
                 <input class="btn btn-primary" type="submit" value="Criar" />
             </div>
+
         </form>
     }
     else

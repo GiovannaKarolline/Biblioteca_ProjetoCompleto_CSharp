@@ -1,0 +1,13 @@
+﻿@if (ViewData["Sucesso"] is not null)
+{
+    <div class="alert alert-success">
+        @ViewData["Sucesso"]
+    </div>
+}
+
+@if (ViewData["Falha"] is not null)
+{
+    <div class="alert alert-danger">
+        @ViewData["Falha"]
+    </div>
+}

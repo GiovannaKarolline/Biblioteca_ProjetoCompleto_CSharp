@@ -4,19 +4,7 @@
     ViewData["Title"] = "Listar cópias";
 }
 
-@if (ViewData["Sucesso"] is not null)
-{
-    <div class="alert alert-success">
-        @ViewData["Sucesso"]
-    </div>
-}
-
-@if (ViewData["Falha"] is not null)
-{
-    <div class="alert alert-danger">
-        @ViewData["Falha"]
-    </div>
-}
+<partial name="_AvisosPartial" />
 
 <a class="btn btn-outline-dark" asp-area="Administration" asp-controller="Home" asp-action="Listar">Voltar</a>
 <br />

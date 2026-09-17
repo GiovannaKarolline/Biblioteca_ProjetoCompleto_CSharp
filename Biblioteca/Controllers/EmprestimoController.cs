@@ -40,8 +40,6 @@ namespace Biblioteca.Controllers
                 {
                     emprestimoViewModel.Copias = emprestimo.Copias;
                 }
-
-                //atualizar emprestimo
             }
             else
             {
@@ -132,9 +130,9 @@ namespace Biblioteca.Controllers
             EmprestimoViewModel emprestimoViewModel = new EmprestimoViewModel()
             {
                 Copias = emprestimo.Copias,
-                DataDevolucao = emprestimo.DataDevolucao,
-                DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao,
-                DataRetirada = emprestimo.DataRetirada,
+                DataDevolucao = null,
+                DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day),
+                DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
                 Finalizado = emprestimo.Finalizado,
                 UsuarioId = emprestimo.UsuarioId,
                 Id = emprestimo.Id
@@ -154,9 +152,6 @@ namespace Biblioteca.Controllers
                 return View("Emprestimo", emprestimoViewModel);
             }
 
-            emprestimo.Finalizado = true;
-            await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimoViewModel);
-
             try
             {
                 await _copiaService.EmprestarCopias(emprestimo.Copias);
@@ -167,6 +162,10 @@ namespace Biblioteca.Controllers
 
                 return View("Emprestimo", emprestimoViewModel);
             }
+
+            emprestimo.Finalizado = true;
+
+            await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimoViewModel);
 
             return RedirectToAction("Index", "Home");
         }
@@ -180,7 +179,13 @@ namespace Biblioteca.Controllers
             {
                 ViewData["Falha"] = "Não existe um empréstimo com este Id.";
 
-                return View();
+                IEnumerable<Emprestimo>? emprestimos = (await _emprestimoService
+                .GetEmprestimosByUsuarioId(
+                    Guid.Parse(_userManager.GetUserId(User))
+                )
+                ).Where(emprestimo => emprestimo.Finalizado == true);
+
+                return View("VisualizarEmprestimos", emprestimos);
             }
 
             Emprestimo? resultadoAtualizacao = await _emprestimoService.RealizarDevolucao(idEmprestimo);
@@ -190,9 +195,27 @@ namespace Biblioteca.Controllers
                 ViewData["Falha"] = "Não foi possível realizar a devolução do empréstimo.";
             }
 
-            return View();
+            IEnumerable<Emprestimo>? emprestimosPosAtualizacao = (await _emprestimoService
+                .GetEmprestimosByUsuarioId(
+                    Guid.Parse(_userManager.GetUserId(User))
+                )
+                ).Where(emprestimo => emprestimo.Finalizado == true);
+
+            return View("VisualizarEmprestimos", emprestimosPosAtualizacao);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> VisualizarEmprestimos()
+        {
+
+            IEnumerable<Emprestimo>? emprestimos = (await _emprestimoService
+                .GetEmprestimosByUsuarioId(
+                    Guid.Parse(_userManager.GetUserId(User))
+                )
+                ).Where(emprestimo => emprestimo.Finalizado == true);
+
+            return View(emprestimos);
+        }
 
     }
 }

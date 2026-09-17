@@ -39,9 +39,20 @@ namespace Biblioteca.Controllers
                 return View(usuario);
             }
 
-            var resultado = await _usuarioService.CadastrarUsuario(usuario);
+            Usuario? resultadoCadastro;
 
-            if(resultado is null)
+            try
+            {
+                resultadoCadastro = await _usuarioService.CadastrarUsuario(usuario);
+
+            }catch(Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(usuario);
+            }
+            
+            if(resultadoCadastro is null)
             {
                 return View(usuario);
             }
@@ -63,9 +74,20 @@ namespace Biblioteca.Controllers
                 return View(usuario);
             }
 
-            var resultado = await _usuarioService.LogarUsuario(usuario);
+            Usuario? resultadoLogin;
 
-            if (resultado is null)
+            try { 
+
+                resultadoLogin = await _usuarioService.LogarUsuario(usuario);
+
+            }catch(Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View(usuario);
+            }
+
+            if (resultadoLogin is null)
             {
                 return View(usuario);
             }
@@ -102,11 +124,23 @@ namespace Biblioteca.Controllers
                 return View(usuario);
             }
 
-            var resultadoCriacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+            Usuario? resultadoAtualizacao;
 
-            if (resultadoCriacao == null)
+            try
             {
-                ViewData["Falha"] = "Não foi possível atualizar a Usuario literária (falha ao atualizar).";
+                resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+            }
+            catch(Exception excecao)
+            {
+                ViewData["Falha"] = excecao.Message;
+
+                return View(usuario);
+            }
+            
+
+            if (resultadoAtualizacao == null)
+            {
+                ViewData["Falha"] = "Não foi possível atualizar o usuário (falha ao atualizar).";
 
                 return View(usuario);
             }
@@ -123,7 +157,7 @@ namespace Biblioteca.Controllers
         {
             IEnumerable<Emprestimo> emprestimosUsuario = await _emprestimoService.GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User)));
 
-            return View();
+            return View(emprestimosUsuario);
         }
 
         public IActionResult Logout()
