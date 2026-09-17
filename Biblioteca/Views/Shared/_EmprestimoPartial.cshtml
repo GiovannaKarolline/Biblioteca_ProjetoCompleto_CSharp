@@ -6,10 +6,10 @@
     {
         <form asp-area="" asp-controller="Emprestimo" asp-action="RemoverDoEmprestimo" asp-route-idCopia="@copia.Id" method="post">
             <fieldset>
-                <div class="form-group listar-container">
+                <div class="form-group listar-container d-flex align-items-center gap-4">
                     <img src="@copia.ObraLiteraria.FotoCapa" width="80" />
                     <label>@copia.ObraLiteraria.Titulo</label>
-                    <input class="btn btn-outline-danger" type="submit" value="Remover" />
+                    <input class="btn btn-outline-danger ms-auto" type="submit" value="Remover" />
                 </div>
             </fieldset>
             

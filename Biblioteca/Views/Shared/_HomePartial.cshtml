@@ -4,11 +4,13 @@
 
     @if(Model is null || Model.Count() < 1)
     {
-        <h2>Nosso acervo ainda não possui obras literárias...</h2>
+        <h2 class="text-center">Nosso acervo ainda não possui obras literárias...</h2>
+        <hr />
     }
     else
     {
         <h2 class="text-center">Conheça as obras do nosso acervo</h2>
+        <hr />
 
         @foreach (ObraLiteraria obra in Model)
         {

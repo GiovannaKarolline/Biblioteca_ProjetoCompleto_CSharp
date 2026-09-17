@@ -71,6 +71,11 @@ h2{
     color: #5b879d;
 }
 
+.campo-pesquisa {
+    width: 100%;
+    max-width: 500px;
+}
+
 .btn-outline-success, .btn-outline-primary {
     color: #5b879d;
     border-color: #5b879d;

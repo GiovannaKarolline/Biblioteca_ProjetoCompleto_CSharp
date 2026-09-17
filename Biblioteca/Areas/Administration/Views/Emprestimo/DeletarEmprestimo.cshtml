@@ -2,7 +2,7 @@
 @model DeletarEmprestimoViewModel
 
 @{
-    ViewData["Titulo"] = "Deletar cópia";
+    ViewData["Titulo"] = "Deletar empréstimo";
 }
 
 <h2>Deletar empréstimo</h2>
@@ -12,7 +12,7 @@
 
     <partial name="_AvisosPartial" />
 
-    @if (Model is not null && Model.Copias is not null)
+    @if (Model is not null && Model.Emprestimos is not null && Model.Emprestimos.Count() > 0)
     {
         <form asp-controller="Emprestimo" asp-action="DeletarEmprestimo" method="post" role="form">
 

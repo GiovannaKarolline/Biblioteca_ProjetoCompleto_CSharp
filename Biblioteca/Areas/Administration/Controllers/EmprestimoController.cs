@@ -84,7 +84,8 @@ namespace Biblioteca.Areas.Administration.Controllers
             AtualizarEmprestimoViewModel emprestimo = new AtualizarEmprestimoViewModel()
             {
                 CopiasExistentes = await _copiaService.GetCopias(),
-                Emprestimos = await _emprestimoService.GetEmprestimos(),
+                Emprestimos = (await _emprestimoService.GetEmprestimos())
+                .Where(emprestimo => emprestimo.Finalizado == true),
                 Copias = new List<Copia>()
             };
 
