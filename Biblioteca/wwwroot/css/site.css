@@ -24,6 +24,18 @@ body {
     color: #3b485c;
 }
 
+footer{
+    position: 
+}
+
+h2{
+    margin-top: 2rem;
+}
+
+.navbar{
+    margin-bottom: 2rem !important;
+}
+
 .navbar-dark {
     background-color: #313946 !important;
 }

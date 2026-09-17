@@ -1,13 +1,19 @@
 ﻿@model IEnumerable<Emprestimo>
 
+@{
+    ViewData["Title"] = "Seus empréstimos";
+}
+
 <partial name="_AvisosPartial" />
 
 @if(Model is null || Model.Count() < 1)
 {
-    <h2>Não há empréstimos registrados</h2>
+    <h2 class="text-center">Você não possui empréstimos registrados</h2>
 }
 else
 {
+    <h2 class="text-center">Seus empréstimos</h2>
+
     @foreach(Emprestimo emprestimo in Model)
     {
         <div class="container emprestimo">

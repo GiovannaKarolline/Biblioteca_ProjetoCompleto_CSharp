@@ -35,7 +35,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Falha"] = "Não foi possível criar o empréstimo (modelo/dados inválidos).";
+                ViewData["Falha"] = "Não foi possível criar o endereço (modelo/dados inválidos).";
 
                 return View(endereco);
             }
@@ -57,12 +57,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             if (resultadoCriacao == null)
             {
-                ViewData["Falha"] = "Não foi possível criar o empréstimo (falha ao criar).";
+                ViewData["Falha"] = "Não foi possível criar o endereço (falha ao criar).";
 
                 return View(endereco);
             }
 
-            ViewData["Sucesso"] = "Empréstimo criado com sucesso!";
+            ViewData["Sucesso"] = "Endereço criado com sucesso!";
 
             return View("CriarEndereco", endereco);
         }
@@ -83,7 +83,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
+                ViewData["Falha"] = "Não foi possível atualizar o endereço (modelo/dados inválidos).";
 
                 return View(endereco);
             }
@@ -103,12 +103,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             if (resultadoAtualizacao == null)
             {
-                ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
+                ViewData["Falha"] = "Não foi possível atualizar o endereço (falha ao atualizar).";
 
                 return View(endereco);
             }
 
-            ViewData["Sucesso"] = "Empréstimo atualizado com sucesso!";
+            ViewData["Sucesso"] = "Endereço atualizado com sucesso!";
 
             endereco.Enderecos = await _enderecoService.GetEnderecos();
 
@@ -131,7 +131,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             if (endereco.Id == Guid.Empty)
             {
-                ViewData["Falha"] = "Não foi possível deletar o empréstimo (Guid inválido).";
+                ViewData["Falha"] = "Não foi possível deletar o endereço (Guid inválido).";
 
                 return View(endereco);
             }
@@ -151,12 +151,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             if (resultadoDeletar == null)
             {
-                ViewData["Falha"] = "Não foi possível deletar o empréstimo (falha ao deletar).";
+                ViewData["Falha"] = "Não foi possível deletar o endereço (falha ao deletar).";
 
                 return View(endereco);
             }
 
-            ViewData["Sucesso"] = "empréstimo deletado com sucesso!";
+            ViewData["Sucesso"] = "Endereço deletado com sucesso!";
 
             endereco.Enderecos = await _enderecoService.GetEnderecos();
 
@@ -170,12 +170,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             if (listaEnderecos.IsNullOrEmpty())
             {
-                ViewData["Falha"] = "Não foi possível listar os empréstimos (lista vazia ou nula).";
+                ViewData["Falha"] = "Não foi possível listar os endereços (lista vazia ou nula).";
 
                 return View(listaEnderecos);
             }
 
-            ViewData["Sucesso"] = "Empréstimos listados com sucesso!";
+            ViewData["Sucesso"] = "Endereços listados com sucesso!";
 
             return View("ListarEnderecos", listaEnderecos);
         }
