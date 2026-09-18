@@ -57,7 +57,13 @@ namespace Biblioteca.Controllers
                 return View(usuario);
             }
 
-            return RedirectToAction("Login");
+            await _usuarioService.LogarUsuario(new LoginViewModel()
+            {
+                NomeUsuario = usuario.NomeUsuario,
+                Senha = usuario.Senha
+            });
+
+            return RedirectToAction("CadastrarEndereco", "Endereco");
         }
 
         [HttpGet]
@@ -155,7 +161,8 @@ namespace Biblioteca.Controllers
         [HttpGet]
         public async Task<IActionResult> VisualizarPerfil()
         {
-            IEnumerable<Emprestimo> emprestimosUsuario = await _emprestimoService.GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User)));
+            IEnumerable<Emprestimo> emprestimosUsuario = (await _emprestimoService.GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User))))
+                .Where(emprestimo => emprestimo.Finalizado == true);
 
             return View(emprestimosUsuario);
         }

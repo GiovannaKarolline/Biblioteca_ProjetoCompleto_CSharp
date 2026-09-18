@@ -23,6 +23,8 @@ namespace Biblioteca.Areas.Administration.Services
             {
                 editoraRegistrada.Nome = editora.Nome;
 
+                await _editoraRepository.AtualizarEditora(editoraRegistrada);
+
                 return await Task.FromResult(editoraRegistrada);
             }
 

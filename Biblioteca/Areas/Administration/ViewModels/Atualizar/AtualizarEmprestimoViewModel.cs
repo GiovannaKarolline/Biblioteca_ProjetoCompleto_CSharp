@@ -9,9 +9,9 @@ namespace Biblioteca.Areas.Administration.ViewModels.Atualizar
         [Required(ErrorMessage = "O empréstimo a ser atualizado precisa ser definido.")]
         public Guid Id { get; set; }
 
-        public IEnumerable<Copia> CopiasExistentes { get; set; }
+        public IEnumerable<Copia>? CopiasExistentes = Enumerable.Empty<Copia>();
 
-        public IEnumerable<Emprestimo> Emprestimos { get; set; }
+        public IEnumerable<Emprestimo>? Emprestimos = Enumerable.Empty<Emprestimo>();
 
         [Required(ErrorMessage = "O empréstimo precisa incluir cópias para ser atualizado.")]
         public List<Guid> IdCopias { get; set; }

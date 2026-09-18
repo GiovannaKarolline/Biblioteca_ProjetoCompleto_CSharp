@@ -1,4 +1,5 @@
-﻿using Biblioteca.Models;
+﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
+using Biblioteca.Models;
 using Biblioteca.ViewModels;
 
 namespace Biblioteca.Services.Interfaces
@@ -18,6 +19,8 @@ namespace Biblioteca.Services.Interfaces
         public Task<Emprestimo> AtualizarEmprestimo(Guid id, EmprestimoViewModel emprestimo);
 
         public Task<Emprestimo> AdicionarCopia(Guid idCopia, Guid idEmprestimo);
+
+        public Task<Emprestimo> EditarCopiasEmprestimo(IEnumerable<Guid> idCopias, Guid idEmprestimo);
 
         public Task<Emprestimo> RemoverCopia(Guid idCopia, Guid idUsuario);
 

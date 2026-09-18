@@ -95,6 +95,15 @@ namespace Biblioteca.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> AtualizarEmprestimo(AtualizarEmprestimoViewModel emprestimo)
         {
+            emprestimo.CopiasExistentes = await _copiaService.GetCopias(); //para trazer os dados de volta para o formulário numa próxima chamada de view
+
+            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos())
+                .Where(emprestimo => emprestimo.Finalizado == true);
+
+            emprestimo.Copias = new List<Copia>();
+
+            emprestimo.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
+
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
@@ -102,36 +111,34 @@ namespace Biblioteca.Areas.Administration.Controllers
                 return View("AtualizarEmprestimo", emprestimo);
             }
 
-            Emprestimo? emprestimoRegistrado = await _emprestimoService.GetEmprestimoById(emprestimo.Id);
+            Emprestimo? emprestimoRegistrado;
 
-            if(emprestimoRegistrado is not null)
+            try
             {
-                foreach (Guid idCopia in emprestimo.IdCopias)
-                {
-                    if(!emprestimoRegistrado.Copias.Any(copia => copia.Id == idCopia))
-                    {
-                        await _emprestimoService.AdicionarCopia(emprestimo.Id, idCopia);
-                    }
+                emprestimoRegistrado = await _emprestimoService.GetEmprestimoById(emprestimo.Id);
 
-                        if (emprestimo.DataDevolucao is null)
-                    {
-                        (await _copiaService.GetCopiaById(idCopia)).StatusDisponibilidade = false;
-                    }
-                }
+                emprestimo.DataDevolucao = emprestimoRegistrado.DataDevolucao;
 
-                foreach(Copia copia in emprestimoRegistrado.Copias)
-                {
-                    if (!emprestimo.IdCopias.Any(id => id == copia.Id))
-                    {
-                        await _emprestimoService.RemoverCopiaEmprestimoFinalizado(copia.Id, emprestimo.Id);
-                    }
-                }
+                emprestimo.DataPrevistaDevolucao = emprestimoRegistrado.DataPrevistaDevolucao;
 
+                emprestimo.DataRetirada = emprestimoRegistrado.DataRetirada;
+
+            }catch(Exception excecao)
+            {
+                ViewData["Falha"] = excecao.Message;
+
+                return View("AtualizarEmprestimo", emprestimo);
             }
 
-            List<Copia> novaListaCopias = emprestimo.Copias.ToList();
+            foreach(Copia copia in emprestimoRegistrado.Copias)
+            {
+                if (emprestimo.DataDevolucao is null)
+                {
+                    copia.StatusDisponibilidade = false;
+                }
+            }
 
-            emprestimo.Copias = novaListaCopias;
+            await _emprestimoService.EditarCopiasEmprestimo(emprestimo.IdCopias, emprestimo.Id);
 
             Emprestimo? resultadoAtualizar;
 
@@ -155,7 +162,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Empréstimo atualizado com sucesso!";
 
-            emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
+            emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+
+            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos())
+                .Where(emprestimo => emprestimo.Finalizado == true);
+
+            emprestimo.Copias = new List<Copia>();
 
             return View("AtualizarEmprestimo", emprestimo);
         }

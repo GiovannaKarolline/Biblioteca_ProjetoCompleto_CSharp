@@ -24,7 +24,6 @@ namespace Biblioteca.ViewModels
 
         public Boolean Finalizado { get; set; } = false;
 
-        [Required]
-        public IEnumerable<Copia> Copias { get; set; }
+        public IEnumerable<Copia>? Copias = Enumerable.Empty<Copia>();
     }
 }

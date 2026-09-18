@@ -2,7 +2,9 @@
 
 @if (@Model.FirstOrDefault() is not null)
 {
-    <h2>Lista de registros do tipo @Model.FirstOrDefault().GetType().Name</h2>
+    <h2 class="text-center">Lista de registros do tipo @Model.FirstOrDefault().GetType().Name</h2>
+    <hr />
+    <br />
 
     @foreach(Object item in Model)
     {

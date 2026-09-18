@@ -119,6 +119,8 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Cópia atualizada com sucesso!";
 
+            copia.Obras = await _obraLiterariaService.GetObras();
+            copia.Copias = await _copiaService.GetCopias();
             copia.Copias = await _copiaService.GetCopias();
 
             return View("AtualizarCopia", copia);

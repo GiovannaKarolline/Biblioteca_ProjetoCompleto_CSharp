@@ -11,6 +11,6 @@ namespace Biblioteca.Areas.Administration.ViewModels.Atualizar
 
         public IEnumerable<Copia>? Copias { get; set; }
 
-        public IEnumerable<ObraLiteraria> Obras { get; set; }
+        public IEnumerable<ObraLiteraria>? Obras = Enumerable.Empty<ObraLiteraria>();
     }
 }

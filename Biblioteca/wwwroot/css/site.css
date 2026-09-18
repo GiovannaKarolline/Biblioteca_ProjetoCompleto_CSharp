@@ -1,5 +1,7 @@
 html {
     font-size: 14px;
+    margin: 0;
+    padding: 0;
 }
 
 @media (min-width: 768px) {
@@ -18,18 +20,22 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
     font-family: Poppins, sans-serif;
     background: linear-gradient(to bottom, #dbe4e8ff, #85aabbff);
     color: #3b485c;
-}
-
-footer{
-    position: 
+    overflow: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none !important;
 }
 
 h2{
     margin-top: 2rem;
+}
+
+footer {
+    margin-bottom: 0;
+    bottom: 0 !important;
+    right: 0 !important;
 }
 
 .navbar{
@@ -50,7 +56,13 @@ h2{
     border-radius: 20px;
     padding: 20px;
     margin: 20px;
+    align-self: center auto;
     filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+}
+
+.listar-container h6{
+    overflow-wrap: break-word;
+    word-break: normal;
 }
 
 .card {

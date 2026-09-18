@@ -31,7 +31,7 @@
         {
             @if(emprestimo.DataDevolucao is null)
             {
-                <h6>• @emprestimo.DataPrevistaDevolucao.ToShortDateString() - <a asp-controller="Emprestimo" asp-action="VisualizarEmprestimos">Realizar devolução</a></h6>
+                <h6>• @emprestimo.DataPrevistaDevolucao.ToShortDateString() - <a asp-controller="Emprestimo" asp-action="VisualizarEmprestimos" style="text-decoration: none; color:green">Realizar devolução</a></h6>
             }
 
         } 

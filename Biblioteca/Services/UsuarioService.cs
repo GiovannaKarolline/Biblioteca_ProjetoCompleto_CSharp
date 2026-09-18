@@ -5,6 +5,7 @@ using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Services
 {
@@ -30,6 +31,11 @@ namespace Biblioteca.Services
                 throw new ArgumentException("O nome de usuário já existe, então o usuário não pôde ser cadastrado.");
             }
 
+            if (((await _usuarioRepository.GetUsuariosByNome(usuario.NomeUsuario)).Where(usuarioLista => usuarioLista.Email == usuario.Email)).FirstOrDefault() is not null)
+            {
+                throw new ArgumentException("Já existe um usuário com este e-mail, então o usuário não pôde ser cadastrado.");
+            }
+
             Usuario novoUsuario = new Usuario() 
             { 
                 UserName = usuario.NomeUsuario,
@@ -40,13 +46,21 @@ namespace Biblioteca.Services
                 PhoneNumber = usuario.NumeroTelefone
             };
 
-            var resultado = await _usuarioRepository.CriarUsuario(novoUsuario);
-
-            if (resultado is not null)
+            if (usuario != null)
             {
-                return resultado;
+                var resultado = await _usuarioRepository.CriarUsuario(novoUsuario);
+
+                if (resultado is not null)
+                {
+                    return resultado;
+                }
+                else
+                {
+                    throw new OperationCanceledException("Falha ao registrar usuário: criação falhou.");
+                }
             }
-            return null;
+
+            throw new ArgumentException("Falha ao registrar usuário: usuário inválido.");
         }
 
         public async Task<Usuario> DeletarUsuario(Guid id)

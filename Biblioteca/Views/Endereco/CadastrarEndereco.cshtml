@@ -1,0 +1,78 @@
+﻿@using Biblioteca.Enums
+@model EnderecoViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar endereço";
+}
+
+<partial name="_AvisosPartial"></partial>
+
+<h2>Seu endereço</h2>
+
+<hr />
+
+<div class="container">
+
+    <partial name="_AvisosPartial" />
+
+    @if (Model is not null)
+    {
+        <form asp-controller="Endereco" asp-action="CadastrarEndereco" method="post" role="form">
+            <div class="form-group">
+                <fieldset>
+                    <label asp-for="TipoLogradouro">Tipo de logradouro: </label>
+                    <select class="form-select" asp-for="TipoLogradouro" asp-items="Html.GetEnumSelectList<TipoLogradouro>()">
+
+                        <option value="">Selecione um tipo de logradouro</option>
+
+                    </select>
+                </fieldset>
+
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Logradouro">Logradouro: </label>
+                    <input class="form-control" asp-for="Logradouro" type="text" />
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Numero">Número: </label>
+                    <input class="form-control" asp-for="Numero" type="text" />
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Complemento">Complemento: </label>
+                    <input class="form-control" asp-for="Complemento" />
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Cep">CEP: </label>
+                    <input class="form-control" asp-for="Cep" />
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <br />
+                <input class="btn btn-primary" type="submit" value="Cadastrar-se" />
+            </div>
+        </form>
+    }
+    else
+    {
+        <h4>O modelo necessário para a criação do endereço não foi passado.</h4>
+    }
+</div>
+
+<br />
+<a class="btn btn-outline-dark" asp-area="" asp-controller="Conta" asp-action="Cadastro">Voltar</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

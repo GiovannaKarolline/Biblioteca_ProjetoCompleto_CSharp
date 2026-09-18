@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3" style="min-height: 100%;">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Biblioteca</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -36,7 +36,7 @@
                             </li>
                         }
 
-                        @if(User.Identity is null || !User.Identity.IsAuthenticated)
+                        @if (User.Identity is null || !User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Conta" asp-action="Cadastro">Cadastro</a>
@@ -55,8 +55,8 @@
 
                     </ul>
 
-                    <form class="d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="PesquisarObra">
-                        <input class="form-control mr-sm-2 campo-pesquisa" type="search" placeholder="Encontre o livro que você está procurando..." name="titulo" />
+                    <form class="d-flex align-items-center gap-2 d-sm-none d-md-none d-lg-flex" asp-area="" asp-controller="Home" asp-action="PesquisarObra">
+                        <input class="form-control mr-sm-2 campo-pesquisa" type="search" placeholder="Encontre o seu livro..." name="titulo" />
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
                     </form>
 
@@ -74,17 +74,20 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container" style="color: #ffffff;">
-            &copy; 2026 - Biblioteca
+    <div>
+   
+        <div class="container" >
+            <main role="main" class="pb-3" style="min-height: 86vh">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
+
+        <footer class="border-top footer text-muted">
+            <div class="container" style="color: #ffffff;">
+                &copy; 2026 - Biblioteca
+            </div>
+        </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -24,16 +24,6 @@ namespace Biblioteca.Repositories
             return await _context.Autores.ToListAsync(); 
         }
 
-        public void CadastrarAutor(Autor autor) 
-        {
-            if (autor == null)
-            {
-                throw new ArgumentNullException("Objeto do tipo Autor está nulo, não pode ser posto no banco de dados.");
-            }
-            _context.Autores.Add(autor);
-            _context.SaveChanges();
-        }
-
         public async Task<Autor> DeletarAutor(Autor autor)
         {
             AtualizarAutor(autor);

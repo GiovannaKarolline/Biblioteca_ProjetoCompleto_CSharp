@@ -51,13 +51,13 @@ namespace Biblioteca.Models
         public override string ToString()
         {
             return $"\nObra Literária:\n" +
-                $"\n* Id: {Id.ToString()}" +
-                $"\n* Título: {Titulo}" +
-                $"\n* Foto da Capa: {FotoCapa}" +
-                $"\n* ISBN: {ISBN}" +
-                $"\n* Ano de Publicação: {AnoPublicacao}" +
-                $"\n* Id da Editora: {EditoraId.ToString()}" +
-                $"\n* Id da Categoria: {CategoriaId.ToString()}\n";
+                $"\n• Id: {Id.ToString()}\n" +
+                $"\n• Título: {Titulo}\n" +
+                $"\n• Foto da Capa: {"" + FotoCapa}\n" +
+                $"\n• ISBN: {ISBN}\n" +
+                $"\n• Ano de Publicação: {AnoPublicacao}\n" +
+                $"\n• Id da Editora: {EditoraId.ToString()}\n" +
+                $"\n• Id da Categoria: {CategoriaId.ToString()}\n";
         }
     }
 }

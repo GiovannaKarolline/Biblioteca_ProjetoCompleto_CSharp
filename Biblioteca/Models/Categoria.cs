@@ -21,9 +21,9 @@ namespace Biblioteca.Models
 
         public override string ToString()
         {
-            return $"\nCategoria:\n" +
-                $"\n* Id: {Id.ToString()}" +
-                $"\n* Título: {Titulo}\n";
+            return $"\nCategoria\n" +
+                $"\n• Título: {Titulo}\n" +
+                $"\n• Id: {Id.ToString()}";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Biblioteca.Models;
+﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
+using Biblioteca.Models;
 using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
@@ -22,9 +23,8 @@ namespace Biblioteca.Services
             if(emprestimoRegistrado is not null && emprestimoRegistrado.Deletado == false)
             {
                 emprestimoRegistrado.UsuarioId = emprestimo.UsuarioId;
-                emprestimoRegistrado.DataRetirada = emprestimo.DataRetirada;
-                emprestimoRegistrado.DataPrevistaDevolucao = (DateOnly)emprestimo.DataPrevistaDevolucao;
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
+
                 
                 foreach(Copia copia in emprestimo.Copias.ToList())
                 {
@@ -143,6 +143,83 @@ namespace Biblioteca.Services
                 await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
 
                 return emprestimo;
+            }
+
+            throw new ArgumentException("Não existe um empréstimo com este Id no banco de dados.");
+        }
+
+        public async Task<Emprestimo> EditarCopiasEmprestimo(IEnumerable<Guid> idCopias, Guid idEmprestimo)
+        {
+            Emprestimo? emprestimo = await GetEmprestimoById(idEmprestimo);
+
+            if (emprestimo is not null)
+            {
+                foreach (Guid idCopia in idCopias)
+                {
+                    if (!idCopia.Equals(Guid.Empty))
+                    {
+                        Copia? copia = await _copiaService.GetCopiaById(idCopia);
+
+                        if(copia is not null)
+                        {
+                            if (!emprestimo.Copias.Any(copia => copia.Id == idCopia)) //se não tem nenhuma cópia no empréstimo com o Id da cópia selecionada
+                            {
+                                await AdicionarCopia(idCopia, emprestimo.Id);
+                            }
+
+                            if (emprestimo.Finalizado == true && emprestimo.DataDevolucao == null)
+                            {
+                                if (emprestimo.DataDevolucao is null)
+                                {
+                                    copia.StatusDisponibilidade = false;
+                                }
+                            }
+
+                            if (emprestimo.Copias is null) //preencher o modelo
+                            {
+                                emprestimo.Copias = new List<Copia>();
+
+                                if (copia is not null)
+                                {
+                                    emprestimo.Copias.Add(copia);
+                                }
+                            }
+                            else
+                            {
+                                if (emprestimo.Copias.FirstOrDefault(copias => copias.Id == idCopia) is null && copia is not null)
+                                {
+                                    emprestimo.Copias.Add(copia);
+                                }
+                            }
+                        }
+                    }
+
+                    List<Copia> copiasAtualizadas = new List<Copia>();
+
+                    copiasAtualizadas.AddRange(emprestimo.Copias);
+
+                    foreach (Copia copia in emprestimo.Copias) //copias que já estavam no empréstimo e as adicionadas anteriormente
+                    {
+                        if (!idCopias.Any(id => id == copia.Id)) //se houver alguma cópia nessa lista que não foi selecionada
+                        {
+                            copiasAtualizadas.Remove(copia);
+
+                            if (emprestimo.Finalizado == true && emprestimo.DataDevolucao == null)
+                            {
+                                if (emprestimo.DataDevolucao is null)
+                                {
+                                    copia.StatusDisponibilidade = true;
+                                }
+                            }
+                        }
+                    }
+
+                    emprestimo.Copias = copiasAtualizadas;
+                    
+                    await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
+
+                    return emprestimo;
+                }
             }
 
             throw new ArgumentException("Não existe um empréstimo com este Id no banco de dados.");

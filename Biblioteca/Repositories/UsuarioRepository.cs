@@ -38,25 +38,13 @@ namespace Biblioteca.Repositories
 
         public async Task<Usuario?> CriarUsuario(Usuario usuario)
         {
-            if (usuario != null)
-            {
-                var resultadoCriacao = await _userManager.CreateAsync(usuario, usuario.Senha);
+            var resultadoCriacao = await _userManager.CreateAsync(usuario, usuario.Senha);
 
-                if (resultadoCriacao.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(usuario, usuario.Cargo.ToString());
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    throw new OperationCanceledException("Falha ao registrar usuário: criação falhou.");
-                }
-            }
-            else
+            if (resultadoCriacao.Succeeded)
             {
-                throw new ArgumentException("Falha ao registrar usuário: usuário inválido.");
+                await _userManager.AddToRoleAsync(usuario, usuario.Cargo.ToString());
+                await _context.SaveChangesAsync();
             }
-
             return await GetUsuarioById(usuario.Id);
         }
 
