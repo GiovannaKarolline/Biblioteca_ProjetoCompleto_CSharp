@@ -154,6 +154,8 @@ namespace Biblioteca.Services
 
             if (emprestimo is not null)
             {
+                List<Copia> copiasAtualizadas = new List<Copia>();
+
                 foreach (Guid idCopia in idCopias)
                 {
                     if (!idCopia.Equals(Guid.Empty))
@@ -194,8 +196,6 @@ namespace Biblioteca.Services
                         }
                     }
 
-                    List<Copia> copiasAtualizadas = new List<Copia>();
-
                     copiasAtualizadas.AddRange(emprestimo.Copias);
 
                     foreach (Copia copia in emprestimo.Copias) //copias que já estavam no empréstimo e as adicionadas anteriormente
@@ -214,12 +214,13 @@ namespace Biblioteca.Services
                         }
                     }
 
-                    emprestimo.Copias = copiasAtualizadas;
                     
+                }
+                    emprestimo.Copias = copiasAtualizadas;
+
                     await _emprestimoRepository.AtualizarEmprestimo(emprestimo);
 
                     return emprestimo;
-                }
             }
 
             throw new ArgumentException("Não existe um empréstimo com este Id no banco de dados.");
