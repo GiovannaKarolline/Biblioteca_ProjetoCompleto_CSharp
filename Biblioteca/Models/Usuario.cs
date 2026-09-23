@@ -40,13 +40,12 @@ namespace Biblioteca.Models
         public override string ToString()
         {
             return $"\nUsuário:\n" +
-                $"\n* Id: {Id.ToString()}" +
-                $"\n* Nome de usuário: {UserName}" +
-                $"\n* E-mail: {Email}" +
-                $"\n* Senha: {Senha}" +
-                $"\n* Número de Telefone: {PhoneNumber}" +
-                $"\n* Cargo: {Cargo.ToString()}" +
-                $"\n* Data de Nascimento: {DataNascimento.ToString()}\n";
+                $"\n• Id: {Id.ToString()}\n" +
+                $"\n• Nome de usuário: {UserName}\n" +
+                $"\n• E-mail: {Email}\n" +
+                $"\n• Número de Telefone: {PhoneNumber}\n" +
+                $"\n• Cargo: {Cargo.ToString()}\n" +
+                $"\n• Data de Nascimento: {DataNascimento.ToString()}\n";
         }
     }
 }

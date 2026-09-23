@@ -1,11 +1,7 @@
-﻿using Biblioteca.Enums;
-using Biblioteca.Models;
+﻿using Biblioteca.Models;
 using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Biblioteca.Services
 {
@@ -20,10 +16,6 @@ namespace Biblioteca.Services
 
         public async Task<Usuario?> CadastrarUsuario(UsuarioViewModel usuario)
         {
-            if(usuario.Email.Substring(usuario.Email.IndexOf("@")) == "@admin.com.br")
-            {
-                usuario.Cargo = Cargo.Administrador;
-            }
 
             if ((await _usuarioRepository.GetUsuariosByNome(usuario.NomeUsuario))
                 .FirstOrDefault(usuarioRegistrado => usuarioRegistrado.UserName == usuario.NomeUsuario) is not null)

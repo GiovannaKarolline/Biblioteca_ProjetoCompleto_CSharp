@@ -126,6 +126,21 @@ footer {
     border-color: #cbdae1ff;
 }
 
+.paginacao{
+    display: flex;
+    justify-content: center;
+}
+
 .list-group-item:hover {
     background-color: #e9f4f8;
+}
+
+.pagination .page-item .page-link {
+    background-color: #5b879d;
+    color: #ffffff;
+}
+
+.pagination .page-item .page-link:hover, .pagination .page-item .page-link:active {
+    background-color: #6eadcb;
+    color: #ffffff;
 }

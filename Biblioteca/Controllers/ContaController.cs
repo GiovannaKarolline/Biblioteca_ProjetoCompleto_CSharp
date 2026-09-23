@@ -54,6 +54,8 @@ namespace Biblioteca.Controllers
             
             if(resultadoCadastro is null)
             {
+                ViewData["Falha"] = "A criação falhou.";
+
                 return View(usuario);
             }
 

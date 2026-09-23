@@ -1,5 +1,7 @@
 ﻿using Biblioteca.Enums;
+using Biblioteca.Models;
 using System.ComponentModel.DataAnnotations;
+using X.PagedList;
 
 namespace Biblioteca.ViewModels
 {
@@ -29,5 +31,10 @@ namespace Biblioteca.ViewModels
         [Display(Name = "Número de Telefone")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "O número de telefone precisa ser válido.")]
         public string NumeroTelefone { get; set; }
+
+        public IPagedList<Usuario> Usuarios;
+
+        public int? PaginaAtual;
+
     }
 }
