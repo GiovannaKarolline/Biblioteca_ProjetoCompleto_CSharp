@@ -1,154 +1,338 @@
-﻿@using Biblioteca.ViewModels
+﻿@using Biblioteca.Enums
+@using Biblioteca.ViewModels
 
 @model UsuarioViewModel
+
+@{
+    ViewData["Title"] = "Usuários";
+}
+
+<partial name="_AvisosPartial" />
 
 <h2>Usuários</h2>
 <hr />
 <br />
 
-<button class="btn btn-primary">+ Criar novo administrador</button>
+@if (Model is not null && Model.Usuarios is not null && Model.Usuarios.Count() > 0)
+{
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Criar novo administrador</button>
 
-<div class="tabela_listar">
+    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content card">
 
-    <table class="table table-responsive">
-        <tr class="d-table-row">
-            <th class="d-table-cell">Id</th>
-            <th>Nome de usuário</th>
-            <th>E-mail</th>
-            <th>Número de celular</th>
-            <th>Cargo</th>
-            <th>Data de nascimento</th>
-            <th>Editar registro</th>
-        </tr>
-        @foreach (Usuario usuario in Model.Usuarios)
-        {
-            <tr>
-                <td>@usuario.Id</td>
-                <td>@usuario.UserName</td>
-                <td>@usuario.Email</td>
-                <td>@usuario.PhoneNumber</td>
-                <td>@usuario.Cargo</td>
-                <td>@usuario.DataNascimento</td>
-                <td>
-                    <div class="d-inline-flex justify-content-between">
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@usuario.UserName">Atualizar</button>
+                <form asp-area="Administration" asp-controller="Usuario" asp-action="Cadastro" method="post">
 
-                        <div class="modal fade" id="atualizar-@usuario.UserName" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content card">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar usuário</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form asp-area="Administration" asp-controller="Usuario" asp-action="AtualizarUsuario" method="post">
+                    <div id="criarModal">
+                        <div class="modal-body">
 
-                                            <label asp-for="NomeUsuario">Nome de usuário</label>
-                                            <input asp-for="NomeUsuario" class="form-control" value="@usuario.UserName" placeholder="Nome de usuário" />
-                                            <span asp-validation-for="NomeUsuario"></span>
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Criar administrador</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                            </div>
 
-                                            <br />
+                            <label asp-for="NomeUsuario">Nome de usuário</label>
+                            <input asp-for="NomeUsuario" class="form-control" placeholder="Nome de usuário" />
+                            <span asp-validation-for="NomeUsuario"></span>
 
-                                            <label asp-for="Email">E-mail</label>
-                                            <input asp-for="Email" class="form-control" value="@usuario.Email" placeholder="E-mail" />
-                                            <span asp-validation-for="Email"></span>
+                            <br />
 
-                                            <br />
+                            <label asp-for="Email">E-mail</label>
+                            <input asp-for="Email" class="form-control" placeholder="E-mail" />
+                            <span asp-validation-for="Email"></span>
 
-                                            <label asp-for="NumeroTelefone">Número de Telefone</label>
-                                            <input asp-for="NumeroTelefone" class="form-control" value="@usuario.PhoneNumber" placeholder="Número de Telefone" />
-                                            <span asp-validation-for="NumeroTelefone"></span>
+                            <br />
 
-                                            <br />
+                            <label asp-for="Senha">Senha</label>
+                            <input asp-for="Senha" class="form-control" placeholder="Senha" />
+                            <span asp-validation-for="Senha"></span>
 
-                                            <label asp-for="Cargo">Cargo</label>
-                                            <input asp-for="Cargo" class="form-control" value="@usuario.Cargo" placeholder="Cargo" />
-                                            <span asp-validation-for="Cargo"></span>Cargo
+                            <br />
 
-                                            <br />
+                            <label asp-for="NumeroTelefone">Número de Telefone</label>
+                            <input asp-for="NumeroTelefone" class="form-control" placeholder="Número de Telefone" />
+                            <span asp-validation-for="NumeroTelefone"></span>
 
-                                            <label asp-for="DataNascimento">Data de nascimento</label>
-                                            <input asp-for="DataNascimento" class="form-control" value="@usuario.DataNascimento" />
-                                            <span asp-validation-for="DataNascimento"></span>
+                            <br />
 
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-primary">Atualizar</button>
-                                    </div>
-                                </div>
+                            <label asp-for="Cargo">Cargo</label>
+                            <input asp-for="Cargo" value="@Cargo.Administrador" class="form-control" placeholder="Cargo" readonly />
+
+                            <br />
+
+                            <label asp-for="DataNascimento">Data de nascimento</label>
+                            <input asp-for="DataNascimento" type="date" class="form-control" />
+                            <span asp-validation-for="DataNascimento"></span>
+
+                            <br />
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button id="botaoEndereco" type="button" class="btn btn-primary">Cadastrar endereço</button>
                             </div>
                         </div>
-
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@usuario.UserName">Deletar</button>
-
-                        <div class="modal fade" id="deletar-@usuario.UserName" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content card">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar usuário</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form asp-area="Administration" asp-controller="Usuario" asp-action="DeletarUsuario" method="post">
-
-                                            <label>Nome de usuário</label>
-                                            <input asp-for="NomeUsuario" class="form-control" value="@usuario.UserName" placeholder="Nome de usuário" disabled />
-
-                                            <br />
-
-                                            <label>E-mail</label>
-                                            <input asp-for="Email" class="form-control" value="@usuario.Email" placeholder="E-mail" disabled />
-
-                                            <br />
-
-                                            <label asp-for="NumeroTelefone">Número de Telefone</label>
-                                            <input asp-for="NumeroTelefone" class="form-control" value="@usuario.PhoneNumber" placeholder="Número de Telefone" disabled />
-
-                                            <br />
-
-                                            <label asp-for="Cargo">Cargo</label>
-                                            <input asp-for="Cargo" class="form-control" value="@usuario.Cargo" placeholder="Cargo" disabled />
-
-                                            <br />
-
-                                            <label asp-for="DataNascimento">Data de nascimento</label>
-                                            <input asp-for="DataNascimento" class="form-control" value="@usuario.DataNascimento" disabled />
-
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-danger">Deletar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
                     </div>
-                </td>
+
+                    <div class="d-none" id="enderecoModal">
+                        <div class="modal-body">
+
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Endereço do Administrador</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                            </div>
+
+                            <label asp-for="@Model.Endereco.TipoLogradouro">Tipo de Logradouro</label>
+                            <select asp-for="@Model.Endereco.TipoLogradouro" asp-items="@Html.GetEnumSelectList<TipoLogradouro>()" class="form-select" placeholder="Tipo de Logradouro">
+                            </select>
+                            <span asp-validation-for="@Model.Endereco.TipoLogradouro"></span>
+
+                            <br />
+
+                            <label asp-for="@Model.Endereco.Logradouro">Logradouro</label>
+                            <input asp-for="@Model.Endereco.Logradouro" class="form-control" placeholder="Logradouro" />
+                            <span asp-validation-for="@Model.Endereco.Logradouro"></span>
+
+                            <br />
+
+                            <label asp-for="@Model.Endereco.Numero">Número</label>
+                            <input asp-for="@Model.Endereco.Numero" class="form-control" placeholder="Número" />
+                            <span asp-validation-for="@Model.Endereco.Numero"></span>
+
+                            <br />
+
+                            <label asp-for="@Model.Endereco.Cep">CEP</label>
+                            <input asp-for="@Model.Endereco.Cep" class="form-control" placeholder="CEP" />
+                            <span asp-validation-for="@Model.Endereco.Cep"></span>
+
+                            <br />
+
+                            <label asp-for="@Model.Endereco.Complemento">Complemento</label>
+                            <input asp-for="@Model.Endereco.Complemento" class="form-control" placeholder="Complemento" />
+                            <span asp-validation-for="@Model.Endereco.Complemento"></span>
+
+                            <br />
+
+                            <div class="modal-footer">
+                                <button id="botaoVoltar" type="button" class="btn btn-secondary">Voltar</button>
+                                <button type="submit" class="btn btn-primary">Criar administrador</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabela_listar">
+
+        <table class="table table-responsive">
+            <tr class="d-table-row">
+                <th class="d-table-cell">Id</th>
+                <th>Nome de usuário</th>
+                <th>E-mail</th>
+                <th>Número de celular</th>
+                <th>Cargo</th>
+                <th>Data de nascimento</th>
+                <th>Editar registro</th>
             </tr>
-        }
-    </table>
 
-</div>
-
-
-
-<div class ="paginacao">
-    <nav aria-label="páginas" class="">
-        <ul class="pagination">
-
-            <li class="page-item"><a asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(Model.Usuarios.PageNumber - 1)" class="page-link">Anterior</a></li>
-            
-            @for(int i = 0; i < Model.Usuarios.PageCount; i++)
+            @foreach (Usuario usuario in Model.Usuarios)
             {
-                <li class="page-item"><a class="page-link" asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(i+1)">@(i+1)</a></li>
-            }
+                <tr>
+                    <td>@usuario.Id</td>
+                    <td>@usuario.UserName</td>
+                    <td>@usuario.Email</td>
+                    <td>@usuario.PhoneNumber</td>
+                    <td>@usuario.Cargo</td>
+                    <td>@usuario.DataNascimento</td>
+                    <td>
+                        <div class="d-inline-flex justify-content-between">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@usuario.UserName">Atualizar</button>
 
-            <li class="page-item"><a class="page-link" asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(Model.Usuarios.PageNumber + 1)">Próxima</a></li>
-        
-        </ul>
-    </nav>
-</div>
+                            <div class="modal fade" id="atualizar-@usuario.UserName" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar usuário</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form asp-area="Administration" asp-controller="Usuario" asp-action="AtualizarUsuario" method="post">
+
+                                                <input hidden asp-for="Id" value="@usuario.Id" />
+
+                                                <input hidden asp-for="Senha" value="@usuario.Senha" />
+
+                                                <label asp-for="NomeUsuario">Nome de usuário</label>
+                                                <input asp-for="NomeUsuario" class="form-control" value="@usuario.UserName" placeholder="Nome de usuário" />
+                                                <span asp-validation-for="NomeUsuario"></span>
+
+                                                <br />
+
+                                                <label asp-for="Email">E-mail</label>
+                                                <input asp-for="Email" class="form-control" value="@usuario.Email" placeholder="E-mail" />
+                                                <span asp-validation-for="Email"></span>
+
+                                                <br />
+
+                                                <label asp-for="NumeroTelefone">Número de Telefone</label>
+                                                <input asp-for="NumeroTelefone" class="form-control" value="@usuario.PhoneNumber" placeholder="Número de Telefone" />
+                                                <span asp-validation-for="NumeroTelefone"></span>
+
+                                                <br />
+
+                                                <label asp-for="Cargo">Cargo</label>
+                                                <select asp-for="Cargo" asp-items="@Html.GetEnumSelectList<Cargo>()" class="form-select" placeholder="Cargo">
+                                                </select>
+                                                <span asp-validation-for="Cargo"></span>
+
+                                                <br />
+
+                                                <label asp-for="DataNascimento">Data de nascimento</label>
+                                                <input asp-for="DataNascimento" type="date" class="form-control" value="@usuario.DataNascimento.ToString("yyyy-MM-dd")" />
+                                                <span asp-validation-for="DataNascimento"></span>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button asp-area="Administration" asp-controller="Usuario" asp-action="AtualizarUsuario" type="submit" class="btn btn-primary">Atualizar</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@usuario.UserName">Deletar</button>
+
+                            <div class="modal fade" id="deletar-@usuario.UserName" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar usuário</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <form asp-area="Administration" asp-controller="Usuario" asp-action="DeletarUsuario" method="post">
+
+                                                <label>Nome de usuário</label>
+                                                <input asp-for="NomeUsuario" class="form-control" value="@usuario.UserName" placeholder="Nome de usuário" disabled />
+
+                                                <br />
+
+                                                <label>E-mail</label>
+                                                <input asp-for="Email" class="form-control" value="@usuario.Email" placeholder="E-mail" disabled />
+
+                                                <br />
+
+                                                <label asp-for="NumeroTelefone">Número de Telefone</label>
+                                                <input asp-for="NumeroTelefone" class="form-control" value="@usuario.PhoneNumber" placeholder="Número de Telefone" disabled />
+
+                                                <br />
+
+                                                <label asp-for="Cargo">Cargo</label>
+                                                <input asp-for="Cargo" class="form-control" value="@usuario.Cargo" placeholder="Cargo" disabled />
+
+                                                <br />
+
+                                                <label asp-for="DataNascimento">Data de nascimento</label>
+                                                <input asp-for="DataNascimento" type="date" class="form-control" value="@usuario.DataNascimento.ToString("yyyy-MM-dd")" disabled />
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button asp-controller="Usuario" asp-action="DeletarUsuario" asp-route-id="@usuario.Id" type="submit" class="btn btn-danger">Deletar</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <div class="paginacao">
+        <nav aria-label="páginas" class="">
+            <ul class="pagination">
+                @if (Model.Usuarios.PageNumber > 1)
+                {
+                    <li class="page-item"><a asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(Model.Usuarios.PageNumber - 1)" class="page-link">Anterior</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="btn page-link disabled">Anterior</a></li>
+                }
+
+                @for (int i = 0; i < Model.Usuarios.PageCount; i++)
+                {
+                    <li class="page-item"><a class="page-link" asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(i + 1)">@(i + 1)</a></li>
+                }
+
+                @if (Model.Usuarios.PageNumber != Model.Usuarios.PageCount)
+                {
+                    <li class="page-item"><a class="page-link" asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(Model.Usuarios.PageNumber + 1)">Próxima</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="btn page-link disabled">Próxima</a></li>
+                }
+
+            </ul>
+        </nav>
+    </div>
+
+}
+else
+{
+    <h4>Não há registros de usuários.</h4>
+}
+
+
+
+<script>
+
+    //elementos da parte de criar administrador:
+
+    let modalCriar = document.getElementById('criarModal')
+
+    let botaoEndereco = document.getElementById('botaoEndereco')
+
+    //elementos da parte de endereço:
+
+    let modalEndereco = document.getElementById('enderecoModal')
+
+    let botaoVoltar = document.getElementById('botaoVoltar')
+
+
+    botaoEndereco.addEventListener('click', function () {
+
+        modalEndereco.classList.remove("d-none");
+
+        modalCriar.classList.add("d-none");
+
+    })
+
+    botaoVoltar.addEventListener('click', function () {
+
+        modalCriar.classList.remove("d-none");
+
+        modalEndereco.classList.add("d-none");
+
+    })
+
+</script>

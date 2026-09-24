@@ -18,128 +18,104 @@ namespace Biblioteca.Areas.Administration.Controllers
     public class UsuarioController : Controller
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IEnderecoService _enderecoService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IEnderecoService enderecoService)
         {
             _usuarioService = usuarioService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> AtualizarUsuario(Guid id)
-        {
-            AtualizarUsuarioViewModel Usuario = new AtualizarUsuarioViewModel()
-            {
-                Usuarios = await _usuarioService.GetUsuarios()
-            };
-
-            return View(Usuario);
+            _enderecoService = enderecoService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AtualizarUsuario(AtualizarUsuarioViewModel usuario)
+        public async Task<IActionResult> Cadastro(UsuarioViewModel usuario)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Falha"] = "Não foi possível atualizar a Usuario literária (modelo/dados inválidos).";
+                ViewData["Falha"] = "Não foi possível criar o usuário (modelo/dados inválidos).";
 
-                return View(usuario);
+                return View("Index", usuario);
+            }
+
+            Usuario? resultadoCadastro;
+
+            try
+            {
+                resultadoCadastro = await _usuarioService.CadastrarUsuario(usuario);
+
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
+
+                return View("Index", usuario);
+            }
+
+            if (resultadoCadastro is null)
+            {
+                ViewData["Falha"] = "A criação falhou.";
+
+                return View("Index", usuario);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AtualizarUsuario(UsuarioViewModel usuario)
+        {
+            Endereco enderecoRegistrado = await _enderecoService.GetEnderecoByUsuarioId(usuario.Id);
+
+            usuario.Endereco = new EnderecoViewModel(); //o endereço sempre vem nulo porque objetos não são passados diretamente por tag helpers
+
+            if(enderecoRegistrado is not null)
+            {
+                usuario.Endereco.Logradouro = enderecoRegistrado.Logradouro;
+                usuario.Endereco.TipoLogradouro = enderecoRegistrado.TipoLogradouro;
+                usuario.Endereco.Numero = enderecoRegistrado.Numero;
+                usuario.Endereco.UsuarioId = usuario.Id;
+                usuario.Endereco.Complemento = enderecoRegistrado.Complemento;
+                usuario.Endereco.Cep = enderecoRegistrado.Cep;
+            }
+            else
+            {
+                ViewData["Falha"] = "Não foi possível atualizar o usuário porque ele não possui um endereço.";
+
+                return View("Index", usuario);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["Falha"] = "Não foi possível atualizar o usuário (modelo/dados inválidos).";
+
+                return View("Index", usuario);
             }
 
             Usuario? resultadoAtualizacao;
 
             try
             {
-                resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+                resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario);
             }
             catch (Exception exception)
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(usuario);
+                return View("Index", usuario);
             }
 
             if (resultadoAtualizacao == null)
             {
-                ViewData["Falha"] = "Não foi possível atualizar a Usuario literária (falha ao atualizar).";
+                ViewData["Falha"] = "Não foi possível atualizar o usuário (falha ao atualizar).";
 
-                return View(usuario);
+                return View("Index", usuario);
             }
 
-            ViewData["Sucesso"] = "Usuario literária atualizada com sucesso!";
+            ViewData["Sucesso"] = "Usuário atualizado com sucesso!";
 
-            usuario.Usuarios = await _usuarioService.GetUsuarios();
+            usuario.Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6);
 
-            return View("AtualizarUsuario", usuario);
+            return View("Index", usuario);
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> DeletarUsuario()
-        //{
-        //    DeletarUsuarioViewModel usuario = new DeletarUsuarioViewModel()
-        //    {
-        //        Usuarios = await _usuarioService.GetUsuarios()
-        //    };
-
-        //    return View(usuario);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> DeletarUsuario(DeletarUsuarioViewModel usuario)
-        //{
-        //    if (usuario.Id == Guid.Empty)
-        //    {
-        //        ViewData["Falha"] = "Não foi possível deletar o usuário (Guid inválido).";
-
-        //        usuario.Usuarios = await _usuarioService.GetUsuarios();
-
-        //        return View(usuario);
-        //    }
-
-        //    Usuario? resultadoDeletar;
-
-        //    try
-        //    {
-        //        resultadoDeletar = await _usuarioService.DeletarUsuario(usuario.Id);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        ViewData["Falha"] = exception.Message;
-
-        //        return View(usuario);
-        //    }
-
-        //    if (resultadoDeletar == null)
-        //    {
-        //        ViewData["Falha"] = "Não foi possível deletar o usuário (falha ao deletar).";
-
-        //        usuario.Usuarios = await _usuarioService.GetUsuarios();
-
-        //        return View(usuario);
-        //    }
-
-        //    ViewData["Sucesso"] = "Usuário deletado com sucesso!";
-
-        //    usuario.Usuarios = await _usuarioService.GetUsuarios();
-
-        //    return View("DeletarUsuario", usuario);
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> ListarUsuarios()
-        //{
-        //    var listaUsuarios = await _usuarioService.GetUsuarios();
-
-        //    if (listaUsuarios.IsNullOrEmpty())
-        //    {
-        //        ViewData["Falha"] = "Não foi possível listar as Usuarios  (lista vazia ou nula).";
-
-        //        return View(listaUsuarios);
-        //    }
-
-        //    ViewData["Sucesso"] = "Usuários listados com sucesso!";
-
-        //    return View("ListarUsuarios", listaUsuarios);
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Index(int? paginaAtual)
@@ -161,41 +137,40 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarAdministrador(UsuarioViewModel usuario)
+        public async Task<IActionResult> DeletarUsuario(Guid id)
         {
+            Usuario? usuario = await _usuarioService.GetUsuarioById(id);
 
-            //if (ModelState.IsValid)
-            //{
-            //    ViewData["Falha"] = "Não foi possível atualizar a Usuario literária (modelo/dados inválidos).";
+            if (usuario is null)
+            {
+                ViewData["Falha"] = "Não foi possível deletar o usuário (Guid inválido).";
 
-            //    return View(new UsuarioViewModel());
-            //}
+                return View("Index", new UsuarioViewModel() { Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6) });
+            }
 
-            //usuario.Cargo = Cargo.Administrador;
+            Usuario? resultadoDeletar;
 
-            //Usuario? resultadoCriacao;
+            try
+            {
+                resultadoDeletar = await _usuarioService.DeletarUsuario(usuario.Id);
+            }
+            catch (Exception exception)
+            {
+                ViewData["Falha"] = exception.Message;
 
-            //try
-            //{
-            //    resultadoCriacao = await _usuarioService.CadastrarUsuario(usuario);
+                return View(usuario);
+            }
 
-            //}
-            //catch (Exception exception)
-            //{
-            //    ViewData["Falha"] = exception.Message;
+            if (resultadoDeletar == null)
+            {
+                ViewData["Falha"] = "Não foi possível deletar o usuário (falha ao deletar).";
 
-            //    return View(usuario);
-            //}
+                return View("Index", new UsuarioViewModel() { Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6) });
+            }
 
-            //if (resultadoCriacao is null)
-            //{
-            //    ViewData["Falha"] = "A criação falhou.";
+            ViewData["Sucesso"] = "Usuário deletado com sucesso!";
 
-            //    return View(usuario);
-            //}
-
-            return View(new UsuarioViewModel());
-
+            return View("Index", new UsuarioViewModel() { Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6) });
         }
     }
 }

@@ -136,7 +136,7 @@ namespace Biblioteca.Controllers
 
             try
             {
-                resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario.Id, usuario);
+                resultadoAtualizacao = await _usuarioService.AtualizarUsuario(usuario);
             }
             catch(Exception excecao)
             {

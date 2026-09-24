@@ -28,7 +28,7 @@ namespace Biblioteca.Services
                 enderecoRegistrado.Logradouro = endereco.Logradouro;
                 enderecoRegistrado.TipoLogradouro = endereco.TipoLogradouro;
                 enderecoRegistrado.Numero = endereco.Numero;
-                enderecoRegistrado.UsuarioId = endereco.UsuarioId;
+                enderecoRegistrado.UsuarioId = (Guid)endereco.UsuarioId;
                 enderecoRegistrado.Cep = endereco.Cep;
                 enderecoRegistrado.Complemento = endereco.Complemento;
 
@@ -42,7 +42,7 @@ namespace Biblioteca.Services
 
         public async Task<Endereco> CriarEndereco(EnderecoViewModel endereco)
         {
-            if(_usuarioRepository.GetUsuarioById(endereco.UsuarioId) is null)
+            if(_usuarioRepository.GetUsuarioById((Guid)endereco.UsuarioId) is null)
             {
                 throw new ArgumentException("O usuário atrelado a esse endereço não existe. O endereço não pôde ser registrado.");
             }
@@ -54,7 +54,7 @@ namespace Biblioteca.Services
                 Numero = endereco.Numero,
                 Complemento = endereco.Complemento,
                 Cep = endereco.Cep,
-                UsuarioId = endereco.UsuarioId
+                UsuarioId = (Guid)endereco.UsuarioId
             };
 
             if(endereco is not null)
@@ -101,6 +101,13 @@ namespace Biblioteca.Services
             enderecos = enderecos.Except(enderecos.Where(endereco => endereco.Deletado == true));
 
             return enderecos;
+        }
+
+        public async Task<Endereco?> GetEnderecoByUsuarioId(Guid id)
+        {
+            Endereco endereco = await _enderecoRepository.GetEnderecoByUsuarioId(id);
+
+            return endereco;
         }
     }
 }

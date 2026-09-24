@@ -9,6 +9,8 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<Endereco?> GetEnderecoById(Guid id);
 
+        public Task<Endereco?> GetEnderecoByUsuarioId(Guid id);
+
         public Task<Endereco> CriarEndereco(EnderecoViewModel endereco);
 
         public Task<Endereco> DeletarEndereco(Guid id);

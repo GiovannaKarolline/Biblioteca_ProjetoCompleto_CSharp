@@ -16,7 +16,6 @@ namespace Biblioteca.Services
 
         public async Task<Usuario?> CadastrarUsuario(UsuarioViewModel usuario)
         {
-
             if ((await _usuarioRepository.GetUsuariosByNome(usuario.NomeUsuario))
                 .FirstOrDefault(usuarioRegistrado => usuarioRegistrado.UserName == usuario.NomeUsuario) is not null)
             {
@@ -35,7 +34,15 @@ namespace Biblioteca.Services
                 Email = usuario.Email,
                 Senha = usuario.Senha,
                 DataNascimento = usuario.DataNascimento,
-                PhoneNumber = usuario.NumeroTelefone
+                PhoneNumber = usuario.NumeroTelefone,
+                Endereco = new Endereco()
+                {
+                    Logradouro = usuario.Endereco.Logradouro,
+                    TipoLogradouro = usuario.Endereco.TipoLogradouro,
+                    Cep = usuario.Endereco.Cep,
+                    Numero = usuario.Endereco.Numero,
+                    Complemento = usuario.Endereco.Complemento
+                }
             };
 
             if (usuario != null)
@@ -61,6 +68,8 @@ namespace Biblioteca.Services
 
             if (usuario is not null && usuario.Deletado == false)
             {
+                usuario.Deletado = true;
+
                 await _usuarioRepository.DeletarUsuario(usuario);
             }
             else
@@ -71,9 +80,9 @@ namespace Biblioteca.Services
             return await Task.FromResult(usuario);
         }
 
-        public async Task<Usuario> AtualizarUsuario(Guid id, UsuarioViewModel usuario)
+        public async Task<Usuario> AtualizarUsuario(UsuarioViewModel usuario)
         {
-            Usuario? usuarioRegistrado = await _usuarioRepository.GetUsuarioById(id);
+            Usuario? usuarioRegistrado = await _usuarioRepository.GetUsuarioById(usuario.Id);
 
             if (usuarioRegistrado is not null)
             {
@@ -83,6 +92,7 @@ namespace Biblioteca.Services
                 usuarioRegistrado.Cargo = usuario.Cargo;
                 usuarioRegistrado.Email = usuario.Email;
                 usuarioRegistrado.Senha = usuario.Senha;
+                usuarioRegistrado.DataNascimento = usuario.DataNascimento;
 
                 await _usuarioRepository.AtualizarUsuario(usuarioRegistrado);
 

@@ -22,7 +22,6 @@ namespace Biblioteca.ViewModels
         [Required(ErrorMessage = "O tipo do logradouro precisa ser definido.")]
         public TipoLogradouro TipoLogradouro { get; set; }
 
-        [Required(ErrorMessage = "O usuário residente do endereço precisa ser definido.")]
-        public Guid UsuarioId { get; set; }
+        public Guid? UsuarioId { get; set; }
     }
 }

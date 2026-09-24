@@ -13,7 +13,7 @@ namespace Biblioteca.Services.Interfaces
 
         public Task<Usuario> DeletarUsuario(Guid id);
 
-        public Task<Usuario> AtualizarUsuario(Guid id, UsuarioViewModel usuario);
+        public Task<Usuario> AtualizarUsuario(UsuarioViewModel usuario);
 
         public Task<IEnumerable<Usuario>> GetUsuarios();
 

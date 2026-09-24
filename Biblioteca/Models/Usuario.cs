@@ -36,6 +36,7 @@ namespace Biblioteca.Models
         public bool Deletado { get; set; } = false;
 
         public List<Emprestimo>? Emprestimos { get; set; }
+        public Endereco Endereco { get; set; }
 
         public override string ToString()
         {

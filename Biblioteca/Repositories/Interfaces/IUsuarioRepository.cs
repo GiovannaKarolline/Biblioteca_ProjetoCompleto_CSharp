@@ -19,5 +19,6 @@ namespace Biblioteca.Repositories.Interfaces
         public Task<Usuario> DeletarUsuario(Usuario usuario);
 
         public Task<Usuario> AtualizarUsuario(Usuario usuario);
+
     }
 }

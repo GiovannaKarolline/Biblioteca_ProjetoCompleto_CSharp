@@ -7,6 +7,8 @@ namespace Biblioteca.ViewModels
 {
     public class UsuarioViewModel
     {
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "O nome de usuário precisa ser fornecido.")]
         [Display(Name = "Nome de usuário")]
         public string NomeUsuario { get; set; }
@@ -32,7 +34,9 @@ namespace Biblioteca.ViewModels
         [DataType(DataType.PhoneNumber, ErrorMessage = "O número de telefone precisa ser válido.")]
         public string NumeroTelefone { get; set; }
 
-        public IPagedList<Usuario> Usuarios;
+        public EnderecoViewModel? Endereco { get; set; }
+
+        public IPagedList<Usuario>? Usuarios;
 
         public int? PaginaAtual;
 
