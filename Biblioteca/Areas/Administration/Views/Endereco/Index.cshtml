@@ -1,0 +1,270 @@
+﻿@using Biblioteca.Enums
+@using Biblioteca.ViewModels
+@model EnderecoViewModel
+
+@{
+    ViewData["Title"] = "Endereços";
+}
+
+<partial name="_AvisosPartial" />
+
+<h2>Endereços</h2>
+<hr />
+<br />
+
+@if (Model is null || Model.Enderecos is null || Model.Enderecos.Count() < 1)
+{
+    <h4>Não há registros de endereços disponíveis para edição.</h4>
+}
+else
+{
+    @if (Model.Usuarios is null || Model.Usuarios.Count() < 1)
+    {
+        <span title="Não há registros de usuários.">
+            <button class="btn btn-primary" disabled>+ Adicionar nova endereco literária</button>
+        </span>
+
+    }
+    else
+    {
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar novo endereço</button>
+    }
+
+    <br />
+
+    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content card">
+                <div class="modal-body">
+                    <form asp-area="Administration" asp-controller="Endereco" asp-action="CriarEndereco" method="post">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Adicionar novo endereço</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <br />
+                        
+                        <label asp-for="UsuarioId">Dono do endereço</label>
+                        <select asp-for="UsuarioId" asp-items="@(Html.GetEnumSelectList<Cargo>())" class="form-select" placeholder="Quem mora neste endereço?">
+                        </select>
+                        <span asp-validation-for="UsuarioId"></span>
+
+                        <br />
+
+                        <label asp-for="TipoLogradouro">Tipo de Logradouro</label>
+                        <select asp-for="TipoLogradouro" asp-items="@(Html.GetEnumSelectList<Cargo>())" class="form-select" placeholder="Tipo de Logradouro">
+                        </select>
+                        <span asp-validation-for="TipoLogradouro"></span>
+
+                        <br />
+
+                        <label asp-for="Logradouro">Logradouro</label>
+                        <input asp-for="Logradouro" class="form-control" placeholder="Logradouro" />
+                        <span asp-validation-for="Logradouro"></span>
+
+                        <br />
+
+                        <label asp-for="Numero">Número</label>
+                        <input asp-for="Numero" type="number" class="form-control" placeholder="Número" />
+                        <span asp-validation-for="Numero"></span>
+
+                        <br />
+
+                        <label asp-for="Cep">CEP</label>
+                        <input asp-for="Cep" class="form-control" placeholder="CEP" />
+                        <span asp-validation-for="Cep"></span>
+
+                        <br />
+
+                        <label asp-for="Complemento">Complemento</label>
+                        <input asp-for="Complemento" class="form-control" placeholder="Complemento" />
+                        <span asp-validation-for="Complemento"></span>
+           
+                        <br />
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabela_listar">
+
+        <table class="table table-responsive">
+            <tr class="d-table-row">
+                <th class="d-table-cell">Id</th>
+                <th>Id</th>
+                <th>Dono do endereço</th>
+                <th>Tipo de Logradouro</th>
+                <th>Logradouro</th>
+                <th>Número</th>
+                <th>CEP</th>
+                <th>Complemento</th>
+            </tr>
+
+            @foreach (Endereco endereco in Model.Enderecos)
+            {
+                <tr>
+                    <td>@endereco.Id</td>
+                    <td>@endereco.Usuario.UserName</td>
+                    <td>@endereco.TipoLogradouro</td>
+                    <td>@endereco.Logradouro</td>
+                    <td>@endereco.Numero</td>
+                    <td>@endereco.Cep</td>
+                    <td>@endereco.Complemento</td>
+                    <td>
+                        <div class="d-inline-flex justify-content-between">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@endereco.Id">Atualizar</button>
+
+                            <div class="modal fade" id="atualizar-@endereco.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar endereco literária</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <form asp-area="Administration" asp-controller="Endereco" asp-action="AtualizarEndereco" method="post">
+
+                                            <div class="modal-body">
+
+                                                <input hidden asp-for="Id" value="@endereco.Id" />
+
+                                                <br />
+
+                                                @if (Model.Usuarios is not null)
+                                                {
+                                                    <label asp-for="UsuarioId">Dono do endereço</label>
+                                                    <select asp-for="UsuarioId" asp-items="@(Html.GetEnumSelectList<Cargo>()/* mudar para lista de usuários existentes! */)" class="form-select" placeholder="Quem mora neste endereço?">
+                                                    </select>
+                                                    <span asp-validation-for="UsuarioId"></span>
+                                                }
+                                                else
+                                                {
+                                                    <label>Dono do endereço</label>
+                                                    <input class="form-control" value="@endereco.Usuario.UserName" disabled />
+                                                }
+
+                                                <br />
+
+                                                <label asp-for="TipoLogradouro">Tipo de Logradouro</label>
+                                                <select asp-for="TipoLogradouro" asp-items="@(Html.GetEnumSelectList<TipoLogradouro>())" class="form-select" placeholder="Tipo de Logradouro">
+                                                </select>
+                                                <span asp-validation-for="TipoLogradouro"></span>
+
+                                                <br />
+
+                                                <label asp-for="Logradouro">Título</label>
+                                                <input asp-for="Logradouro" class="form-control" placeholder="Logradouro" value="@endereco.Logradouro"/>
+                                                <span asp-validation-for="Logradouro"></span>
+
+                                                <br />
+
+                                                <label asp-for="Numero">Número</label>
+                                                <input asp-for="Numero" type="number" class="form-control" placeholder="Número" value="@endereco.Numero" />
+                                                <span asp-validation-for="Numero"></span>
+
+                                                <br />
+
+                                                <label asp-for="Cep">CEP</label>
+                                                <input asp-for="Cep" type="number" class="form-control" placeholder="CEP" value="@endereco.Cep" />
+                                                <span asp-validation-for="Cep"></span>
+
+                                                <br />
+
+                                                <label asp-for="Complemento">ISBN</label>
+                                                <input asp-for="Complemento" class="form-control" placeholder="Complemento" value="@endereco.Complemento" />
+                                                <span asp-validation-for="Complemento"></span>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@endereco.Id">Deletar</button>
+
+                            <div class="modal fade" id="deletar-@endereco.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar endereço</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <form asp-area="Administration" asp-controller="Endereco" asp-action="DeletarEndereco" method="post">
+
+                                                <br />
+
+                                                <label>Dono do endereço</label>
+                                                <input class="form-control" value="@endereco.Usuario.UserName" disabled />
+
+                                                <br />
+
+                                                <label>Tipo de Logradouro</label>
+                                                <input class="form-control" value="@endereco.TipoLogradouro" disabled />
+
+                                                <br />
+
+                                                <label>Logradouro</label>
+                                                <input class="form-control" value="@endereco.Logradouro" disabled>
+
+                                                <br />
+
+                                                <label>Número</label>
+                                                <input class="form-control" value="@endereco.Numero" disabled />
+
+                                                <br />
+
+                                                <label>CEP</label>
+                                                <input class="form-control" value="@endereco.Cep" disabled />
+
+                                                <br />
+
+                                                <label>Complemento</label>
+                                                <input class="form-control" value="@endereco.Complemento" disabled />
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button asp-controller="enderecoLiteraria" asp-action="DeletarEndereco" asp-route-id="@endereco.Id" type="submit" class="btn btn-primary">Deletar</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <partial name="_PaginacaoPartial" model="@Model.Enderecos"></partial>
+
+}

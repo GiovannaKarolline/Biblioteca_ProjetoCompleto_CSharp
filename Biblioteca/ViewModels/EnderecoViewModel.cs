@@ -1,10 +1,16 @@
 ﻿using Biblioteca.Enums;
+using Biblioteca.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using X.PagedList;
 
 namespace Biblioteca.ViewModels
 {
     public class EnderecoViewModel
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "O logradouro precisa ser preenchido.")]
         [StringLength(50)]
         public string Logradouro { get; set; }
@@ -21,6 +27,10 @@ namespace Biblioteca.ViewModels
 
         [Required(ErrorMessage = "O tipo do logradouro precisa ser definido.")]
         public TipoLogradouro TipoLogradouro { get; set; }
+
+        public IPagedList<Endereco>? Enderecos;
+
+        public List<Usuario>? Usuarios;
 
         public Guid? UsuarioId { get; set; }
     }

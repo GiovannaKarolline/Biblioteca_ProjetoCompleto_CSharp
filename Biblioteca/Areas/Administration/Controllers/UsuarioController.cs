@@ -26,6 +26,25 @@ namespace Biblioteca.Areas.Administration.Controllers
             _enderecoService = enderecoService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index(int? paginaAtual)
+        {
+            UsuarioViewModel usuario = new UsuarioViewModel();
+
+            usuario.Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(paginaAtual ?? 1, 6);
+
+            if (usuario.Usuarios.IsNullOrEmpty())
+            {
+                ViewData["Falha"] = "Não foi possível listar os usuários (lista vazia ou nula).";
+
+                return View(usuario);
+            }
+
+            ViewData["Sucesso"] = "Usuários listados com sucesso!";
+
+            return View("Index", usuario);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Cadastro(UsuarioViewModel usuario)
         {
@@ -67,7 +86,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             usuario.Endereco = new EnderecoViewModel(); //o endereço sempre vem nulo porque objetos não são passados diretamente por tag helpers
 
-            if(enderecoRegistrado is not null)
+            if (enderecoRegistrado is not null)
             {
                 usuario.Endereco.Logradouro = enderecoRegistrado.Logradouro;
                 usuario.Endereco.TipoLogradouro = enderecoRegistrado.TipoLogradouro;
@@ -113,25 +132,6 @@ namespace Biblioteca.Areas.Administration.Controllers
             ViewData["Sucesso"] = "Usuário atualizado com sucesso!";
 
             usuario.Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6);
-
-            return View("Index", usuario);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index(int? paginaAtual)
-        {
-            UsuarioViewModel usuario = new UsuarioViewModel();
-
-            usuario.Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(paginaAtual ?? 1 , 6);
-
-            if (usuario.Usuarios.IsNullOrEmpty())
-            {
-                ViewData["Falha"] = "Não foi possível listar os usuários (lista vazia ou nula).";
-
-                return View(usuario);
-            }
-
-            ViewData["Sucesso"] = "Usuários listados com sucesso!";
 
             return View("Index", usuario);
         }

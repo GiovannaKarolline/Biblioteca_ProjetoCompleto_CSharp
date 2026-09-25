@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
@@ -34,30 +35,40 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CriarObra()
+        public async Task<IActionResult> Index(int? paginaAtual)
         {
-            CriarObraViewModel obra = new CriarObraViewModel()
+            ObraLiterariaViewModel obra = new ObraLiterariaViewModel();
+
+            obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(paginaAtual ?? 1, 6);
+            obra.CategoriasExistentes = await _categoriaService.GetCategorias();
+            obra.EditorasExistentes = await _editoraService.GetEditoras();
+            obra.AutoresExistentes = await _autorService.GetAutores();
+
+            if (obra.ObrasLiterarias.IsNullOrEmpty())
             {
-                AutoresExistentes = await _autorService.GetAutores(),
-                EditorasExistentes = await _editoraService.GetEditoras(),
-                CategoriasExistentes = await _categoriaService.GetCategorias()
-            };
+                ViewData["Falha"] = "Não foi possível listar as obras literárias (lista vazia ou nula).";
+
+                return View(obra);
+            }
+
+            ViewData["Sucesso"] = "Obras literárias listadas com sucesso!";
 
             return View(obra);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarObra(CriarObraViewModel obra)
+        public async Task<IActionResult> CriarObra(ObraLiterariaViewModel obra)
         {
+            obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
+            obra.AutoresExistentes = await _autorService.GetAutores();
+            obra.EditorasExistentes = await _editoraService.GetEditoras();
+            obra.CategoriasExistentes = await _categoriaService.GetCategorias();
+
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível criar a obra literária (modelo/dados inválidos).";
 
-                obra.AutoresExistentes = await _autorService.GetAutores();
-                obra.EditorasExistentes = await _editoraService.GetEditoras();
-                obra.CategoriasExistentes = await _categoriaService.GetCategorias();
-
-                return View(obra);
+                return View("Index", obra);
             }
 
             ObraLiteraria? resultadoCriacao;
@@ -70,56 +81,37 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(obra);
+                return View("Index", obra);
             }
 
             if (resultadoCriacao == null)
             {
                 ViewData["Falha"] = "Não foi possível criar a obra literária (falha ao criar).";
 
-                obra.AutoresExistentes = await _autorService.GetAutores();
-                obra.EditorasExistentes = await _editoraService.GetEditoras();
-                obra.CategoriasExistentes = await _categoriaService.GetCategorias();
-
-                return View(obra);
+                return View("Index", obra);
             }
 
             ViewData["Sucesso"] = "Obra literária criada com sucesso!";
 
-            obra.AutoresExistentes = await _autorService.GetAutores();
-            obra.EditorasExistentes = await _editoraService.GetEditoras();
-            obra.CategoriasExistentes = await _categoriaService.GetCategorias();
+            obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
 
-            return View("CriarObra", obra);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> AtualizarObra()
-        {
-            AtualizarObraViewModel obra = new AtualizarObraViewModel()
-            {
-                ObrasLiterarias = await _obraLiterariaService.GetObras(),
-                AutoresExistentes = await _autorService.GetAutores(),
-                CategoriasExistentes = await _categoriaService.GetCategorias(),
-                EditorasExistentes = await _editoraService.GetEditoras()
-            };
-
-            return View(obra);
+            return View("Index", obra);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AtualizarObra(AtualizarObraViewModel obra)
+        public async Task<IActionResult> AtualizarObra(ObraLiterariaViewModel obra)
         {
+
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a obra literária (modelo/dados inválidos).";
 
-                obra.ObrasLiterarias = await _obraLiterariaService.GetObras();
+                obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
                 obra.AutoresExistentes = await _autorService.GetAutores();
                 obra.CategoriasExistentes = await _categoriaService.GetCategorias();
                 obra.EditorasExistentes = await _editoraService.GetEditoras();
 
-                return View(obra);
+                return View("Index", obra);
             }
 
             ObraLiteraria? resultadoAtualizacao;
@@ -132,53 +124,47 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(obra);
+                obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
+                obra.AutoresExistentes = await _autorService.GetAutores();
+                obra.CategoriasExistentes = await _categoriaService.GetCategorias();
+                obra.EditorasExistentes = await _editoraService.GetEditoras();
+
+                return View("Index", obra);
             }
 
             if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a obra literária (falha ao atualizar).";
 
-                obra.ObrasLiterarias = await _obraLiterariaService.GetObras();
+                obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
                 obra.AutoresExistentes = await _autorService.GetAutores();
                 obra.CategoriasExistentes = await _categoriaService.GetCategorias();
                 obra.EditorasExistentes = await _editoraService.GetEditoras();
 
-                return View(obra);
+                return View("Index", obra);
             }
 
             ViewData["Sucesso"] = "Obra literária atualizada com sucesso!";
 
-            obra.ObrasLiterarias = await _obraLiterariaService.GetObras();
-
+            obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
             obra.AutoresExistentes = await _autorService.GetAutores();
-
             obra.CategoriasExistentes = await _categoriaService.GetCategorias();
-
             obra.EditorasExistentes = await _editoraService.GetEditoras();
 
-            return View("AtualizarObra", obra);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DeletarObra()
-        {
-            DeletarObraViewModel obra = new DeletarObraViewModel()
-            {
-                ObrasLiterarias = await _obraLiterariaService.GetObras()
-            };
-
-            return View(obra);
+            return View("Index", obra);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletarObra(DeletarObraViewModel obra)
+        public async Task<IActionResult> DeletarObra(ObraLiterariaViewModel obra)
         {
+            obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
+            obra.AutoresExistentes = await _autorService.GetAutores();
+            obra.CategoriasExistentes = await _categoriaService.GetCategorias();
+            obra.EditorasExistentes = await _editoraService.GetEditoras();
+
             if (obra.Id == Guid.Empty)
             {
                 ViewData["Falha"] = "Não foi possível deletar a obra literária (Guid inválido).";
-
-                obra.ObrasLiterarias = await _obraLiterariaService.GetObras();
 
                 return View(obra);
             }
@@ -200,33 +186,16 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar a obra literária (falha ao deletar).";
 
-                obra.ObrasLiterarias = await _obraLiterariaService.GetObras();
-
                 return View(obra);
             }
 
             ViewData["Sucesso"] = "Obra literária deletada com sucesso!";
 
-            obra.ObrasLiterarias = await _obraLiterariaService.GetObras();
+            obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
 
-            return View("DeletarObra", obra);
+            return View("Index", obra);
+
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarObras()
-        {
-            var listaObras = await _obraLiterariaService.GetObras();
-
-            if (listaObras.IsNullOrEmpty())
-            {
-                ViewData["Falha"] = "Não foi possível listar as obras literárias (lista vazia ou nula).";
-
-                return View(listaObras);
-            }
-
-            ViewData["Sucesso"] = "Obras literárias listadas com sucesso!";
-
-            return View("ListarObras", listaObras);
-        }
     }
 }

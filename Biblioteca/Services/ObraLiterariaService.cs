@@ -1,4 +1,5 @@
-﻿using Biblioteca.Models;
+﻿using Biblioteca.Areas.Administration.Services.Interfaces;
+using Biblioteca.Models;
 using Biblioteca.Repositories;
 using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Services.Interfaces;
@@ -10,10 +11,12 @@ namespace Biblioteca.Services
     public class ObraLiterariaService : IObraLiterariaService
     {
         private readonly IObraLiterariaRepository _obraRepository;
+        private readonly IAutorService _autorService;
 
-        public ObraLiterariaService(IObraLiterariaRepository obraRepository)
+        public ObraLiterariaService(IObraLiterariaRepository obraRepository, IAutorService autorService)
         {
             _obraRepository = obraRepository;
+            _autorService = autorService;
         }
 
         public async Task<ObraLiteraria> AtualizarObraLiteraria(Guid id, ObraLiterariaViewModel obraViewModel)
@@ -28,6 +31,29 @@ namespace Biblioteca.Services
                 obra.CategoriaId = obraViewModel.CategoriaId;
                 obra.EditoraId = obraViewModel.EditoraId;
                 obra.FotoCapa = obraViewModel.FotoCapa;
+
+                if(obra.Autores is null)
+                {
+                    obra.Autores = new List<Autor>();
+                }
+                
+                foreach (Guid idAutor in obraViewModel.AutoresSelecionados)
+                {
+                    Autor autor = await _autorService.GetAutorById(idAutor);
+
+                    if (!obra.Autores.Contains(autor))
+                    {
+                        obra.Autores.Add(autor);
+
+                    }
+                }
+
+                List<Autor> autoresARemover = obra.Autores.Where(autor => !obraViewModel.AutoresSelecionados.Contains(autor.Id)).ToList();
+
+                foreach (Autor autor in autoresARemover)
+                {
+                    obra.Autores.Remove(autor);
+                }
 
                 await _obraRepository.AtualizarObraLiteraria(obra);
             }

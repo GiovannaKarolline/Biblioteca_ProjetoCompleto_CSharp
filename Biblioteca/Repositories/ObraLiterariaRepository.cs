@@ -17,8 +17,10 @@ namespace Biblioteca.Repositories
         public async Task<IEnumerable<ObraLiteraria>> GetObras()
         {
             return await _context.ObrasLiterarias.Include(obra => obra.Editora)
+                .Include(obra => obra.Editora)
                 .Include(obra => obra.Categoria)
                 .Include(obra => obra.Copias)
+                .Include(obra => obra.Autores)
                 .ToListAsync();
         }
 
@@ -30,6 +32,7 @@ namespace Biblioteca.Repositories
                 .Include(obra => obra.Editora)
                 .Include(obra => obra.Categoria)
                 .Include(obra => obra.Copias)
+                .Include(obra => obra.Autores)
                 .ToListAsync();
         }
 
@@ -62,6 +65,7 @@ namespace Biblioteca.Repositories
                 .Include(obra => obra.Editora)
                 .Include(obra => obra.Categoria)
                 .Include(obra => obra.Copias)
+                .Include(obra => obra.Autores)
                 .FirstOrDefaultAsync();
         }
 
@@ -71,6 +75,7 @@ namespace Biblioteca.Repositories
                 .Include(obra => obra.Editora)
                 .Include(obra => obra.Categoria)
                 .Include(obra => obra.Copias)
+                .Include(obra => obra.Autores)
                 .Where(obra => obra.ISBN == ISBN).FirstOrDefaultAsync();
         }
     }

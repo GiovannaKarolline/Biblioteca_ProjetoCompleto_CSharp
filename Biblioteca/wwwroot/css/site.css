@@ -108,6 +108,11 @@ footer {
     border-color: #50656fff;
 }
 
+.btn-primary:disabled{
+    background-color: #6eadcb;
+    border-color: #50656fff;
+}
+
 .btn-outline-dark {
     border-color: #4f5d72;
     color: #313946;

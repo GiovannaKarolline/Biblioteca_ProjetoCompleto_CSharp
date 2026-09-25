@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
@@ -16,18 +17,32 @@ namespace Biblioteca.Areas.Administration.Controllers
     public class EnderecoController : Controller
     {
         private readonly IEnderecoService _enderecoService;
-        private readonly ICopiaService _copiaService;
+        private readonly IUsuarioService _usuarioService;
 
-        public EnderecoController(IEnderecoService EnderecoService, ICopiaService copiaService)
+        public EnderecoController(IEnderecoService enderecoService, IUsuarioService usuarioService)
         {
-            _enderecoService = EnderecoService;
-            _copiaService = copiaService;
+            _enderecoService = enderecoService;
+            _usuarioService = usuarioService;
         }
 
         [HttpGet]
-        public IActionResult CriarEndereco()
+        public async Task<IActionResult> Index(int? paginaAtual)
         {
-            return View(new EnderecoViewModel());
+            EnderecoViewModel endereco = new EnderecoViewModel();
+
+            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(paginaAtual ?? 1, 6);
+            endereco.Usuarios = (await _usuarioService.GetUsuarios()).ToList();
+
+            if (endereco.Enderecos.IsNullOrEmpty())
+            {
+                ViewData["Falha"] = "Não foi possível listar os endereços (lista vazia ou nula).";
+
+                return View(endereco);
+            }
+
+            ViewData["Sucesso"] = "Endereços listados com sucesso!";
+
+            return View(endereco);
         }
 
         [HttpPost]
@@ -37,7 +52,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o endereço (modelo/dados inválidos).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             endereco.UsuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -52,31 +67,21 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View("CriarEndereco", endereco);
+                return View("Index", endereco);
             }
 
             if (resultadoCriacao == null)
             {
                 ViewData["Falha"] = "Não foi possível criar o endereço (falha ao criar).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             ViewData["Sucesso"] = "Endereço criado com sucesso!";
 
-            return View("CriarEndereco", endereco);
+            return View("Index", endereco);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AtualizarEndereco()
-        {
-            AtualizarEnderecoViewModel endereco = new AtualizarEnderecoViewModel()
-            {
-                Enderecos = await _enderecoService.GetEnderecos()
-            };
-
-            return View(endereco);
-        }
 
         [HttpPost]
         public async Task<IActionResult> AtualizarEndereco(AtualizarEnderecoViewModel endereco)
@@ -127,7 +132,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletarEndereco(DeletarEnderecoViewModel endereco)
+        public async Task<IActionResult> DeletarEndereco(EnderecoViewModel endereco)
         {
             if (endereco.Id == Guid.Empty)
             {
@@ -158,26 +163,10 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Endereço deletado com sucesso!";
 
-            endereco.Enderecos = await _enderecoService.GetEnderecos();
+            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6);
 
             return View("DeletarEndereco", endereco);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarEnderecos()
-        {
-            var listaEnderecos = await _enderecoService.GetEnderecos();
-
-            if (listaEnderecos.IsNullOrEmpty())
-            {
-                ViewData["Falha"] = "Não foi possível listar os endereços (lista vazia ou nula).";
-
-                return View(listaEnderecos);
-            }
-
-            ViewData["Sucesso"] = "Endereços listados com sucesso!";
-
-            return View("ListarEnderecos", listaEnderecos);
-        }
     }
 }

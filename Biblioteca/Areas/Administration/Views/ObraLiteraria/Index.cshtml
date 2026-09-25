@@ -1,0 +1,351 @@
+﻿@using Biblioteca.ViewModels
+
+@model ObraLiterariaViewModel
+
+@{
+    ViewData["Title"] = "Obras literárias";
+}
+
+<partial name="_AvisosPartial" />
+
+<h2>Obras literárias</h2>
+<hr />
+<br />
+
+@if (Model is null || Model.ObrasLiterarias is null || Model.ObrasLiterarias.Count() < 1)
+{
+    <h4>Não há registros de obras literárias disponíveis para edição.</h4>
+}
+else
+{
+    @if (Model.CategoriasExistentes is null || Model.CategoriasExistentes.Count() < 1)
+    {
+        <span title="Não há registros de categorias.">
+            <button class="btn btn-primary" disabled>+ Adicionar nova obra literária</button>
+        </span>
+
+    }
+    else if (Model.EditorasExistentes is null || Model.EditorasExistentes.Count() < 1)
+    {
+        <span title="Não há registros de editoras.">
+            <button class="btn btn-primary" disabled>+ Adicionar nova obra literária</button>
+        </span>
+
+    }
+    else if (Model.AutoresExistentes is null || Model.AutoresExistentes.Count() < 1)
+    {
+        <span title="Não há registros de autores.">
+            <button class="btn btn-primary" disabled>+ Adicionar nova obra literária</button>
+        </span>
+    }
+    else
+    {
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar nova obra literária</button>
+    }
+
+    <br />
+
+    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content card">
+                <div class="modal-body">
+                    <form asp-area="Administration" asp-controller="ObraLiteraria" asp-action="CriarObra" method="post">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Adicionar nova obra literária</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <label asp-for="Titulo">Nome de usuário</label>
+                        <input asp-for="Titulo" class="form-control" placeholder="Titulo da obra literária" />
+                        <span asp-validation-for="Titulo"></span>
+
+                        <br />
+
+                        @if (Model.CategoriasExistentes is not null)
+                        {
+                            <label asp-for="CategoriaId">Categoria</label>
+                            <select asp-for="CategoriaId" asp-items="@(new SelectList(Model.CategoriasExistentes, "Id", "Titulo"))" class="form-select" placeholder="Categoria">
+                            </select>
+                            <span asp-validation-for="CategoriaId"></span>
+                        }
+
+                        <br />
+
+                        <div class="form-group">
+                            <label>Autores: </label>
+                            <fieldset>
+
+                                @if (Model.AutoresExistentes is not null)
+                                {
+                                    @foreach (Autor autor in Model.AutoresExistentes)
+                                    {
+                                        <input name="AutoresSelecionados" value="@autor.Id" type="checkbox" />
+                                        <label>@(autor.PrimeiroNome + " " + @autor.Sobrenome)</label>
+                                        <br />
+                                    }
+                                }
+
+                            </fieldset>
+                            <span asp-validation-for="Autores"></span>
+                        </div>
+
+                        <br />
+
+                        <label asp-for="AnoPublicacao">Ano de Publicação</label>
+                        <input asp-for="AnoPublicacao" type="number" class="form-control" placeholder="Ano de Publicação" />
+                        <span asp-validation-for="AnoPublicacao"></span>
+
+                        <br />
+
+                        <label asp-for="ISBN">ISBN</label>
+                        <input asp-for="ISBN" class="form-control" placeholder="ISBN" />
+                        <span asp-validation-for="ISBN"></span>
+
+                        <br />
+
+                        @if (Model.EditorasExistentes is not null)
+                        {
+                            <label asp-for="EditoraId">Editora</label>
+                            <select asp-for="EditoraId" asp-items="@(new SelectList(Model.EditorasExistentes, "Id", "Nome"))" class="form-select" placeholder="Editora">
+                            </select>
+                            <span asp-validation-for="EditoraId"></span>
+                        }
+
+                        <br />
+
+                        <label asp-for="FotoCapa">Foto de Capa</label>
+                        <input asp-for="FotoCapa" type="url" class="form-control" placeholder="Foto de Capa" />
+                        <span asp-validation-for="FotoCapa"></span>
+
+                        <br />
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabela_listar">
+
+        <table class="table table-responsive">
+            <tr class="d-table-row">
+                <th class="d-table-cell">Id</th>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Ano de Publicação</th>
+                <th>Autor(es)</th>
+                <th>Editora</th>
+                <th>ISBN</th>
+                <th>Foto da Capa</th>
+            </tr>
+
+            @foreach (ObraLiteraria obra in Model.ObrasLiterarias)
+            {
+                <tr>
+                    <td>@obra.Id</td>
+                    <td>@obra.Titulo</td>
+                    <td>@obra.Categoria.Titulo</td>
+                    <td>@obra.AnoPublicacao</td>
+                    <td>
+                        @foreach(Autor autor in obra.Autores)
+                        {
+                            <h6>@(autor.PrimeiroNome + " " + autor.Sobrenome)</h6>
+                        }
+                    </td>
+                    <td>@obra.Editora.Nome</td>
+                    <td>@obra.ISBN</td>
+                    <td>@obra.FotoCapa</td>
+                    <td>
+                        <div class="d-inline-flex justify-content-between">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@obra.Id">Atualizar</button>
+
+                            <div class="modal fade" id="atualizar-@obra.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar obra literária</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <form asp-area="Administration" asp-controller="ObraLiteraria" asp-action="AtualizarObra" method="post">
+
+                                            <div class="modal-body">
+
+                                                <input hidden asp-for="Id" value="@obra.Id" />
+
+                                                <label asp-for="Titulo">Título</label>
+                                                <input asp-for="Titulo" class="form-control" placeholder="Titulo da obra literária" value="@obra.Titulo"/>
+                                                <span asp-validation-for="Titulo"></span>
+
+                                                <br />
+
+                                                @if (Model.CategoriasExistentes is not null)
+                                                {
+                                                    <label asp-for="CategoriaId">Categoria</label>
+                                                    <select asp-for="CategoriaId" asp-items="@(new SelectList(Model.CategoriasExistentes, "Id", "Titulo"))" class="form-select" placeholder="Categoria" >
+                                                    </select>
+                                                    <span asp-validation-for="CategoriaId"></span>
+                                                }
+                                                else
+                                                {
+                                                    <label>Categoria</label>
+                                                    <input class="form-control" value="@obra.Categoria.Titulo" disabled />
+
+                                                    <input asp-for="CategoriaId" value="@obra.Categoria.Id" hidden />
+                                                }
+
+                                                <br />
+
+                                                <label asp-for="AnoPublicacao">Ano de Publicação</label>
+                                                <input asp-for="AnoPublicacao" type="number" class="form-control" placeholder="Ano de Publicação" value="@obra.AnoPublicacao" />
+                                                <span asp-validation-for="AnoPublicacao"></span>
+
+                                                <br />
+
+                                                <label asp-for="ISBN">ISBN</label>
+                                                <input asp-for="ISBN" class="form-control" placeholder="ISBN" value="@obra.ISBN" />
+                                                <span asp-validation-for="ISBN"></span>
+
+                                                <br />
+
+                                                @if (Model.EditorasExistentes is not null)
+                                                {
+                                                    <label asp-for="EditoraId">Editora</label>
+                                                    <select asp-for="EditoraId" asp-items="@(new SelectList(Model.EditorasExistentes, "Id", "Nome"))" class="form-select" placeholder="Editora">
+                                                    </select>
+                                                    <span asp-validation-for="EditoraId"></span>
+                                                }
+                                                else
+                                                {
+                                                    <label>Editora</label>
+
+                                                    <input class="form-control" value="@obra.Editora.Nome" disabled />
+
+                                                    <input asp-for="EditoraId" value="@obra.Editora.Id" hidden />
+                                                }
+
+                                                <br />
+
+                                                <label asp-for="FotoCapa">Foto de Capa</label>
+                                                <input asp-for="FotoCapa" type="url" class="form-control" placeholder="Foto de Capa" value="@obra.FotoCapa" />
+                                                <span asp-validation-for="FotoCapa"></span>
+
+                                                <br />
+
+                                                <div class="form-group">
+                                                    <label>Autores: </label>
+                                                    <fieldset>
+
+                                                        @if (Model.AutoresExistentes is not null)
+                                                        {
+                                                            @foreach (Autor autor in Model.AutoresExistentes)
+                                                            {
+                                                                @if (obra.Autores is not null && obra.Autores.Contains(autor))
+                                                                {
+                                                                    <input name="AutoresSelecionados" value="@autor.Id" type="checkbox" checked/>
+                                                                    <label>@(autor.PrimeiroNome + " " + @autor.Sobrenome)</label>
+                                                                    <br />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input name="AutoresSelecionados" value="@autor.Id" type="checkbox" />
+                                                                    <label>@(autor.PrimeiroNome + " " + @autor.Sobrenome)</label>
+                                                                    <br />
+                                                                }
+                                                            }
+                                                        }
+
+                                                    </fieldset>
+                                                    <span asp-validation-for="Autores"></span>
+                                                </div>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@obra.Id">Deletar</button>
+
+                            <div class="modal fade" id="deletar-@obra.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar obra literária</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <form asp-area="Administration" asp-controller="ObraLiteraria" asp-action="DeletarObra" method="post">
+
+                                                <label>Título</label>
+                                                <input class="form-control" value="@obra.Titulo" disabled />
+
+                                                <br />
+
+                                                <label>Categoria</label>
+                                                <input class="form-control" value="@obra.Categoria.Titulo" disabled>
+
+                                                <br />
+
+                                                <label>Ano de Publicação</label>
+                                                <input class="form-control" value="@obra.AnoPublicacao" disabled />
+
+                                                <br />
+
+                                                <label>ISBN</label>
+                                                <input class="form-control" value="@obra.ISBN" disabled />
+
+                                                <br />
+
+                                                <label>Editora</label>
+                                                <input class="form-control" value="@obra.Editora.Nome" disabled />
+
+                                                <br />
+
+                                                <label>Foto de Capa</label>
+                                                <input class="form-control" value="@obra.FotoCapa" disabled />
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button asp-controller="ObraLiteraria" asp-action="DeletarObra" asp-route-id="@obra.Id" type="submit" class="btn btn-primary">Deletar</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <partial name="_PaginacaoPartial" model="@Model.ObrasLiterarias"></partial>
+
+}

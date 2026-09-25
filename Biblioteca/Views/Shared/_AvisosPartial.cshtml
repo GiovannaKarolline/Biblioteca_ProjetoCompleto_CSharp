@@ -1,13 +1,30 @@
 ﻿@if (ViewData["Sucesso"] is not null)
 {
-    <div class="alert alert-success">
+    <div class="cardAviso alert alert-success">
         @ViewData["Sucesso"]
     </div>
 }
 
 @if (ViewData["Falha"] is not null)
 {
-    <div class="alert alert-danger d-inline-flex gap-3">
+    <div class="cardAviso alert alert-danger d-inline-flex gap-3" >
         @ViewData["Falha"]
     </div>
 }
+
+<script>
+
+    let avisos = document.querySelectorAll('.cardAviso')
+
+    if( avisos != null ){
+
+        avisos.forEach(function (item) {
+
+            setTimeout(() => {
+                item.style.display = 'none';
+            }, 3000)
+
+        })
+    }
+
+</script>

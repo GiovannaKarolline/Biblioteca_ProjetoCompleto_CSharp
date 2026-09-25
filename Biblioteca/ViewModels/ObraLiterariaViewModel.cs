@@ -1,10 +1,15 @@
 ﻿using Biblioteca.Models;
+using X.PagedList;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Biblioteca.ViewModels
 {
     public class ObraLiterariaViewModel
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "O título da obra literária precisa ser preenchido.")]
         [StringLength(50, ErrorMessage = "O título precisa ter entre 1 e 50 caracteres.")]
         public string Titulo { get; set; }
@@ -28,7 +33,16 @@ namespace Biblioteca.ViewModels
 
         public List<Autor> Autores { get; set; } = new List<Autor>();
 
-        public IEnumerable<ObraLiteraria>? ObrasLiterarias { get; set; }
+        public IPagedList<ObraLiteraria>? ObrasLiterarias { get; set; }
+
+        public IEnumerable<Categoria>? CategoriasExistentes { get; set; }
+
+        public IEnumerable<Editora>? EditorasExistentes { get; set; }
+
+        public IEnumerable<Autor>? AutoresExistentes { get; set; }
+
+        [Required(ErrorMessage = "O(s) autor(es) da obra precisa(m) ser definido(s).")]
+        public List<Guid> AutoresSelecionados { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

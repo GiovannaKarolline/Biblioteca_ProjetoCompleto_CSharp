@@ -17,6 +17,8 @@
 {
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Criar novo administrador</button>
 
+    <br />
+
     <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content card">
@@ -24,12 +26,13 @@
                 <form asp-area="Administration" asp-controller="Usuario" asp-action="Cadastro" method="post">
 
                     <div id="criarModal">
-                        <div class="modal-body">
 
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5">Criar administrador</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                            </div>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Criar administrador</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <div class="modal-body">
 
                             <label asp-for="NomeUsuario">Nome de usuário</label>
                             <input asp-for="NomeUsuario" class="form-control" placeholder="Nome de usuário" />
@@ -74,12 +77,13 @@
                     </div>
 
                     <div class="d-none" id="enderecoModal">
-                        <div class="modal-body">
 
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5">Endereço do Administrador</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                            </div>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Endereço do Administrador</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <div class="modal-body">
 
                             <label asp-for="@Model.Endereco.TipoLogradouro">Tipo de Logradouro</label>
                             <select asp-for="@Model.Endereco.TipoLogradouro" asp-items="@Html.GetEnumSelectList<TipoLogradouro>()" class="form-select" placeholder="Tipo de Logradouro">
@@ -154,10 +158,12 @@
                             <div class="modal fade" id="atualizar-@usuario.UserName" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content card">
+
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar usuário</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
                                         </div>
+
                                         <div class="modal-body">
                                             <form asp-area="Administration" asp-controller="Usuario" asp-action="AtualizarUsuario" method="post">
 
@@ -212,10 +218,12 @@
                             <div class="modal fade" id="deletar-@usuario.UserName" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content card">
+
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar usuário</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
                                         </div>
+
                                         <div class="modal-body">
 
                                             <form asp-area="Administration" asp-controller="Usuario" asp-action="DeletarUsuario" method="post">
@@ -266,43 +274,13 @@
 
     </div>
 
-    <div class="paginacao">
-        <nav aria-label="páginas" class="">
-            <ul class="pagination">
-                @if (Model.Usuarios.PageNumber > 1)
-                {
-                    <li class="page-item"><a asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(Model.Usuarios.PageNumber - 1)" class="page-link">Anterior</a></li>
-                }
-                else
-                {
-                    <li class="page-item"><a class="btn page-link disabled">Anterior</a></li>
-                }
-
-                @for (int i = 0; i < Model.Usuarios.PageCount; i++)
-                {
-                    <li class="page-item"><a class="page-link" asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(i + 1)">@(i + 1)</a></li>
-                }
-
-                @if (Model.Usuarios.PageNumber != Model.Usuarios.PageCount)
-                {
-                    <li class="page-item"><a class="page-link" asp-controller="Usuario" asp-action="Index" asp-route-paginaAtual="@(Model.Usuarios.PageNumber + 1)">Próxima</a></li>
-                }
-                else
-                {
-                    <li class="page-item"><a class="btn page-link disabled">Próxima</a></li>
-                }
-
-            </ul>
-        </nav>
-    </div>
+    <partial name="_PaginacaoPartial" model="@Model.Usuarios"></partial>
 
 }
 else
 {
     <h4>Não há registros de usuários.</h4>
 }
-
-
 
 <script>
 
