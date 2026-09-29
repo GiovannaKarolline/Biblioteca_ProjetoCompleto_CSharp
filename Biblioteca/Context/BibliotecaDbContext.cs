@@ -53,6 +53,11 @@ namespace Biblioteca.Context
                 .WithMany(usuario => usuario.Emprestimos)
                 .HasForeignKey(emprestimo => emprestimo.UsuarioId);
 
+            modelBuilder.Entity<Endereco>()
+                .HasOne(endereco => endereco.Usuario)
+                .WithOne(usuario => usuario.Endereco)
+                .HasForeignKey<Endereco>(endereco => endereco.UsuarioId);
+
             modelBuilder.Entity<Usuario>()
                 .HasIndex(coluna => coluna.Email)
                 .IsUnique();

@@ -4,6 +4,8 @@ using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Biblioteca.Areas.Administration.ViewModels.Atualizar;
+using Biblioteca.Services.Interfaces;
+using Biblioteca.Services;
 
 namespace Biblioteca.Areas.Administration.Services
 {
@@ -54,7 +56,9 @@ namespace Biblioteca.Areas.Administration.Services
             if (autor is not null)
             {
                 autor.Deletado = true;
+
                 await _autorRepository.DeletarAutor(autor);
+
             }
             else
             {

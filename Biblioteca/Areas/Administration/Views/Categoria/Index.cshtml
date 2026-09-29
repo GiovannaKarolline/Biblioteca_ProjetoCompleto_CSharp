@@ -1,0 +1,153 @@
+﻿@model CategoriaViewModel
+
+@{
+    ViewData["Title"] = "Categorias";
+}
+
+<partial name="_AvisosPartial" />
+
+<h2>Categorias</h2>
+<hr />
+<br />
+
+@if (Model is null || Model.Categorias is null || Model.Categorias.Count() < 1)
+{
+    <h4>Não há registros de categorias disponíveis para edição.</h4>
+}
+else
+{
+
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar nova categoria</button>
+
+    <br />
+
+    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content card">
+                <div class="modal-body">
+                    <form asp-area="Administration" asp-controller="Categoria" asp-action="CriarCategoria" method="post">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Adicionar nova categoria</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <br />
+
+                        <label asp-for="Titulo">Título</label>
+                        <input asp-for="Titulo" class="form-control" placeholder="Título da categoria" />
+                        <span asp-validation-for="Titulo"></span>
+
+                        <br />
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabela_listar">
+
+        <table class="table table-responsive text-center">
+            <tr class="d-table-row">
+                <th>Id</th>
+                <th>Título da categoria</th>
+            </tr>
+
+            @foreach (Categoria categoria in Model.Categorias)
+            {
+                <tr>
+                    <td>@categoria.Id</td>
+                    <td>@categoria.Titulo</td>
+                    <td>
+                        <div class="d-inline-flex justify-content-between">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@categoria.Id">Atualizar</button>
+
+                            <div class="modal fade" id="atualizar-@categoria.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar categoria</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <form class="text-start" asp-area="Administration" asp-controller="Categoria" asp-action="AtualizarCategoria" method="post">
+
+                                            <div class="modal-body">
+
+                                                <input hidden asp-for="Id" value="@categoria.Id" />
+
+                                                <br />
+
+                                                <label asp-for="Titulo">Título</label>
+                                                <input asp-for="Titulo" class="form-control" placeholder="Título da categoria" value="@categoria.Titulo" />
+                                                <span asp-validation-for="Titulo"></span>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@categoria.Id">Deletar</button>
+
+                            <div class="modal fade" id="deletar-@categoria.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar categoria</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <form class="text-start" asp-area="Administration" asp-controller="Categoria" asp-action="DeletarCategoria" method="post">
+
+                                                <input hidden asp-for="Id" value="@categoria.Id" />
+
+                                                <br />
+
+                                                <label>Título</label>
+                                                <input class="form-control" value="@categoria.Titulo" disabled>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Deletar</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <partial name="_PaginacaoPartial" model="@Model.Categorias"></partial>
+
+}

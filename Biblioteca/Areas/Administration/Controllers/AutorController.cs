@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
+using X.PagedList;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
@@ -21,9 +22,26 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        public IActionResult CriarAutor()
+        public async Task<IActionResult> Index(int? paginaAtual)
         {
-            return View(new AutorViewModel());
+            AutorViewModel autor = new AutorViewModel();
+
+            autor.Autores = (await _autorService.GetAutores()).ToPagedList(paginaAtual ?? 1, 6);
+
+            if (autor.Autores.IsNullOrEmpty())
+            {
+                ViewData["Falha"] = "Não foi possível listar os autores (lista vazia ou nula).";
+
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(paginaAtual ?? 1, 6);
+
+                return View(autor);
+            }
+
+            ViewData["Sucesso"] = "Autores listados com sucesso!";
+
+            autor.Autores = (await _autorService.GetAutores()).ToPagedList(paginaAtual ?? 1, 6);
+
+            return View("Index", autor);
         }
 
         [HttpPost]
@@ -33,7 +51,9 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o autor (modelo/dados inválidos).";
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             Autor? resultadoCriacao;
@@ -48,7 +68,9 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
 
@@ -56,23 +78,16 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o autor (falha ao criar).";
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             ViewData["Sucesso"] = "Autor criado com sucesso!";
 
-            return View("CriarAutor");
-        }
+            autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
 
-        [HttpGet]
-        public async Task<IActionResult> AtualizarAutor()
-        {
-            AtualizarAutorViewModel autores = new AtualizarAutorViewModel()
-            {
-                Autores = await _autorService.GetAutores()
-            };
-
-            return View("AtualizarAutor", autores);
+            return View("Index", autor);
         }
 
         [HttpPost]
@@ -82,7 +97,9 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o autor (modelo/dados inválidos).";
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             Autor? resultadoAtualizacao;
@@ -97,42 +114,37 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o autor (falha ao atualizar).";
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             ViewData["Sucesso"] = "Autor atualizado com sucesso!";
 
-            autor.Autores = await _autorService.GetAutores();
+            autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
 
-            return View("AtualizarAutor", autor);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DeletarAutor()
-        {
-            DeletarAutorViewModel autores = new DeletarAutorViewModel()
-            {
-                Autores = await _autorService.GetAutores()
-            };
-
-            return View("DeletarAutor", autores);
+            return View("Index", autor);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletarAutor(DeletarAutorViewModel autor)
+        public async Task<IActionResult> DeletarAutor(AutorViewModel autor)
         {
             if(autor.Id == Guid.Empty)
             {
                 ViewData["Falha"] = "Não foi possível deletar o autor (Guid inválido).";
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             Autor? resultadoDeletar;
@@ -147,38 +159,23 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(autor);
+                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+
+                return View("Index", autor);
             }
 
             if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o autor (falha ao deletar).";
 
-                return View(autor);
+                return View("Index", autor);
             }
 
             ViewData["Sucesso"] = "Autor deletado com sucesso!";
 
-            autor.Autores = await _autorService.GetAutores();
+            autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
 
-            return View("DeletarAutor", autor);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ListarAutores()
-        {
-            var listaAutores = await _autorService.GetAutores();
-
-            if (listaAutores.IsNullOrEmpty())
-            {
-                ViewData["Falha"] = "Não foi possível listar os autores (lista vazia ou nula).";
-
-                return View(listaAutores);
-            }
-
-            ViewData["Sucesso"] = "Autores listados com sucesso!";
-
-            return View("ListarAutores", listaAutores);
+            return View("Index", autor);
         }
 
     }

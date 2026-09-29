@@ -12,11 +12,13 @@ namespace Biblioteca.Services
     {
         private readonly IObraLiterariaRepository _obraRepository;
         private readonly IAutorService _autorService;
+        private readonly ICopiaService _copiaService;
 
-        public ObraLiterariaService(IObraLiterariaRepository obraRepository, IAutorService autorService)
+        public ObraLiterariaService(IObraLiterariaRepository obraRepository, IAutorService autorService, ICopiaService copiaService)
         {
             _obraRepository = obraRepository;
             _autorService = autorService;
+            _copiaService = copiaService;
         }
 
         public async Task<ObraLiteraria> AtualizarObraLiteraria(Guid id, ObraLiterariaViewModel obraViewModel)
@@ -69,15 +71,25 @@ namespace Biblioteca.Services
             ObraLiteraria novaObra = new ObraLiteraria()
             {
                 Titulo = obra.Titulo,
-                Autores = obra.Autores,
                 AnoPublicacao = obra.AnoPublicacao,
                 CategoriaId = obra.CategoriaId,
                 EditoraId = obra.EditoraId,
                 ISBN = obra.ISBN,
-                FotoCapa = obra.FotoCapa
+                FotoCapa = obra.FotoCapa,
+                Autores = new List<Autor>()
             };
 
-            if(novaObra is not null)
+            foreach(Guid id in obra.AutoresSelecionados)
+            {
+                Autor? autor = await _autorService.GetAutorById(id);
+
+                if(autor is not null)
+                {
+                    novaObra.Autores.Add(autor);
+                }
+            }
+
+            if (novaObra is not null)
             {
                 await _obraRepository.CriarObraLiteraria(novaObra);
             }
@@ -93,9 +105,19 @@ namespace Biblioteca.Services
         {
             var obra = await _obraRepository.GetObraLiterariaById(id);
 
+            var copias = (await _copiaService.GetCopias()).Where(copia => copia.ObraLiteraria.Id == id);
+
             if (obra is not null)
             {
                 obra.Deletado = true;
+
+                if(copias is not null)
+                {
+                    foreach (Copia copia in copias)
+                    {
+                        copia.Deletado = true;
+                    }
+                }
 
                 await _obraRepository.DeletarObraLiteraria(obra);
 

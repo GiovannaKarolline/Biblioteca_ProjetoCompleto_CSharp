@@ -5,31 +5,30 @@ html {
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
     font-family: Poppins, sans-serif;
     background: linear-gradient(to bottom, #dbe4e8ff, #85aabbff);
     color: #3b485c;
-    overflow: scroll;
     scroll-behavior: smooth;
-    scrollbar-width: none !important;
 }
 
-h2{
-    margin-top: 2rem;
+h2 {
+    margin-top: 3.5vh !important;
+    font-weight: 600;
 }
 
 footer {
@@ -38,8 +37,12 @@ footer {
     right: 0 !important;
 }
 
-.navbar{
-    margin-bottom: 2rem !important;
+span {
+    color: #a70404;
+}
+
+.navbar {
+    margin-bottom: 2vh !important;
 }
 
 .navbar-dark {
@@ -60,9 +63,13 @@ footer {
     filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
 }
 
-.listar-container h6{
-    overflow-wrap: break-word;
-    word-break: normal;
+    .listar-container h6 {
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+.imgTelaInicial {
+    max-width: 80vh;
 }
 
 .card {
@@ -71,13 +78,13 @@ footer {
     filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
 }
 
-.card img{
-    border-radius: 10px
-}
+    .card img {
+        border-radius: 10px
+    }
 
-.card button{
-    border-radius: 5px;
-}
+    .card button {
+        border-radius: 5px;
+    }
 
 .material-symbols-rounded {
     color: #5b879d;
@@ -93,34 +100,34 @@ footer {
     border-color: #5b879d;
 }
 
-.btn-outline-success:hover, .btn-outline-primary:hover{
-    background-color: #5b879d;
-    border-color: #5b879d;
-}
+    .btn-outline-success:hover, .btn-outline-primary:hover {
+        background-color: #5b879d;
+        border-color: #5b879d;
+    }
 
 .btn-primary {
     background-color: #5b879d;
     border-color: #cbdae1ff;
 }
 
-.btn-primary:hover {
-    background-color: #6eadcb;
-    border-color: #50656fff;
-}
+    .btn-primary:hover {
+        background-color: #6eadcb;
+        border-color: #50656fff;
+    }
 
-.btn-primary:disabled{
-    background-color: #6eadcb;
-    border-color: #50656fff;
-}
+    .btn-primary:disabled {
+        background-color: #6eadcb;
+        border-color: #50656fff;
+    }
 
 .btn-outline-dark {
     border-color: #4f5d72;
     color: #313946;
 }
 
-.btn-outline-dark:hover {
-    background-color: #313946;
-}
+    .btn-outline-dark:hover {
+        background-color: #313946;
+    }
 
 .form-control, .form-select {
     background-color: #e9f0f3;
@@ -131,7 +138,12 @@ footer {
     border-color: #cbdae1ff;
 }
 
-.paginacao{
+.tabela-listar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.paginacao {
     display: flex;
     justify-content: center;
 }
@@ -145,7 +157,56 @@ footer {
     color: #ffffff;
 }
 
-.pagination .page-item .page-link:hover, .pagination .page-item .page-link:active {
+    .pagination .page-item .page-link:hover, .pagination .page-item .page-link:active {
+        background-color: #6eadcb;
+        color: #ffffff;
+    }
+
+.dropdown .btn:focus, .dropdown .btn:active, .dropdown .btn {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.dropdown {
+    text-decoration: none;
+    padding: 0;
+    list-style: none;
+}
+
+.dropdown-toggle {
+    margin: 0 auto;
+}
+
+.icone-emprestimo {
+    margin-left: 2vh;
+    text-align: center !important;
+}
+
+#contador-emprestimo {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: #cbdae1ff;
+    font-weight: 600;
+    font-size: 1.7vh;
+}
+
+.contador {
+    border-radius: 100%;
+    width: 0.5vh;
+    height: 0.5vh;
     background-color: #6eadcb;
-    color: #ffffff;
+    padding: 1.2vh;
+    margin-left: -2vh;
+    margin-right: 0.5vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.fieldsetParaModal {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 2vh;
+    border-radius: 1vh;
+    margin-bottom: 1.7vh
 }

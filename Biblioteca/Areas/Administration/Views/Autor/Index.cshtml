@@ -1,0 +1,170 @@
+﻿@model AutorViewModel
+
+@{
+    ViewData["Title"] = "Autores";
+}
+
+<partial name="_AvisosPartial" />
+
+<h2>Autores</h2>
+<hr />
+<br />
+
+@if (Model is null || Model.Autores is null || Model.Autores.Count() < 1)
+{
+    <h4>Não há registros de autores disponíveis para edição.</h4>
+}
+else
+{
+
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar novo autor</button>
+
+    <br />
+
+    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content card">
+                <div class="modal-body">
+                    <form asp-area="Administration" asp-controller="Autor" asp-action="CriarAutor" method="post">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Adicionar novo autor</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <br />
+
+                        <label asp-for="PrimeiroNome">Primeiro nome</label>
+                        <input asp-for="PrimeiroNome" class="form-control" placeholder="Primeiro nome do autor" />
+                        <span asp-validation-for="PrimeiroNome"></span>
+
+                        <br />
+
+                        <label asp-for="Sobrenome">Sobrenome</label>
+                        <input asp-for="Sobrenome" class="form-control" placeholder="Sobrenome do autor" />
+                        <span asp-validation-for="Sobrenome"></span>
+
+                        <br />
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabela_listar">
+
+        <table class="table table-responsive text-center">
+            <tr class="d-table-row">
+                <th>Id</th>
+                <th>Primeiro nome</th>
+                <th>Sobrenome</th>
+            </tr>
+
+            @foreach (Autor autor in Model.Autores)
+            {
+                <tr>
+                    <td>@autor.Id</td>
+                    <td>@autor.PrimeiroNome</td>
+                    <td>@autor.Sobrenome</td>
+                    <td>
+                        <div class="d-inline-flex justify-content-between">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@autor.Id">Atualizar</button>
+
+                            <div class="modal fade" id="atualizar-@autor.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar autor</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <form class="text-start" asp-area="Administration" asp-controller="Autor" asp-action="AtualizarAutor" method="post">
+
+                                            <div class="modal-body">
+
+                                                <input hidden asp-for="Id" value="@autor.Id" />
+
+                                                <br />
+
+                                                <label asp-for="PrimeiroNome">Primeiro nome do autor</label>
+                                                <input asp-for="PrimeiroNome" class="form-control" placeholder="Primeiro nome do autor" value="@autor.PrimeiroNome" />
+                                                <span asp-validation-for="PrimeiroNome"></span>
+
+                                                <br />
+
+                                                <label asp-for="Sobrenome">Sobrenome</label>
+                                                <input asp-for="Sobrenome" class="form-control" placeholder="Sobrenome do autor" />
+                                                <span asp-validation-for="Sobrenome"></span>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@autor.Id">Deletar</button>
+
+                            <div class="modal fade" id="deletar-@autor.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar autor</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <form class="text-start" asp-area="Administration" asp-controller="Autor" asp-action="DeletarAutor" method="post">
+
+                                                <input hidden asp-for="Id" value="@autor.Id" />
+
+                                                <br />
+
+                                                <label>Primeiro nome do autor</label>
+                                                <input class="form-control" value="@autor.PrimeiroNome" disabled>
+
+                                                <label>Sobrenome do autor</label>
+                                                <input class="form-control" value="@autor.Sobrenome" disabled>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Deletar</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <partial name="_PaginacaoPartial" model="@Model.Autores"></partial>
+
+}

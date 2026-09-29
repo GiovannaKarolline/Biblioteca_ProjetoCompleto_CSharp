@@ -65,7 +65,7 @@ namespace Biblioteca.Controllers
                 Senha = usuario.Senha
             });
 
-            return RedirectToAction("CadastrarEndereco", "Endereco");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

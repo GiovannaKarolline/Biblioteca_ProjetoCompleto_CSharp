@@ -38,12 +38,16 @@ namespace Biblioteca.Repositories
 
         public async Task<Endereco?> GetEnderecoById(Guid id)
         {
-            return await _context.Enderecos.FirstOrDefaultAsync(endereco => endereco.Id == id);
+            return await _context.Enderecos
+                .Include(endereco => endereco.Usuario)
+                .FirstOrDefaultAsync(endereco => endereco.Id == id);
         }
 
         public async Task<IEnumerable<Endereco>> GetEnderecos() 
         { 
-            return await _context.Enderecos.Include(endereco => endereco.Usuario).ToListAsync(); 
+            return await _context.Enderecos
+                .Include(endereco => endereco.Usuario)
+                .ToListAsync(); 
         }
 
         public async Task<Endereco?> GetEnderecoByUsuarioId(Guid id)

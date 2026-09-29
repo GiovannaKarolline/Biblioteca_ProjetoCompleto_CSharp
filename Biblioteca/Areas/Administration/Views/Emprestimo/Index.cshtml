@@ -1,0 +1,322 @@
+﻿@using Biblioteca.ViewModels
+@model EmprestimoViewModel
+
+@{
+    ViewData["Title"] = "Empréstimos";
+}
+
+<partial name="_AvisosPartial" />
+
+<h2>Empréstimos</h2>
+<hr />
+<br />
+
+@if (Model is null || Model.Emprestimos is null || Model.Emprestimos.Count() < 1)
+{
+    <h4>Não há registros de endereços disponíveis para edição.</h4>
+}
+else
+{
+    @if (Model.Usuarios is null || Model.Usuarios.Count() < 1)
+    {
+        <span title="Não há registros de usuários.">
+            <button class="btn btn-primary" disabled>+ Adicionar novo empréstimo</button>
+        </span>
+
+    }
+    else
+    {
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar novo empréstimo</button>
+    }
+
+    <br />
+
+    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content card">
+                <div class="modal-body">
+                    <form asp-area="Administration" asp-controller="Emprestimo" asp-action="CriarEmprestimo" method="post">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">Adicionar novo empréstimo</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                        </div>
+
+                        <br />
+
+                        <label asp-for="UsuarioId">Usuário</label>
+                        <select asp-for="UsuarioId" asp-items="@(new SelectList(Model.Usuarios, "Id", "UserName"))" class="form-select" placeholder="Quem mora neste endereço?">
+                        </select>
+                        <span asp-validation-for="UsuarioId"></span>
+
+                        <br />
+
+                        <label asp-for="DataRetirada">Data de Retirada</label>
+                        <input asp-for="DataRetirada" type="date" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" class="form-control" placeholder="Data de Retirada" />
+                        <span asp-validation-for="DataRetirada"></span>
+
+                        <br />
+
+                        <label asp-for="DataPrevistaDevolucao">Data Prevista de Devolucao</label>
+                        <input asp-for="DataPrevistaDevolucao" type="date" value=@(DateTime.Now.AddMonths(3).ToString("yyyy-MM-dd")) class="form-control" placeholder="Data Prevista de Devolucao" />
+                        <span asp-validation-for="DataPrevistaDevolucao"></span>
+
+                        <br />
+
+                        <fieldset id="formDataDevolucao" class="fieldsetParaModal">
+
+                            <input id="possuiDataDevolucao" type="checkbox" />
+                            <label>Possui data de devolução?</label>
+
+                            <div id="campoDataDevolucao" class="d-none">
+
+                                <br />
+
+                                <label asp-for="DataDevolucao">Data da Devolucao</label>
+                                <input asp-for="DataDevolucao" type="date" value="@null" class="form-control" placeholder="Data da Devolucao" />
+                                <span asp-validation-for="DataDevolucao"></span>
+
+                            </div>
+
+                        </fieldset>
+
+                        <fieldset class="fieldsetParaModal">
+
+                            <label>Escolha as cópias inclusas: </label>
+                            <br />
+
+                            @if (Model.CopiasExistentes is not null)
+                            {
+                                @foreach (Copia copia in Model.CopiasExistentes)
+                                {
+                                    <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" />
+                                    <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
+                                    <br />
+                                }
+                            }
+
+                        </fieldset>
+                        <span asp-validation-for="Copias"></span>
+
+                        <br />
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tabela_listar table-dark">
+
+        <table class="table table-responsive text-center">
+            <tr class="d-table-row">
+                <th>Id</th>
+                <th>Usuário</th>
+                <th>Data de Retirada</th>
+                <th>Data Prevista de Devolução</th>
+                <th>Data da Devolução</th>
+                <th>Quantidade de cópias inclusas</th>
+                <th>Editar registro</th>
+            </tr>
+
+            @foreach (Emprestimo emprestimo in Model.Emprestimos)
+            {
+                <tr>
+                    <td>@emprestimo.Id</td>
+                    <td>@emprestimo.Usuario.UserName</td>
+                    <td>@emprestimo.DataRetirada</td>
+                    <td>@(emprestimo.DataPrevistaDevolucao.ToString() ?? "Não houve devolução.")</td>
+                    <td>@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")</td>
+                    <td>@emprestimo.Copias.Count()</td>
+                    <td>
+                        <div class="d-inline-flex justify-content-between">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@emprestimo.Id">Atualizar</button>
+
+                            <div class="modal fade" id="atualizar-@emprestimo.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar empréstimo</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <form class="text-start" asp-area="Administration" asp-controller="Emprestimo" asp-action="AtualizarEmprestimo" method="post">
+
+                                            <div class="modal-body">
+
+                                                <input hidden asp-for="Id" value="@emprestimo.Id" />
+
+                                                <br />
+
+                                                @if (Model.Usuarios is not null)
+                                                {
+                                                    <label asp-for="UsuarioId">Usuário</label>
+                                                    <select asp-for="UsuarioId" asp-items="@(new SelectList(Model.Usuarios, "Id", "UserName"))" class="form-select" placeholder="Quem mora neste endereço?">
+                                                    </select>
+                                                    <span asp-validation-for="UsuarioId"></span>
+                                                }
+                                                else
+                                                {
+                                                    <label>Usuário</label>
+                                                    <input class="form-control" value="@emprestimo.Usuario.UserName" disabled />
+                                                }
+
+                                                <br />
+
+                                                <label asp-for="DataRetirada">Data de Retirada</label>
+                                                <input asp-for="DataRetirada" type="date" class="form-control" placeholder="Data de Retirada" value="@emprestimo.DataRetirada.ToString("yyyy-MM-dd")" />
+                                                <span asp-validation-for="DataRetirada"></span>
+
+                                                <br />
+
+                                                <label asp-for="DataPrevistaDevolucao">Data Prevista de Devolucao</label>
+                                                <input asp-for="DataPrevistaDevolucao" type="date" min="@(DateOnly.Parse("2026-01-01"))" class="form-control" placeholder="Data Prevista de Devolucao" value="@emprestimo.DataPrevistaDevolucao.ToString("yyyy-MM-dd")" />
+                                                <span asp-validation-for="DataPrevistaDevolucao"></span>
+
+                                                <br />
+
+                                                <label asp-for="DataDevolucao">Data da Devolucao</label>
+                                                <input asp-for="DataDevolucao" type="date" min="@(DateOnly.Parse("2026-01-01"))" class="form-control" placeholder="Data da Devolucao" value="@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")" />
+                                                <span asp-validation-for="DataDevolucao"></span>
+
+                                                <br />
+
+                                                <div class="form-group">
+                                                    <label>Copias: </label>
+                                                    <fieldset>
+
+                                                        @if (Model.CopiasExistentes is not null)
+                                                        {
+                                                            @foreach (Copia copia in Model.CopiasExistentes)
+                                                            {
+                                                                @if (emprestimo.Copias is not null && emprestimo.Copias.Contains(copia))
+                                                                {
+                                                                    <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" checked />
+                                                                    <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
+                                                                    <br />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" />
+                                                                    <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
+                                                                    <br />
+                                                                }
+                                                            }
+                                                        }
+
+                                                    </fieldset>
+                                                    <span asp-validation-for="Copias"></span>
+                                                </div>
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@emprestimo.Id">Deletar</button>
+
+                            <div class="modal fade" id="deletar-@emprestimo.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content card">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar empréstimo</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <form class="text-start" asp-area="Administration" asp-controller="Emprestimo" asp-action="DeletarEmprestimo" method="post">
+
+                                                <input hidden asp-for="Id" value="@emprestimo.Id" />
+
+                                                <br />
+
+                                                <label>Usuário</label>
+                                                <input class="form-control" value="@emprestimo.Usuario.UserName" disabled />
+
+                                                <br />
+
+                                                <label>Data de Retirada</label>
+                                                <input class="form-control" type="date" value="@emprestimo.DataRetirada.ToString("yyyy-MM-dd")" disabled />
+
+                                                <br />
+
+                                                <label>Data Prevista de Devolução</label>
+                                                <input class="form-control" type="date" value="@emprestimo.DataPrevistaDevolucao.ToString("yyyy-MM-dd")" disabled>
+
+                                                <br />
+
+                                                <label>Data da Devolução</label>
+                                                <input class="form-control" type="date" value="@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")" disabled />
+
+                                                <br />
+
+                                                <label>Cópia(s) inclusa(s)</label>
+
+                                                @foreach (Copia copia in emprestimo.Copias)
+                                                {
+                                                    <br />
+                                                    <input type="checkbox" checked disabled />
+                                                    <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
+                                                }
+
+                                                <br />
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Deletar</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+    <partial name="_PaginacaoPartial" model="@Model.Emprestimos" />
+}
+<script>
+
+    let checkbox = document.getElementById("possuiDataDevolucao");
+    let campoDataDevolucao = document.getElementById("campoDataDevolucao");
+
+    checkbox.addEventListener("change", function(){
+
+        if(campoDataDevolucao.classList.contains("d-none")){
+
+            campoDataDevolucao.classList.remove("d-none")
+
+        }else{
+
+            campoDataDevolucao.classList.add("d-none")
+        }
+
+    })
+
+</script>

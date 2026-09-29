@@ -44,8 +44,12 @@ namespace Biblioteca.Services
             Emprestimo? novoEmprestimo = new Emprestimo()
             {
                 UsuarioId = emprestimo.UsuarioId,
-                DataPrevistaDevolucao = DateOnly.Parse(DateTime.Now.ToShortDateString()).AddMonths(3),
-                DataRetirada = DateOnly.Parse(DateTime.Now.ToShortDateString()),
+                DataPrevistaDevolucao = 
+                emprestimo.DataPrevistaDevolucao.ToString() != "0001-01-01" ? 
+                emprestimo.DataPrevistaDevolucao : DateOnly.Parse(DateTime.Now.ToShortDateString())
+                .AddMonths(3),
+                DataRetirada = emprestimo.DataRetirada.ToString() != "0001-01-01" ? 
+                emprestimo.DataRetirada : DateOnly.Parse(DateTime.Now.ToShortDateString()),
                 DataDevolucao = null,
                 Finalizado = false
             };

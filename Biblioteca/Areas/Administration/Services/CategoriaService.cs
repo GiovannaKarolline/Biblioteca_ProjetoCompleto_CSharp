@@ -17,7 +17,7 @@ namespace Biblioteca.Areas.Administration.Services
             _categoriaRepository = categoriaRepository;
         }
 
-        public async Task<Categoria> AtualizarCategoria(Guid id, AtualizarCategoriaViewModel categoria)
+        public async Task<Categoria> AtualizarCategoria(Guid id, CategoriaViewModel categoria)
         {
             var categoriaRegistrada = await _categoriaRepository.GetCategoriaById(id);
 

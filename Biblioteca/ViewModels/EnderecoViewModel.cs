@@ -28,9 +28,9 @@ namespace Biblioteca.ViewModels
         [Required(ErrorMessage = "O tipo do logradouro precisa ser definido.")]
         public TipoLogradouro TipoLogradouro { get; set; }
 
-        public IPagedList<Endereco>? Enderecos;
+        public IPagedList<Endereco>? Enderecos { get; set; }
 
-        public List<Usuario>? Usuarios;
+        public List<Usuario>? Usuarios { get; set; }
 
         public Guid? UsuarioId { get; set; }
     }

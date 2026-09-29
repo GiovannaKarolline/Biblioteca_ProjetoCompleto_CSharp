@@ -6,9 +6,16 @@
     {
         <h2 class="text-center">Nosso acervo ainda não possui obras literárias...</h2>
         <hr />
+
+        <h4 class="text-center">Aguarde nossos administradores adicionarem os registros.</h4>
+
+        <img class="imgTelaInicial" src="~/images/aguarde.png" />
     }
     else
     {
+        <h2 class="text-center">Conheça as obras do nosso acervo</h2>
+
+        <hr />
 
         @foreach (ObraLiteraria obra in Model)
         {
@@ -17,16 +24,20 @@
                 <img class="card-img-top" src="@obra.FotoCapa" alt="Capa do livro">
 
                 <div class="card-body">
+
                     <h5 class="card-title">@obra.Titulo</h5>
+
                     <p class="card-text">@obra.Editora.Nome</p>
 
                     @if (obra.Copias.FirstOrDefault(copia => copia.StatusDisponibilidade == true) is not null) //se existe uma cópia disponível
                     {
+                        <p>Há @obra.Copias.Where(copia => copia.StatusDisponibilidade == true).Count() cópias disponíveis.</p>
+
                         @if (User.Identity is null || !User.Identity.IsAuthenticated) //se o usuário está deslogado
                         {
                             <form asp-controller="Conta"
                                   asp-action="Login" method="get">
-                                <button class="btn btn-primary" type="submit">
+                                <button id="botao-pegar-emprestado" class="btn btn-primary" type="submit">
                                     Pegar emprestado
                                 </button>
                             </form>
@@ -44,6 +55,8 @@
                     }
                     else
                     {
+                        <p>Não há cópias disponíveis.</p>
+
                         <a class="btn btn-danger">
                             Esgotado
                         </a>

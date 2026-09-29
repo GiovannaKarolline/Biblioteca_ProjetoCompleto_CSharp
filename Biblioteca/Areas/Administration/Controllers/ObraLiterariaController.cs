@@ -94,6 +94,9 @@ namespace Biblioteca.Areas.Administration.Controllers
             ViewData["Sucesso"] = "Obra literária criada com sucesso!";
 
             obra.ObrasLiterarias = (await _obraLiterariaService.GetObras()).ToPagedList(1, 6);
+            obra.AutoresExistentes = await _autorService.GetAutores();
+            obra.EditorasExistentes = await _editoraService.GetEditoras();
+            obra.CategoriasExistentes = await _categoriaService.GetCategorias();
 
             return View("Index", obra);
         }

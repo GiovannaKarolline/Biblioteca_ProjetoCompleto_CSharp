@@ -131,9 +131,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Usuário atualizado com sucesso!";
 
-            usuario.Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6);
+            UsuarioViewModel proximoUsuario = new UsuarioViewModel()
+            {
+                Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6)
+            };
 
-            return View("Index", usuario);
+            return View("Index", proximoUsuario);
         }
 
         [HttpPost]
@@ -170,7 +173,12 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Usuário deletado com sucesso!";
 
-            return View("Index", new UsuarioViewModel() { Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6) });
+            UsuarioViewModel proximoUsuario = new UsuarioViewModel()
+            {
+                Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6)
+            };
+
+            return View("Index", proximoUsuario);
         }
     }
 }

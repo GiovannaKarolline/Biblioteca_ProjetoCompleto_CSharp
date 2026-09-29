@@ -13,7 +13,7 @@
 <hr />
 <br />
 
-@if (Model is not null && Model.Usuarios is not null && Model.Usuarios.Count() > 0)
+@if (Model is not null)
 {
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Criar novo administrador</button>
 
@@ -128,8 +128,14 @@
         </div>
     </div>
 
-
-    <div class="tabela_listar">
+    @if (Model.Usuarios is null || Model.Usuarios.TotalItemCount < 1)
+    {
+        <br />
+        <h4>Não há registros de usuários disponíveis para edição.</h4>
+    }
+    else
+    {
+        <div class="tabela_listar text-center">
 
         <table class="table table-responsive">
             <tr class="d-table-row">
@@ -165,7 +171,7 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <form asp-area="Administration" asp-controller="Usuario" asp-action="AtualizarUsuario" method="post">
+                                            <form class="text-start" asp-area="Administration" asp-controller="Usuario" asp-action="AtualizarUsuario" method="post">
 
                                                 <input hidden asp-for="Id" value="@usuario.Id" />
 
@@ -226,7 +232,7 @@
 
                                         <div class="modal-body">
 
-                                            <form asp-area="Administration" asp-controller="Usuario" asp-action="DeletarUsuario" method="post">
+                                            <form class="text-start" asp-area="Administration" asp-controller="Usuario" asp-action="DeletarUsuario" method="post">
 
                                                 <label>Nome de usuário</label>
                                                 <input asp-for="NomeUsuario" class="form-control" value="@usuario.UserName" placeholder="Nome de usuário" disabled />
@@ -275,11 +281,12 @@
     </div>
 
     <partial name="_PaginacaoPartial" model="@Model.Usuarios"></partial>
+    }
 
 }
 else
 {
-    <h4>Não há registros de usuários.</h4>
+    <h4>Não é possível administrar os registros de usuário por falta de modelo.</h4>
 }
 
 <script>

@@ -38,13 +38,13 @@ namespace Biblioteca.Repositories
             return await Task.FromResult(emprestimo);
         }
 
-        public Task<Emprestimo?> GetEmprestimoById(Guid id)
+        public async Task<Emprestimo?> GetEmprestimoById(Guid id)
         {
-            return Task.FromResult(_context.Emprestimos
+            return await _context.Emprestimos
                 .Include(emprestimo => emprestimo.Usuario)
                 .Include(emprestimo => emprestimo.Copias)
                 .ThenInclude(copia => copia.ObraLiteraria)
-                .FirstOrDefault(emprestimo => emprestimo.Id == id));
+                .FirstOrDefaultAsync(emprestimo => emprestimo.Id == id);
         }
 
         public async Task<IEnumerable<Emprestimo>> GetEmprestimos()

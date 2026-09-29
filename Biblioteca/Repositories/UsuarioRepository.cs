@@ -23,17 +23,25 @@ namespace Biblioteca.Repositories
 
         public async Task<Usuario?> GetUsuarioById(Guid id)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(usuario => usuario.Id == id);
+            return await _context.Usuarios
+                .Include(usuario => usuario.Endereco)
+                .FirstOrDefaultAsync(usuario => usuario.Id == id);
         }
 
         public async Task<IEnumerable<Usuario>> GetUsuarios()
         {
-            return await _context.Usuarios.ToListAsync();
+            return await _context.Usuarios
+                .Include(usuario => usuario.Endereco)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Usuario>> GetUsuariosByNome(string nome)
         {
-            return await _context.Usuarios.Where(usuario => usuario.NormalizedUserName.Contains(nome.ToUpper())).ToListAsync();
+            return await _context.Usuarios
+                .Include(usuario => usuario.Endereco)
+                .Where(usuario => usuario.NormalizedUserName
+                .Contains(nome.ToUpper()))
+                .ToListAsync();
         }
 
         public async Task<Usuario?> CriarUsuario(Usuario usuario)

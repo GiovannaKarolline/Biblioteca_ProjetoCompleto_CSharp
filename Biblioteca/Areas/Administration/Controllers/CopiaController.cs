@@ -7,6 +7,7 @@ using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using X.PagedList;
 
 namespace Biblioteca.Areas.Administration.Controllers
 {
@@ -24,18 +25,26 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CriarCopia()
+        public async Task<IActionResult> Index(int? paginaAtual)
         {
-            CriarCopiaViewModel copia = new CriarCopiaViewModel()
-            {
-                ObrasPossiveis = await _obraLiterariaService.GetObras()
-            };
+            CopiaViewModel copia = new CopiaViewModel();
 
-            return View(copia);
+            copia.Copias = (await _copiaService.GetCopias()).ToPagedList(paginaAtual ?? 1, 6);
+
+            if (copia.Copias.IsNullOrEmpty())
+            {
+                ViewData["Falha"] = "Não foi possível listar as cópias (lista vazia ou nula).";
+
+                return View(copia);
+            }
+
+            ViewData["Sucesso"] = "Cópias listadas com sucesso!";
+
+            return View("Index", copia);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarCopia(CriarCopiaViewModel copia)
+        public async Task<IActionResult> CriarCopia(CopiaViewModel copia)
         {
             if (!ModelState.IsValid)
             {
@@ -68,9 +77,9 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Cópia criada com sucesso!";
 
-            copia.ObrasPossiveis = await _obraLiterariaService.GetObras();
+            copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
 
-            return View("CriarCopia", copia);
+            return View("Index", copia);
         }
 
         [HttpGet]
@@ -174,21 +183,5 @@ namespace Biblioteca.Areas.Administration.Controllers
             return View("DeletarCopia", copia);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ListarCopias()
-        {
-            var listaCopias = await _copiaService.GetCopias();
-
-            if (listaCopias.IsNullOrEmpty())
-            {
-                ViewData["Falha"] = "Não foi possível listar as cópias (lista vazia ou nula).";
-
-                return View(listaCopias);
-            }
-
-            ViewData["Sucesso"] = "Cópias listadas com sucesso!";
-
-            return View("ListarCopias", listaCopias);
-        }
     }
 }

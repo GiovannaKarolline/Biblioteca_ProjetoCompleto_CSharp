@@ -17,6 +17,8 @@
     
         @if (Model.Copias is not null && Model.Copias.Count() > 0)
         {
+            <h4>Há @Model.Copias.Count() cópia(s) adicionada(s).</h4>
+
             <partial name="_EmprestimoPartial" model="@Model.Copias" />
 
             <form asp-controller="Emprestimo" asp-action="FinalizarEmprestimo" method="post" role="form">

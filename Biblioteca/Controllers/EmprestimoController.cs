@@ -183,7 +183,8 @@ namespace Biblioteca.Controllers
                 .GetEmprestimosByUsuarioId(
                     Guid.Parse(_userManager.GetUserId(User))
                 )
-                ).Where(emprestimo => emprestimo.Finalizado == true);
+                ).Where(emprestimo => emprestimo.Finalizado == true)
+                .OrderBy(emprestimo => emprestimo.DataDevolucao);
 
                 return View("VisualizarEmprestimos", emprestimos);
             }
@@ -193,15 +194,18 @@ namespace Biblioteca.Controllers
             if(resultadoAtualizacao is null)
             {
                 ViewData["Falha"] = "Não foi possível realizar a devolução do empréstimo.";
-            }
 
-            IEnumerable<Emprestimo>? emprestimosPosAtualizacao = (await _emprestimoService
+                IEnumerable<Emprestimo>? emprestimos = (await _emprestimoService
                 .GetEmprestimosByUsuarioId(
                     Guid.Parse(_userManager.GetUserId(User))
                 )
-                ).Where(emprestimo => emprestimo.Finalizado == true);
+                ).Where(emprestimo => emprestimo.Finalizado == true)
+                .OrderBy(emprestimo => emprestimo.DataDevolucao);
 
-            return View("VisualizarEmprestimos", emprestimosPosAtualizacao);
+                return View("VisualizarEmprestimos", emprestimos);
+            }
+
+            return RedirectToAction("VisualizarEmprestimos");
         }
 
         [HttpGet]
@@ -212,9 +216,24 @@ namespace Biblioteca.Controllers
                 .GetEmprestimosByUsuarioId(
                     Guid.Parse(_userManager.GetUserId(User))
                 )
-                ).Where(emprestimo => emprestimo.Finalizado == true);
+                ).Where(emprestimo => emprestimo.Finalizado == true)
+                .OrderBy(emprestimo => emprestimo.DataDevolucao);
 
             return View(emprestimos);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetQuantidadeCopias()
+        {
+            var emprestimos = await _emprestimoService
+                .GetEmprestimosByUsuarioId(Guid.Parse(_userManager.GetUserId(User)));
+
+            var quantidadeCopias = emprestimos
+                .Where(emprestimo => emprestimo.Finalizado == false)
+                .SelectMany(emprestimo => emprestimo.Copias)
+                .Count();
+
+            return Ok(quantidadeCopias);
         }
 
     }
