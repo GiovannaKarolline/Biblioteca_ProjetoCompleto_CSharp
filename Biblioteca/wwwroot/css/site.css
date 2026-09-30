@@ -11,7 +11,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #313946;
 }
 
 html {
@@ -43,6 +43,7 @@ span {
 
 .navbar {
     margin-bottom: 2vh !important;
+    vertical-align: middle;
 }
 
 .navbar-dark {
@@ -68,8 +69,10 @@ span {
         word-break: normal;
     }
 
-.imgTelaInicial {
+.imgsPadrao {
+    margin-top: 5vh;
     max-width: 80vh;
+    filter: drop-shadow(0 5px 3px #31394656)
 }
 
 .card {
@@ -129,6 +132,24 @@ span {
         background-color: #313946;
     }
 
+.btn-danger {
+    border: 1px solid #a70404;
+    margin-left: 1vh;
+}
+
+table {
+    margin-top: 2vh;
+    background-color: #9dbac84e;
+}
+
+th, td {
+    vertical-align: middle;
+}
+
+th {
+    background-color: #5b879d62 !important;
+}
+
 .form-control, .form-select {
     background-color: #e9f0f3;
 }
@@ -136,6 +157,10 @@ span {
 .list-group-item {
     background-color: #e0e9ed;
     border-color: #cbdae1ff;
+}
+
+.bulletQuadrado{
+    list-style-type: square;
 }
 
 .tabela-listar {

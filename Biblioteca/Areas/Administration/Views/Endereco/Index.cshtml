@@ -18,7 +18,7 @@
 }
 else
 {
-    @if (Model.Usuarios is null || Model.Usuarios.Count() < 1)
+    @* @if (Model.Usuarios is null || Model.Usuarios.Count() < 1)
     {
         <span title="Não há registros de usuários.">
             <button class="btn btn-primary" disabled>+ Adicionar novo endereço</button>
@@ -92,12 +92,13 @@ else
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 
 
     <div class="tabela_listar">
 
-        <table class="table table-responsive text-center">
+        <table class="table table-responsive text-center table-striped">
+
             <tr class="d-table-row">
                 <th>Id</th>
                 <th>Dono do endereço</th>
@@ -197,9 +198,10 @@ else
                                 </div>
                             </div>
 
-                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@endereco.Id">Deletar</button>
+                            @*
+                             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@endereco.Id">Deletar</button>
 
-                            <div class="modal fade" id="deletar-@endereco.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                             <div class="modal fade" id="deletar-@endereco.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content card">
 
@@ -257,7 +259,7 @@ else
 
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
 
                         </div>
                     </td>

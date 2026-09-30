@@ -13,11 +13,6 @@
 
     <br />
 
-    <a class="btn btn-outline-secondary" asp-controller="Conta" asp-action="Deslogar">Clique aqui para deslogar</a>
-
-    <br />
-    <br />
-
     @if(Model is null || Model.Count() < 1 || !Model.Any(emprestimo => emprestimo.DataDevolucao is null))
     {
         <h4>Não há devoluções pendentes.</h4>
@@ -31,7 +26,7 @@
         {
             @if(emprestimo.DataDevolucao is null)
             {
-                <h6>• @emprestimo.DataPrevistaDevolucao.ToShortDateString() - <a asp-controller="Emprestimo" asp-action="VisualizarEmprestimos" style="text-decoration: none; color:green">Realizar devolução</a></h6>
+                <h6>• @emprestimo.DataPrevistaDevolucao.ToShortDateString() - <a asp-controller="Emprestimo" asp-action="VisualizarEmprestimos" /><button class="btn btn-primary">Ver empréstimo</button></h6>
             }
 
         } 

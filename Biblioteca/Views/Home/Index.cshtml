@@ -8,6 +8,12 @@
 
 @if(Model.ObrasLiterarias is not null)
 {
+    @if(Model.ObrasLiterarias.Count() > 0)
+    {
+        <h2 class="text-center">Conheça as obras do nosso acervo</h2>
 
+        <hr />
+    }
+    
     <partial name="_HomePartial" model="@Model.ObrasLiterarias" />
 }

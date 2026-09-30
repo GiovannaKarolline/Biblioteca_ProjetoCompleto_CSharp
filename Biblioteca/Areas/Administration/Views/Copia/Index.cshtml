@@ -11,9 +11,9 @@
 <hr />
 <br />
 
-@if (Model is null || Model.Copias is null || Model.Copias.Count() < 1)
+@if (Model is null)
 {
-    <h4>Não há registros de cópias disponíveis para edição.</h4>
+    <h4>Não é possível administrar os registros de cópias por falta de modelo de dados.</h4>
 }
 else
 {
@@ -53,10 +53,10 @@ else
 
                         <label asp-for="StatusDisponibilidade">Status de Disponibilidade</label>
                         <select asp-for="StatusDisponibilidade" class="form-select" placeholder="Esta cópia pode ser emprestada??">
-                            
-                            <option value="@true">Sim</option>
 
-                            <option value="@false">Não</option>
+                            <option value="@true">Disponível</option>
+
+                            <option value="@false">Emprestada</option>
 
                         </select>
                         <span asp-validation-for="ObraId"></span>
@@ -74,127 +74,137 @@ else
         </div>
     </div>
 
+    @if (Model.Copias is null || Model.Copias.TotalItemCount < 1)
+    {
+        <br />
+        <h4>Não há registros de cópias disponíveis para edição.</h4>
 
-    <div class="tabela_listar">
+    }
+    else
+    {
+        <div class="tabela_listar">
 
-        <table class="table table-responsive text-center">
+            <table class="table table-responsive text-center table-striped">
 
-            <tr class="d-table-row">
-                <th>Id</th>
-                <th>Obra Referenciada</th>
-                <th>Status de Disponibilidade</th>
-            </tr>
+                <tr class="d-table-row">
+                    <th>Id</th>
+                    <th>Obra Referenciada</th>
+                    <th>Status de Disponibilidade</th>
+                    <th>Editar registro</th>
+                </tr>
 
-            @foreach (Copia copia in Model.Copias)
-            {
-                <tr>
-                    <td>@copia.Id</td>
-                    <td>@copia.ObraLiteraria.Titulo</td>
-                    <td>@(copia.StatusDisponibilidade.ToString() == "False" ? "Emprestado" : "Disponível")</td>
-                    <td>
-                        <div class="d-inline-flex justify-content-between">
-                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@copia.Id">Atualizar</button>
+                @foreach (Copia copia in Model.Copias)
+                {
+                    <tr>
+                        <td>@copia.Id</td>
+                        <td>@copia.ObraLiteraria.Titulo</td>
+                        <td>@(copia.StatusDisponibilidade.ToString() == "False" ? "Emprestado" : "Disponível")</td>
+                        <td>
+                            <div class="d-inline-flex justify-content-between">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@copia.Id">Atualizar</button>
 
-                            <div class="modal fade" id="atualizar-@copia.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content card">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar cópia</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                                        </div>
+                                <div class="modal fade" id="atualizar-@copia.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content card">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Atualizar cópia</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                            </div>
 
-                                        <form class="text-start" asp-area="Administration" asp-controller="Copia" asp-action="AtualizarCopia" method="post">
+                                            <form class="text-start" asp-area="Administration" asp-controller="Copia" asp-action="AtualizarCopia" method="post">
 
-                                            <div class="modal-body">
+                                                <div class="modal-body">
 
-                                                <input hidden asp-for="Id" value="@copia.Id" />
+                                                    <input hidden asp-for="Id" value="@copia.Id" />
 
-                                                <br />
+                                                    <br />
 
-                                                @if (Model.ObrasLiterarias is not null)
-                                                {
-                                                    <label asp-for="ObraId">Obra literária representada</label>
-                                                    <select asp-for="ObraId" asp-items="@(new SelectList(Model.ObrasLiterarias, "Id", "Titulo"))" class="form-select" placeholder="Quem esta cópia referencia?">
+                                                    @if (Model.ObrasLiterarias is not null)
+                                                    {
+                                                        <label asp-for="ObraId">Obra literária representada</label>
+                                                        <select asp-for="ObraId" asp-items="@(new SelectList(Model.ObrasLiterarias, "Id", "Titulo"))" class="form-select" placeholder="Quem esta cópia referencia?">
+                                                        </select>
+                                                        <span asp-validation-for="ObraId"></span>
+
+                                                        <br />
+                                                    }
+
+                                                    <label asp-for="StatusDisponibilidade">Status de Disponibilidade</label>
+                                                    <select asp-for="StatusDisponibilidade" class="form-select" placeholder="Esta cópia pode ser emprestada??">
+
+                                                        <option value="@true">Disponível</option>
+
+                                                        <option value="@false">Emprestado</option>
+
                                                     </select>
                                                     <span asp-validation-for="ObraId"></span>
 
                                                     <br />
-                                                }
 
-                                                <label asp-for="StatusDisponibilidade">Status de Disponibilidade</label>
-                                                <select asp-for="StatusDisponibilidade" class="form-select" placeholder="Esta cópia pode ser emprestada??">
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                    </div>
 
-                                                    <option value="@true">Disponível</option>
-
-                                                    <option value="@false">Emprestado</option>
-
-                                                </select>
-                                                <span asp-validation-for="ObraId"></span>
-
-                                                <br />
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button type="submit" class="btn btn-primary">Atualizar</button>
-                                                </div>
-
-                                            </div>
-
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@copia.Id">Deletar</button>
-
-                            <div class="modal fade" id="deletar-@copia.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content card">
-
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar cópia</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                                        </div>
-
-                                        <div class="modal-body">
-
-                                            <form class="text-start" asp-area="Administration" asp-controller="Copia" asp-action="DeletarCopia" method="post">
-
-                                                <input hidden asp-for="Id" value="@copia.Id" />
-
-                                                <br />
-
-                                                <label>Obra literária representada</label>
-                                                <input class="form-control" value="@copia.ObraLiteraria.Titulo" disabled />
-
-                                                <br />
-
-                                                <label>Status de Disponibilidade</label>
-                                                <input class="form-control" value="@(copia.StatusDisponibilidade.ToString() == "False" ? "Emprestado" : "Disponível")" disabled />
-
-                                                <br />
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button type="submit" class="btn btn-primary">Deletar</button>
                                                 </div>
 
                                             </form>
-
                                         </div>
-
                                     </div>
                                 </div>
+
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@copia.Id">Deletar</button>
+
+                                <div class="modal fade" id="deletar-@copia.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content card">
+
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar cópia</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+
+                                                <form class="text-start" asp-area="Administration" asp-controller="Copia" asp-action="DeletarCopia" method="post">
+
+                                                    <input hidden asp-for="Id" value="@copia.Id" />
+
+                                                    <br />
+
+                                                    <label>Obra literária representada</label>
+                                                    <input class="form-control" value="@copia.ObraLiteraria.Titulo" disabled />
+
+                                                    <br />
+
+                                                    <label>Status de Disponibilidade</label>
+                                                    <input class="form-control" value="@(copia.StatusDisponibilidade.ToString() == "False" ? "Emprestado" : "Disponível")" disabled />
+
+                                                    <br />
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <button type="submit" class="btn btn-primary">Deletar</button>
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+                        </td>
+                    </tr>
+                }
+            </table>
 
-                        </div>
-                    </td>
-                </tr>
-            }
-        </table>
+        </div>
 
-    </div>
+        <partial name="_PaginacaoPartial" model="@Model.Copias"></partial>
 
-    <partial name="_PaginacaoPartial" model="@Model.Copias"></partial>
+    }
 
 }

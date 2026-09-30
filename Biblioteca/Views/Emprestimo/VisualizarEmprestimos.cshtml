@@ -8,7 +8,12 @@
 
 @if(Model is null || Model.Count() < 1)
 {
-    <h2 class="text-center">Você não possui empréstimos registrados</h2>
+    <h2 class="text-center">Você ainda não realizou um empréstimo</h2>
+    <hr />
+
+    <h4 class="text-center">Assim que você finalizar um pedido de empréstimo, ele aparecerá aqui.</h4>
+
+    <img class="imgsPadrao" src="~/images/emprestimo.png" />
 }
 else
 {
@@ -19,14 +24,19 @@ else
     @foreach(Emprestimo emprestimo in Model)
     {
         <div class="container emprestimo">
-            <h4>Empréstimo</h4>
+
+            <h4>Empréstimo - #@emprestimo.Id.ToString().Substring(1, 3)</h4>
+
             <h5>Cópias inclusas:</h5>
+
             @foreach(Copia copia in emprestimo.Copias)
             {
                 <h5>• @copia.ObraLiteraria.Titulo</h5>
             }
+
             <h5>Data de Retirada dos Livros: @emprestimo.DataRetirada.ToString()</h5>
             <h5>Data Prevista de Devolução: @emprestimo.DataPrevistaDevolucao.ToString()</h5>
+
             @if(emprestimo.DataDevolucao is null)
             {
                 <h5>Devolução: <strong>Pendente</strong></h5>

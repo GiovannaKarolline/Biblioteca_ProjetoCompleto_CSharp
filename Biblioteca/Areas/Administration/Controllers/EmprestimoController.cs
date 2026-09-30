@@ -1,7 +1,4 @@
-﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Criar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
-using Biblioteca.Models;
+﻿using Biblioteca.Models;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -57,12 +54,38 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Falha"] = "Não foi possível criar o endereço (modelo/dados inválidos).";
+                ViewData["Falha"] = "Não foi possível criar o empréstimo (modelo/dados inválidos).";
+
+                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
 
-            emprestimo.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
+            List<Copia> listaCopiasSelecionadas = new List<Copia>();
+
+            foreach (Guid id in emprestimo.CopiasSelecionadas)
+            {
+                Copia copiaRegistrada = await _copiaService.GetCopiaById(id);
+
+                if (!emprestimo.Copias.Contains(copiaRegistrada))
+                {
+                    emprestimo.Copias.Add(copiaRegistrada);
+                }
+
+                listaCopiasSelecionadas.Add(copiaRegistrada);
+            }
+
+            List<Copia> listaCopias = emprestimo.Copias;
+
+            foreach (var copia in listaCopias)
+            {
+                if (!listaCopiasSelecionadas.Contains(copia))
+                {
+                    emprestimo.Copias.Remove(copia);
+                }
+            }
 
             Emprestimo? resultadoCriacao;
 
@@ -74,6 +97,10 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
+                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+
                 return View("Index", emprestimo);
             }
 
@@ -81,10 +108,18 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o empréstimo (falha ao criar).";
 
+                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+
                 return View("Index", emprestimo);
             }
 
             ViewData["Sucesso"] = "Empréstimo criado com sucesso!";
+
+            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+            emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+            emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
             return View("Index", emprestimo);
         }
@@ -95,9 +130,11 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewData["Falha"] = "Não foi possível atualizar o endereço (modelo/dados inválidos).";
+                ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
 
                 emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
@@ -113,22 +150,28 @@ namespace Biblioteca.Areas.Administration.Controllers
                 ViewData["Falha"] = exception.Message;
 
                 emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
 
             if (resultadoAtualizacao == null)
             {
-                ViewData["Falha"] = "Não foi possível atualizar o endereço (falha ao atualizar).";
+                ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
 
                 emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
 
-            ViewData["Sucesso"] = "Endereço atualizado com sucesso!";
+            ViewData["Sucesso"] = "Empréstimo atualizado com sucesso!";
 
-            emprestimo.Emprestimos = await _emprestimoService.GetEmprestimos();
+            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+            emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+            emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
             return View("Index", emprestimo);
         }
@@ -141,6 +184,8 @@ namespace Biblioteca.Areas.Administration.Controllers
                 ViewData["Falha"] = "Não foi possível deletar o endereço (Guid inválido).";
 
                 emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
@@ -156,6 +201,8 @@ namespace Biblioteca.Areas.Administration.Controllers
                 ViewData["Falha"] = exception.Message;
 
                 emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
@@ -165,6 +212,8 @@ namespace Biblioteca.Areas.Administration.Controllers
                 ViewData["Falha"] = "Não foi possível deletar o endereço (falha ao deletar).";
 
                 emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+                emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
                 return View("Index", emprestimo);
             }
@@ -172,169 +221,11 @@ namespace Biblioteca.Areas.Administration.Controllers
             ViewData["Sucesso"] = "Endereço deletado com sucesso!";
 
             emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+            emprestimo.Usuarios = await _usuarioService.GetUsuarios();
+            emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
             return View("Index", emprestimo);
         }
-
-        //        //[HttpGet]
-        //        //public async Task<IActionResult> CriarEmprestimo()
-        //        //{
-        //        //    CriarEmprestimoViewModel emprestimo = new CriarEmprestimoViewModel()
-        //        //    {
-        //        //        CopiasExistentes = await _copiaService.GetCopias()
-        //        //    };
-
-        //        //    return View(emprestimo);
-        //        //}
-
-        //        //[HttpPost]
-        //        //public async Task<IActionResult> CriarEmprestimo(CriarEmprestimoViewModel emprestimo)
-        //        //{
-        //        //    if (!ModelState.IsValid)
-        //        //    {
-        //        //        ViewData["Falha"] = "Não foi possível criar o empréstimo (modelo/dados inválidos).";
-
-        //        //        return View(emprestimo);
-        //        //    }
-
-        //        //    emprestimo.UsuarioId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-        //        //    Emprestimo? resultadoCriacao;
-
-        //        //    try
-        //        //    {
-        //        //        resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
-        //        //    }
-        //        //    catch (Exception exception)
-        //        //    {
-        //        //        ViewData["Falha"] = exception.Message;
-
-        //        //        return View("CriarEmprestimo", emprestimo);
-        //        //    }
-
-        //        //    if (resultadoCriacao == null)
-        //        //    {
-        //        //        ViewData["Falha"] = "Não foi possível criar o empréstimo (falha ao criar).";
-
-        //        //        return View(emprestimo);
-        //        //    }
-
-        //        //    ViewData["Sucesso"] = "Empréstimo criado com sucesso!";
-
-        //        //    emprestimo.Copias = await _copiaService.GetCopias();
-
-        //        //    return View("CriarEmprestimo", emprestimo);
-        //        //}
-
-        //        //[HttpGet]
-        //        //public async Task<IActionResult> AtualizarEmprestimo()
-        //        //{
-        //        //    AtualizarEmprestimoViewModel emprestimo = new AtualizarEmprestimoViewModel()
-        //        //    {
-        //        //        CopiasExistentes = await _copiaService.GetCopias(),
-        //        //        Emprestimos = (await _emprestimoService.GetEmprestimos())
-        //        //        .Where(emprestimo => emprestimo.Finalizado == true),
-        //        //        Copias = new List<Copia>()
-        //        //    };
-
-        //        //    return View("AtualizarEmprestimo", emprestimo);
-        //        //}
-
-        //        //[HttpPost]
-        //        //public async Task<IActionResult> AtualizarEmprestimo(AtualizarEmprestimoViewModel emprestimo)
-        //        //{
-        //        //    emprestimo.CopiasExistentes = await _copiaService.GetCopias(); //para trazer os dados de volta para o formulário numa próxima chamada de view
-
-        //        //    emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos())
-        //        //        .Where(emprestimo => emprestimo.Finalizado == true);
-
-        //        //    emprestimo.Copias = new List<Copia>();
-
-        //        //    emprestimo.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
-
-        //        //    if (!ModelState.IsValid)
-        //        //    {
-        //        //        ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
-
-        //        //        return View("AtualizarEmprestimo", emprestimo);
-        //        //    }
-
-        //        //    Emprestimo? emprestimoRegistrado;
-
-        //        //    try
-        //        //    {
-        //        //        emprestimoRegistrado = await _emprestimoService.GetEmprestimoById(emprestimo.Id);
-
-        //        //        emprestimo.DataDevolucao = emprestimoRegistrado.DataDevolucao;
-
-        //        //        emprestimo.DataPrevistaDevolucao = emprestimoRegistrado.DataPrevistaDevolucao;
-
-        //        //        emprestimo.DataRetirada = emprestimoRegistrado.DataRetirada;
-
-        //        //    }catch(Exception excecao)
-        //        //    {
-        //        //        ViewData["Falha"] = excecao.Message;
-
-        //        //        return View("AtualizarEmprestimo", emprestimo);
-        //        //    }
-
-        //        //    foreach(Copia copia in emprestimoRegistrado.Copias)
-        //        //    {
-        //        //        if (emprestimo.DataDevolucao is null)
-        //        //        {
-        //        //            copia.StatusDisponibilidade = false;
-        //        //        }
-        //        //    }
-
-        //        //    await _emprestimoService.EditarCopiasEmprestimo(emprestimo.IdCopias, emprestimo.Id);
-
-        //        //    Emprestimo? resultadoAtualizar;
-
-        //        //    try
-        //        //    {
-        //        //        resultadoAtualizar = await _emprestimoService.AtualizarEmprestimo(emprestimo.Id, emprestimo);
-        //        //    }
-        //        //    catch (Exception exception)
-        //        //    {
-        //        //        ViewData["Falha"] = exception.Message;
-
-        //        //        return View("AtualizarEmprestimo", emprestimo);
-        //        //    }
-
-        //        //    if (resultadoAtualizar == null)
-        //        //    {
-        //        //        ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
-
-        //        //        return View("AtualizarEmprestimo", emprestimo);
-        //        //    }
-
-        //        //    ViewData["Sucesso"] = "Empréstimo atualizado com sucesso!";
-
-        //        //    emprestimo.CopiasExistentes = await _copiaService.GetCopias();
-
-        //        //    emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos())
-        //        //        .Where(emprestimo => emprestimo.Finalizado == true);
-
-        //        //    emprestimo.Copias = new List<Copia>();
-
-        //        //    return View("AtualizarEmprestimo", emprestimo);
-        //        //}
-
-        //        //[HttpGet]
-        //        //public async Task<IActionResult> DeletarEmprestimo()
-        //        //{
-        //        //    DeletarEmprestimoViewModel emprestimo = new DeletarEmprestimoViewModel()
-        //        //    {
-        //        //        Emprestimos = (await _emprestimoService
-        //        //        .GetEmprestimosByUsuarioId(
-        //        //            Guid.Parse(_userManager.GetUserId(User))
-        //        //        )
-        //        //        ).Where(emprestimo => emprestimo.Finalizado == true)
-        //        //        .ToList()
-        //        //    };
-
-        //        //    return View(emprestimo);
-        //        //}
 
         [HttpGet]
         public async Task<IActionResult> GetQuantidadeCopias()

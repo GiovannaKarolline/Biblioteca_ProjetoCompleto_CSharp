@@ -1,7 +1,5 @@
 ﻿using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels;
-using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -91,7 +89,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AtualizarAutor(AtualizarAutorViewModel autor)
+        public async Task<IActionResult> AtualizarAutor(AutorViewModel autor)
         {
             if (!ModelState.IsValid)
             {

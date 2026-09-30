@@ -24,7 +24,7 @@ namespace Biblioteca.ViewModels
 
         public Boolean Finalizado { get; set; } = false;
 
-        public IEnumerable<Copia>? Copias = Enumerable.Empty<Copia>();
+        public List<Copia>? Copias = new List<Copia>();
 
         public IEnumerable<Emprestimo>? Emprestimos { get; set; }
 
@@ -32,6 +32,6 @@ namespace Biblioteca.ViewModels
 
         public IEnumerable<Copia>? CopiasExistentes { get; set; }
 
-        public IEnumerable<Copia> CopiasSelecionadas { get; set; }
+        public IEnumerable<Guid>? CopiasSelecionadas { get; set; }
     }
 }

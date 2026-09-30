@@ -1,8 +1,5 @@
 ﻿using Biblioteca.Areas.Administration.Services;
 using Biblioteca.Areas.Administration.Services.Interfaces;
-using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Criar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
 using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;

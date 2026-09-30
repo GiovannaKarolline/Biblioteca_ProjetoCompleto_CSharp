@@ -1,6 +1,4 @@
-﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
-using Biblioteca.Models;
+﻿using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
@@ -84,7 +82,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AtualizarEndereco(AtualizarEnderecoViewModel endereco)
+        public async Task<IActionResult> AtualizarEndereco(EnderecoViewModel endereco)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +113,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Endereço atualizado com sucesso!";
 
-            endereco.Enderecos = await _enderecoService.GetEnderecos();
+            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6);
 
             return View("AtualizarEndereco", endereco);
         }
@@ -123,9 +121,9 @@ namespace Biblioteca.Areas.Administration.Controllers
         [HttpGet]
         public async Task<IActionResult> DeletarEndereco()
         {
-            DeletarEnderecoViewModel endereco = new DeletarEnderecoViewModel()
+            EnderecoViewModel endereco = new EnderecoViewModel()
             {
-                Enderecos = await _enderecoService.GetEnderecos()
+                Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6)
             };
 
             return View(endereco);

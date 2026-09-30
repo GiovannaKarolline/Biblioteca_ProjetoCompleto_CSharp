@@ -1,6 +1,4 @@
-﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
-using Biblioteca.Models;
+﻿using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
@@ -9,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace Biblioteca.Controllers
 {
@@ -66,25 +65,14 @@ namespace Biblioteca.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AtualizarEndereco()
-        {
-            AtualizarEnderecoViewModel endereco = new AtualizarEnderecoViewModel()
-            {
-                Enderecos = await _enderecoService.GetEnderecos()
-            };
-
-            return View(endereco);
-        }
-
         [HttpPost]
-        public async Task<IActionResult> AtualizarEndereco(AtualizarEnderecoViewModel endereco)
+        public async Task<IActionResult> AtualizarEndereco(EnderecoViewModel endereco)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o endereço (modelo/dados inválidos).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             Endereco? resultadoAtualizacao;
@@ -97,21 +85,21 @@ namespace Biblioteca.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View("CriarEndereco", endereco);
+                return View("Index", endereco);
             }
 
             if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o endereço (falha ao atualizar).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             ViewData["Sucesso"] = "Endereço atualizado com sucesso!";
 
-            endereco.Enderecos = await _enderecoService.GetEnderecos();
+            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6);
 
-            return View("AtualizarEndereco", endereco);
+            return View("Index", endereco);
         }
     }
 }

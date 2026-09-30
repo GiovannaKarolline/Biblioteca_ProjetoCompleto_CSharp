@@ -1,6 +1,4 @@
-﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
-using Biblioteca.Enums;
+﻿using Biblioteca.Enums;
 using Biblioteca.Models;
 using Biblioteca.Services;
 using Biblioteca.Services.Interfaces;

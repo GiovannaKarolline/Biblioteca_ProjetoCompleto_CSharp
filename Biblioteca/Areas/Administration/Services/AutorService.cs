@@ -3,7 +3,6 @@ using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Areas.Administration.Services.Interfaces;
 using Biblioteca.Areas.Administration.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Biblioteca.Areas.Administration.ViewModels.Atualizar;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.Services;
 
@@ -18,7 +17,7 @@ namespace Biblioteca.Areas.Administration.Services
             _autorRepository = autorRepository;
         }
 
-        public async Task<Autor> AtualizarAutor(Guid id, AtualizarAutorViewModel autorViewModel)
+        public async Task<Autor> AtualizarAutor(Guid id, AutorViewModel autorViewModel)
         {
             var autor = await _autorRepository.GetAutorById(id);
 

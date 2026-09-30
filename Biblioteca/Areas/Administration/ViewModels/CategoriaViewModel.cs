@@ -12,5 +12,7 @@ namespace Biblioteca.Areas.Administration.ViewModels
         public string Titulo { get; set; }
 
         public IPagedList<Categoria>? Categorias { get; set; }
+
+        public IEnumerable<Categoria>? CategoriasExistentes { get; set; }
     }
 }

@@ -74,7 +74,7 @@ else
 
                         <div class="form-group">
                             <label>Autores: </label>
-                            <fieldset>
+                            <fieldset class="fieldsetParaModal">
 
                                 @if (Model.AutoresExistentes is not null)
                                 {
@@ -150,7 +150,8 @@ else
 
         <div class="tabela_listar text-center">
 
-            <table class="table table-responsive">
+            <table class="table table-responsive table-striped">
+
                 <tr class="d-table-row">
                     <th class="d-table-cell">Id</th>
                     <th>Título</th>
@@ -170,10 +171,10 @@ else
                         <td>@obra.Titulo</td>
                         <td>@obra.Categoria.Titulo</td>
                         <td>@obra.AnoPublicacao</td>
-                        <td class="text-start">
+                        <td>
                             @foreach (Autor autor in obra.Autores)
                             {
-                                <h6>• @(autor.PrimeiroNome + " " + autor.Sobrenome)</h6>
+                                <h6>➤ @(autor.PrimeiroNome + " " + autor.Sobrenome)</h6>
                             }
                         </td>
                         <td>@obra.Editora.Nome</td>
@@ -258,7 +259,7 @@ else
 
                                                     <div class="form-group">
                                                         <label>Autores: </label>
-                                                        <fieldset>
+                                                        <fieldset class="fieldsetParaModal">
 
                                                             @if (Model.AutoresExistentes is not null)
                                                             {
@@ -343,15 +344,17 @@ else
                                                     <br />
 
                                                     <label>Autor(es)</label>
-                                                    <ul>
-                                                        @foreach (Autor autor in obra.Autores)
-                                                        {
-                                                            <li>@(autor.PrimeiroNome + " " + autor.Sobrenome)</li>
-                                                        }
-                                                    </ul>
 
+                                                    <fieldset class="fieldsetParaModal">
 
-                                                    <br />
+                                                        <ul>
+                                                            @foreach (Autor autor in obra.Autores)
+                                                            {
+                                                                <li class="bulletQuadrado">@(autor.PrimeiroNome + " " + autor.Sobrenome)</li>
+                                                            }
+                                                        </ul>
+
+                                                    </fieldset>
 
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

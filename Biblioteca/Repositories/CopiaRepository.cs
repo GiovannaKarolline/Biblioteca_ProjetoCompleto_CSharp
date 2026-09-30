@@ -24,6 +24,7 @@ namespace Biblioteca.Repositories
         public Task<Copia> AtualizarCopia(Copia copia)
         {
             _context.Copias.Update(copia);
+            _context.SaveChanges();
 
             return Task.FromResult(copia);
         }

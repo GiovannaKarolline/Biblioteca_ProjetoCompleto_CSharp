@@ -1,8 +1,8 @@
-﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Models;
+﻿using Biblioteca.Models;
 using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
+using System.Globalization;
 
 namespace Biblioteca.Services
 {
@@ -23,13 +23,12 @@ namespace Biblioteca.Services
             if(emprestimoRegistrado is not null && emprestimoRegistrado.Deletado == false)
             {
                 emprestimoRegistrado.UsuarioId = emprestimo.UsuarioId;
+                emprestimoRegistrado.DataRetirada = emprestimo.DataRetirada;
+                emprestimoRegistrado.DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao;
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
+                emprestimoRegistrado.Finalizado = emprestimo.Finalizado;
 
-                
-                foreach(Copia copia in emprestimo.Copias.ToList())
-                {
-                    emprestimoRegistrado.Copias.Add(await _copiaService.GetCopiaById(copia.Id));
-                }
+                await EditarCopiasEmprestimo(emprestimo.CopiasSelecionadas, emprestimo.Id);
 
                 await _emprestimoRepository.AtualizarEmprestimo(emprestimoRegistrado);
 
@@ -41,17 +40,24 @@ namespace Biblioteca.Services
 
         public async Task<Emprestimo> CriarEmprestimo(EmprestimoViewModel emprestimo)
         {
+            var dataAtual = DateTime.Now;
+
             Emprestimo? novoEmprestimo = new Emprestimo()
             {
                 UsuarioId = emprestimo.UsuarioId,
+
                 DataPrevistaDevolucao = 
-                emprestimo.DataPrevistaDevolucao.ToString() != "0001-01-01" ? 
-                emprestimo.DataPrevistaDevolucao : DateOnly.Parse(DateTime.Now.ToShortDateString())
+                emprestimo.DataPrevistaDevolucao.ToString() != "01/01/0001" ? 
+                emprestimo.DataPrevistaDevolucao : DateOnly.Parse(dataAtual.ToString("dd/MM/yyyy"))
                 .AddMonths(3),
-                DataRetirada = emprestimo.DataRetirada.ToString() != "0001-01-01" ? 
-                emprestimo.DataRetirada : DateOnly.Parse(DateTime.Now.ToShortDateString()),
-                DataDevolucao = null,
-                Finalizado = false
+
+                DataRetirada = emprestimo.DataRetirada.ToString() != "01/01/0001" ? 
+                emprestimo.DataRetirada : DateOnly.Parse(dataAtual.ToString("dd/MM/yyyy")),
+
+                DataDevolucao = emprestimo.DataDevolucao.ToString() == "01/01/0001" ?
+                null : emprestimo.DataDevolucao,
+
+                Finalizado = emprestimo.Finalizado
             };
 
             if(emprestimo.Copias is not null && emprestimo.Copias.Count() > 0)

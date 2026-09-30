@@ -1,7 +1,4 @@
-﻿using Biblioteca.Areas.Administration.ViewModels.Atualizar;
-using Biblioteca.Areas.Administration.ViewModels.Criar;
-using Biblioteca.Areas.Administration.ViewModels.Deletar;
-using Biblioteca.Models;
+﻿using Biblioteca.Models;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +27,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             CopiaViewModel copia = new CopiaViewModel();
 
             copia.Copias = (await _copiaService.GetCopias()).ToPagedList(paginaAtual ?? 1, 6);
+            copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
 
             if (copia.Copias.IsNullOrEmpty())
             {
@@ -50,7 +48,10 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar a cópia (modelo/dados inválidos).";
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             Copia? resultadoCriacao;
@@ -65,44 +66,44 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             if (resultadoCriacao == null)
             {
                 ViewData["Falha"] = "Não foi possível criar a cópia (falha ao criar).";
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             ViewData["Sucesso"] = "Cópia criada com sucesso!";
 
+            copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
             copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
 
             return View("Index", copia);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> AtualizarCopia()
-        {
-            AtualizarCopiaViewModel copia = new AtualizarCopiaViewModel()
-            {
-                Obras = await _obraLiterariaService.GetObras(),
-                Copias = await _copiaService.GetCopias()
-            };
-
-            return View(copia);
-        }
-
         [HttpPost]
-        public async Task<IActionResult> AtualizarCopia(AtualizarCopiaViewModel copia)
+        public async Task<IActionResult> AtualizarCopia(CopiaViewModel copia)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a cópia (modelo/dados inválidos).";
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
+
+            
 
             Copia? resultadoAtualizacao;
 
@@ -116,44 +117,41 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar a cópia (falha ao atualizar).";
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             ViewData["Sucesso"] = "Cópia atualizada com sucesso!";
 
-            copia.Obras = await _obraLiterariaService.GetObras();
-            copia.Copias = await _copiaService.GetCopias();
-            copia.Copias = await _copiaService.GetCopias();
+            copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+            copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
 
-            return View("AtualizarCopia", copia);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> DeletarCopia()
-        {
-            DeletarCopiaViewModel copia = new DeletarCopiaViewModel()
-            {
-                Copias = await _copiaService.GetCopias()
-            };
-
-            return View(copia);
+            return View("Index", copia);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletarCopia(DeletarCopiaViewModel copia)
+        public async Task<IActionResult> DeletarCopia(CopiaViewModel copia)
         {
             if (copia.Id == Guid.Empty)
             {
                 ViewData["Falha"] = "Não foi possível deletar a cópia (Guid inválido).";
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             Copia? resultadoDeletar;
@@ -166,21 +164,28 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar a cópia (falha ao deletar).";
 
-                return View(copia);
+                copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+                copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
+
+                return View("Index", copia);
             }
 
             ViewData["Sucesso"] = "Cópia deletada com sucesso!";
 
-            copia.Copias = await _copiaService.GetCopias();
+            copia.Copias = (await _copiaService.GetCopias()).ToPagedList(1, 6);
+            copia.ObrasLiterarias = await _obraLiterariaService.GetObras();
 
-            return View("DeletarCopia", copia);
+            return View("Index", copia);
         }
 
     }

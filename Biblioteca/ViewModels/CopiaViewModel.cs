@@ -14,8 +14,8 @@ namespace Biblioteca.ViewModels
         [Required(ErrorMessage = "O status de disponibilidade da cópia precisa ser definido.")]
         public Boolean StatusDisponibilidade { get; set; }
 
-        public IPagedList<Copia> Copias { get; set; }
+        public IPagedList<Copia>? Copias { get; set; }
 
-        public IEnumerable<ObraLiteraria> ObrasLiterarias { get; set; }
+        public IEnumerable<ObraLiteraria>? ObrasLiterarias { get; set; }
     }
 }

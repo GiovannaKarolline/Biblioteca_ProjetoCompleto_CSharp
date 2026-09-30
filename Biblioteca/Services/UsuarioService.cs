@@ -69,6 +69,7 @@ namespace Biblioteca.Services
             if (usuario is not null && usuario.Deletado == false)
             {
                 usuario.Deletado = true;
+                usuario.Endereco.Deletado = true;
 
                 await _usuarioRepository.DeletarUsuario(usuario);
             }

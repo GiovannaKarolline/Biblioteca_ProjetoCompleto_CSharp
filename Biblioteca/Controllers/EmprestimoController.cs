@@ -80,7 +80,7 @@ namespace Biblioteca.Controllers
 
             emprestimoViewModel.Id = emprestimo.Id;
             emprestimoViewModel.DataRetirada = emprestimo.DataRetirada;
-            emprestimoViewModel.Finalizado = emprestimo.Finalizado;
+            emprestimoViewModel.Finalizado = false;
             emprestimoViewModel.DataPrevistaDevolucao = emprestimo.DataPrevistaDevolucao;
 
             Copia? copia = await _copiaService.GetCopiaById(idCopia);
@@ -96,7 +96,7 @@ namespace Biblioteca.Controllers
 
             emprestimoViewModel.Copias = emprestimo.Copias;
 
-            return View("Emprestimo", emprestimoViewModel);
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -133,7 +133,7 @@ namespace Biblioteca.Controllers
                 DataDevolucao = null,
                 DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day),
                 DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
-                Finalizado = emprestimo.Finalizado,
+                Finalizado = true,
                 UsuarioId = emprestimo.UsuarioId,
                 Id = emprestimo.Id
             };

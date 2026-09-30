@@ -96,9 +96,9 @@ else
                             }
 
                         </fieldset>
-                        <span asp-validation-for="Copias"></span>
+                        <span asp-validation-for="CopiasSelecionadas"></span>
 
-                        <br />
+                        <input asp-for="Finalizado" value="@true" type="checkbox" checked hidden />
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -122,6 +122,7 @@ else
                 <th>Data Prevista de Devolução</th>
                 <th>Data da Devolução</th>
                 <th>Quantidade de cópias inclusas</th>
+                <th>Finalizado?</th>
                 <th>Editar registro</th>
             </tr>
 
@@ -131,9 +132,10 @@ else
                     <td>@emprestimo.Id</td>
                     <td>@emprestimo.Usuario.UserName</td>
                     <td>@emprestimo.DataRetirada</td>
-                    <td>@(emprestimo.DataPrevistaDevolucao.ToString() ?? "Não houve devolução.")</td>
-                    <td>@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")</td>
+                    <td>@(emprestimo.DataPrevistaDevolucao)</td>
+                    <td>@(emprestimo.DataDevolucao?.ToString("dd/MM/yyyy") ?? "Não houve devolução.")</td>
                     <td>@emprestimo.Copias.Count()</td>
+                    <td>@(emprestimo.Finalizado == true ? "Finalizado" : "Aberto")</td>
                     <td>
                         <div class="d-inline-flex justify-content-between">
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#atualizar-@emprestimo.Id">Atualizar</button>
@@ -176,43 +178,64 @@ else
                                                 <br />
 
                                                 <label asp-for="DataPrevistaDevolucao">Data Prevista de Devolucao</label>
-                                                <input asp-for="DataPrevistaDevolucao" type="date" min="@(DateOnly.Parse("2026-01-01"))" class="form-control" placeholder="Data Prevista de Devolucao" value="@emprestimo.DataPrevistaDevolucao.ToString("yyyy-MM-dd")" />
+                                                <input asp-for="DataPrevistaDevolucao" type="date" class="form-control" placeholder="Data Prevista de Devolucao" value="@emprestimo.DataPrevistaDevolucao.ToString("yyyy-MM-dd")" />
                                                 <span asp-validation-for="DataPrevistaDevolucao"></span>
 
                                                 <br />
 
                                                 <label asp-for="DataDevolucao">Data da Devolucao</label>
-                                                <input asp-for="DataDevolucao" type="date" min="@(DateOnly.Parse("2026-01-01"))" class="form-control" placeholder="Data da Devolucao" value="@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")" />
+                                                <input asp-for="DataDevolucao" type="date" class="form-control" placeholder="Data da Devolucao" value="@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")" />
                                                 <span asp-validation-for="DataDevolucao"></span>
 
                                                 <br />
 
-                                                <div class="form-group">
-                                                    <label>Copias: </label>
-                                                    <fieldset>
+                                                <label>Cópias inclusas: </label>
 
-                                                        @if (Model.CopiasExistentes is not null)
-                                                        {
-                                                            @foreach (Copia copia in Model.CopiasExistentes)
+                                                <fieldset class="fieldsetParaModal">
+                                                    <div class="form-group">
+                                                        
+                                                        <fieldset>
+
+                                                            @if (Model.CopiasExistentes is not null)
                                                             {
-                                                                @if (emprestimo.Copias is not null && emprestimo.Copias.Contains(copia))
+                                                                @foreach (Copia copia in Model.CopiasExistentes)
                                                                 {
-                                                                    <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" checked />
-                                                                    <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
-                                                                    <br />
-                                                                }
-                                                                else
-                                                                {
-                                                                    <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" />
-                                                                    <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
-                                                                    <br />
+                                                                    @if (emprestimo.Copias is not null && emprestimo.Copias.Contains(copia))
+                                                                    {
+                                                                        <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" checked />
+                                                                        <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
+                                                                        <br />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" />
+                                                                        <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
+                                                                        <br />
+                                                                    }
                                                                 }
                                                             }
-                                                        }
 
-                                                    </fieldset>
-                                                    <span asp-validation-for="Copias"></span>
-                                                </div>
+                                                        </fieldset>
+                                                        <span asp-validation-for="Copias"></span>
+                                                    </div>
+                                                </fieldset>
+
+                                                <label>Status do empréstimo: </label>
+                                                <br />
+
+                                                <fieldset class="fieldsetParaModal">
+
+                                                    <input asp-for="Finalizado" value="@true" type="radio" />
+                                                    <label>Finalizado</label>
+
+                                                    <br />
+
+                                                    <input asp-for="Finalizado" value="@false" type="radio" />
+                                                    <label>Aberto</label>
+
+                                                    <br />
+
+                                                </fieldset>
 
                                                 <br />
 
