@@ -24,7 +24,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             EditoraViewModel editora = new EditoraViewModel();
 
-            editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(paginaAtual ?? 1, 6);
+            editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(paginaAtual ?? 1, 6);
 
             if (editora.Editoras.IsNullOrEmpty())
             {
@@ -45,7 +45,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar a editora (modelo/dados inválidos).";
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
@@ -60,7 +60,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
@@ -69,14 +69,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar a editora (falha ao criar).";
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
 
             ViewData["Sucesso"] = "Editora criada com sucesso!";
 
-            editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+            editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
             return View("Index", editora);
         }
@@ -88,7 +88,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar a editora (modelo/dados inválidos).";
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
@@ -103,7 +103,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
@@ -112,14 +112,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar a editora (falha ao atualizar).";
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
 
             ViewData["Sucesso"] = "Editora atualizada com sucesso!";
 
-            editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+            editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
             return View("Index", editora);
         }
@@ -131,7 +131,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar a editora (Guid inválido).";
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
@@ -146,7 +146,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View("Index", editora);
             }
@@ -155,14 +155,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar a editora (falha ao deletar).";
 
-                editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+                editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
                 return View(editora);
             }
 
             ViewData["Sucesso"] = "editora deletada com sucesso!";
 
-            editora.Editoras = (await _editoraService.GetEditoras()).ToPagedList(1, 6);
+            editora.Editoras = await (await _editoraService.GetEditoras()).ToPagedListAsync(1, 6);
 
             return View("Index", editora);
         }

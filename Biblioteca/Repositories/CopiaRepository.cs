@@ -16,7 +16,7 @@ namespace Biblioteca.Repositories
         public async Task<IEnumerable<Copia>> GetCopiasDisponiveis()
         {
             return await _context.Copias
-                .Where(copia => copia.StatusDisponibilidade == true)
+                .Where(copia => copia.StatusDisponibilidade == true && copia.Deletado == false)
                 .Include(copia => copia.ObraLiteraria)
                 .ToListAsync();
         }

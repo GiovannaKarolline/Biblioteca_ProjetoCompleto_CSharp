@@ -24,20 +24,20 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             AutorViewModel autor = new AutorViewModel();
 
-            autor.Autores = (await _autorService.GetAutores()).ToPagedList(paginaAtual ?? 1, 6);
+            autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(paginaAtual ?? 1, 6);
 
             if (autor.Autores.IsNullOrEmpty())
             {
                 ViewData["Falha"] = "Não foi possível listar os autores (lista vazia ou nula).";
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(paginaAtual ?? 1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(paginaAtual ?? 1, 6);
 
                 return View(autor);
             }
 
             ViewData["Sucesso"] = "Autores listados com sucesso!";
 
-            autor.Autores = (await _autorService.GetAutores()).ToPagedList(paginaAtual ?? 1, 6);
+            autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(paginaAtual ?? 1, 6);
 
             return View("Index", autor);
         }
@@ -49,7 +49,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o autor (modelo/dados inválidos).";
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
@@ -66,7 +66,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
@@ -76,14 +76,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o autor (falha ao criar).";
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
 
             ViewData["Sucesso"] = "Autor criado com sucesso!";
 
-            autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+            autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
             return View("Index", autor);
         }
@@ -95,7 +95,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o autor (modelo/dados inválidos).";
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
@@ -112,7 +112,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
@@ -121,14 +121,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o autor (falha ao atualizar).";
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
 
             ViewData["Sucesso"] = "Autor atualizado com sucesso!";
 
-            autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+            autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
             return View("Index", autor);
         }
@@ -140,7 +140,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o autor (Guid inválido).";
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
@@ -157,7 +157,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+                autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
                 return View("Index", autor);
             }
@@ -171,7 +171,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Autor deletado com sucesso!";
 
-            autor.Autores = (await _autorService.GetAutores()).ToPagedList(1, 6);
+            autor.Autores = await (await _autorService.GetAutores()).ToPagedListAsync(1, 6);
 
             return View("Index", autor);
         }

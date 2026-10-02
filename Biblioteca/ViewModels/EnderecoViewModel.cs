@@ -15,6 +15,7 @@ namespace Biblioteca.ViewModels
         [StringLength(50)]
         public string Logradouro { get; set; }
 
+        [Required(ErrorMessage = "O número precisa ser preenchido.")]
         [StringLength(8, ErrorMessage = "O número pode ter de 1 a 8 caracteres")]
         public string Numero { get; set; }
 

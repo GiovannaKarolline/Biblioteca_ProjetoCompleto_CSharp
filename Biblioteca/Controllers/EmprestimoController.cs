@@ -33,7 +33,7 @@ namespace Biblioteca.Controllers
             {
                 emprestimoViewModel.UsuarioId = emprestimo.UsuarioId;
                 emprestimoViewModel.DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                emprestimoViewModel.DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day);
+                emprestimoViewModel.DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month), DateTime.Now.Day).AddMonths(3);
                 emprestimoViewModel.Copias = new List<Copia>();
 
                 if(emprestimo.Copias is not null)
@@ -44,7 +44,7 @@ namespace Biblioteca.Controllers
             else
             {
                 emprestimoViewModel.DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-                emprestimoViewModel.DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day);
+                emprestimoViewModel.DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month), DateTime.Now.Day).AddMonths(3);
                 emprestimoViewModel.Copias = new List<Copia>();
                 emprestimoViewModel.Finalizado = false;
                 emprestimoViewModel.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
@@ -131,7 +131,7 @@ namespace Biblioteca.Controllers
             {
                 Copias = emprestimo.Copias,
                 DataDevolucao = null,
-                DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month) + 3, DateTime.Now.Day),
+                DataPrevistaDevolucao = new DateOnly(DateTime.Now.Year, (DateTime.Now.Month), DateTime.Now.Day).AddMonths(3),
                 DataRetirada = new DateOnly(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day),
                 Finalizado = true,
                 UsuarioId = emprestimo.UsuarioId,

@@ -97,7 +97,7 @@ namespace Biblioteca.Controllers
 
             ViewData["Sucesso"] = "Endereço atualizado com sucesso!";
 
-            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6);
+            endereco.Enderecos = await (await _enderecoService.GetEnderecos()).ToPagedListAsync(1, 6);
 
             return View("Index", endereco);
         }

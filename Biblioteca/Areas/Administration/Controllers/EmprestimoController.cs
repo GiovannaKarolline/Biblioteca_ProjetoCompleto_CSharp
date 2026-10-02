@@ -33,9 +33,10 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             EmprestimoViewModel emprestimo = new EmprestimoViewModel();
 
-            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(paginaAtual ?? 1, 6);
+            emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(paginaAtual ?? 1, 6);
             emprestimo.Usuarios = await _usuarioService.GetUsuarios();
             emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+            emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
             if (emprestimo.Emprestimos.IsNullOrEmpty())
             {
@@ -56,9 +57,10 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o empréstimo (modelo/dados inválidos).";
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -92,14 +94,20 @@ namespace Biblioteca.Areas.Administration.Controllers
             try
             {
                 resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
+
+                if (emprestimo.DataDevolucao is null || emprestimo.DataDevolucao != DateOnly.MinValue)
+                {
+                    await _copiaService.EmprestarCopias(emprestimo.Copias);
+                }
             }
             catch (Exception exception)
             {
                 ViewData["Falha"] = exception.Message;
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -108,18 +116,20 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar o empréstimo (falha ao criar).";
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
 
             ViewData["Sucesso"] = "Empréstimo criado com sucesso!";
 
-            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+            emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
             emprestimo.Usuarios = await _usuarioService.GetUsuarios();
             emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+            emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
             return View("Index", emprestimo);
         }
@@ -132,7 +142,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (modelo/dados inválidos).";
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -149,7 +159,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -160,7 +170,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o empréstimo (falha ao atualizar).";
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -169,7 +179,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Empréstimo atualizado com sucesso!";
 
-            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+            emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
             emprestimo.Usuarios = await _usuarioService.GetUsuarios();
             emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -183,7 +193,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o endereço (Guid inválido).";
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -200,7 +210,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -211,7 +221,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o endereço (falha ao deletar).";
 
-                emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+                emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 
@@ -220,7 +230,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             ViewData["Sucesso"] = "Endereço deletado com sucesso!";
 
-            emprestimo.Emprestimos = (await _emprestimoService.GetEmprestimos()).ToPagedList(1, 6);
+            emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
             emprestimo.Usuarios = await _usuarioService.GetUsuarios();
             emprestimo.CopiasExistentes = await _copiaService.GetCopias();
 

@@ -18,83 +18,6 @@
 }
 else
 {
-    @* @if (Model.Usuarios is null || Model.Usuarios.Count() < 1)
-    {
-        <span title="Não há registros de usuários.">
-            <button class="btn btn-primary" disabled>+ Adicionar novo endereço</button>
-        </span>
-
-    }
-    else
-    {
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar novo endereço</button>
-    }
-
-    <br />
-
-    <div class="modal fade" id="criar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content card">
-                <div class="modal-body">
-                    <form asp-area="Administration" asp-controller="Endereco" asp-action="CriarEndereco" method="post">
-
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5">Adicionar novo endereço</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                        </div>
-
-                        <br />
-                        
-                        <label asp-for="UsuarioId">Dono do endereço</label>
-                        <select asp-for="UsuarioId" asp-items="@(new SelectList(Model.Usuarios, "Id", "UserName"))" class="form-select" placeholder="Quem mora neste endereço?">
-                        </select>
-                        <span asp-validation-for="UsuarioId"></span>
-
-                        <br />
-
-                        <label asp-for="TipoLogradouro">Tipo de Logradouro</label>
-                        <select asp-for="TipoLogradouro" asp-items="@(Html.GetEnumSelectList<TipoLogradouro>())" class="form-select" placeholder="Tipo de Logradouro">
-                        </select>
-                        <span asp-validation-for="TipoLogradouro"></span>
-
-                        <br />
-
-                        <label asp-for="Logradouro">Logradouro</label>
-                        <input asp-for="Logradouro" class="form-control" placeholder="Logradouro" />
-                        <span asp-validation-for="Logradouro"></span>
-
-                        <br />
-
-                        <label asp-for="Numero">Número</label>
-                        <input asp-for="Numero" type="number" class="form-control" placeholder="Número" />
-                        <span asp-validation-for="Numero"></span>
-
-                        <br />
-
-                        <label asp-for="Cep">CEP</label>
-                        <input asp-for="Cep" class="form-control" placeholder="CEP" />
-                        <span asp-validation-for="Cep"></span>
-
-                        <br />
-
-                        <label asp-for="Complemento">Complemento</label>
-                        <input asp-for="Complemento" class="form-control" placeholder="Complemento" />
-                        <span asp-validation-for="Complemento"></span>
-           
-                        <br />
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Adicionar</button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> *@
-
-
     <div class="tabela_listar">
 
         <table class="table table-responsive text-center table-striped">
@@ -138,20 +61,7 @@ else
 
                                                 <input hidden asp-for="Id" value="@endereco.Id" />
 
-                                                <br />
-
-                                                @if (Model.Usuarios is not null)
-                                                {
-                                                    <label asp-for="UsuarioId">Dono do endereço</label>
-                                                    <select asp-for="UsuarioId" asp-items="@(new SelectList(Model.Usuarios, "Id", "UserName"))" class="form-select" placeholder="Quem mora neste endereço?">
-                                                    </select>
-                                                    <span asp-validation-for="UsuarioId"></span>
-                                                }
-                                                else
-                                                {
-                                                    <label>Dono do endereço</label>
-                                                    <input class="form-control" value="@endereco.Usuario.UserName" disabled />
-                                                }
+                                                <input hidden asp-for="UsuarioId" value="@endereco.UsuarioId" />
 
                                                 <br />
 
@@ -197,70 +107,6 @@ else
                                     </div>
                                 </div>
                             </div>
-
-                            @*
-                             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletar-@endereco.Id">Deletar</button>
-
-                             <div class="modal fade" id="deletar-@endereco.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content card">
-
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar endereço</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancelar"></button>
-                                        </div>
-
-                                        <div class="modal-body">
-
-                                            <form class="text-start" asp-area="Administration" asp-controller="Endereco" asp-action="DeletarEndereco" method="post">
-
-                                                <input hidden asp-for="Id" value="@endereco.Id" />
-
-                                                <br />
-
-                                                <label>Dono do endereço</label>
-                                                <input class="form-control" value="@endereco.Usuario.UserName" disabled />
-
-                                                <br />
-
-                                                <label>Tipo de Logradouro</label>
-                                                <input class="form-control" value="@endereco.TipoLogradouro" disabled />
-
-                                                <br />
-
-                                                <label>Logradouro</label>
-                                                <input class="form-control" value="@endereco.Logradouro" disabled>
-
-                                                <br />
-
-                                                <label>Número</label>
-                                                <input class="form-control" value="@endereco.Numero" disabled />
-
-                                                <br />
-
-                                                <label>CEP</label>
-                                                <input class="form-control" value="@endereco.Cep" disabled />
-
-                                                <br />
-
-                                                <label>Complemento</label>
-                                                <input class="form-control" value="@endereco.Complemento" disabled />
-
-                                                <br />
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <button type="submit" class="btn btn-primary">Deletar</button>
-                                                </div>
-
-                                            </form>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div> *@
-
                         </div>
                     </td>
                 </tr>

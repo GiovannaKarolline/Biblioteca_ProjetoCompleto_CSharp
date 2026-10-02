@@ -24,7 +24,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             CategoriaViewModel categoria = new CategoriaViewModel();
 
-            categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(paginaAtual ?? 1, 6);
+            categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(paginaAtual ?? 1, 6);
 
             if (categoria.Categorias.IsNullOrEmpty())
             {
@@ -45,7 +45,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar a categoria (modelo/dados inválidos).";
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
@@ -62,7 +62,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
@@ -71,14 +71,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível criar a categoria (falha ao criar).";
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
 
             ViewData["Sucesso"] = "Categoria criada com sucesso!";
 
-            categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+            categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
             return View("Index", categoria);
         }
@@ -90,7 +90,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar a categoria (modelo/dados inválidos).";
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
@@ -107,7 +107,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
@@ -116,14 +116,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar a categoria (falha ao atualizar).";
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
 
             ViewData["Sucesso"] = "Categoria atualizada com sucesso!";
 
-            categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+            categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
             return View("Index", categoria);
         }
@@ -135,7 +135,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar a categoria (Guid inválido).";
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
@@ -152,7 +152,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
@@ -161,14 +161,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar a categoria (falha ao deletar).";
 
-                categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+                categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
                 return View("Index", categoria);
             }
 
             ViewData["Sucesso"] = "Categoria deletada com sucesso!";
 
-            categoria.Categorias = (await _categoriaService.GetCategorias()).ToPagedList(1, 6);
+            categoria.Categorias = await (await _categoriaService.GetCategorias()).ToPagedListAsync(1, 6);
 
             return View("Index", categoria);
         }

@@ -28,19 +28,19 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             EnderecoViewModel endereco = new EnderecoViewModel();
 
-            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(paginaAtual ?? 1, 6);
+            endereco.Enderecos = await (await _enderecoService.GetEnderecos()).ToPagedListAsync(paginaAtual ?? 1, 6);
             endereco.Usuarios = (await _usuarioService.GetUsuarios()).ToList();
 
             if (endereco.Enderecos.IsNullOrEmpty())
             {
                 ViewData["Falha"] = "Não foi possível listar os endereços (lista vazia ou nula).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             ViewData["Sucesso"] = "Endereços listados com sucesso!";
 
-            return View(endereco);
+            return View("Index", endereco);
         }
 
         [HttpPost]
@@ -88,7 +88,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível atualizar o endereço (modelo/dados inválidos).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             Endereco? resultadoAtualizacao;
@@ -101,21 +101,21 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View("CriarEndereco", endereco);
+                return View("Index", endereco);
             }
 
             if (resultadoAtualizacao == null)
             {
                 ViewData["Falha"] = "Não foi possível atualizar o endereço (falha ao atualizar).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             ViewData["Sucesso"] = "Endereço atualizado com sucesso!";
 
-            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6);
+            endereco.Enderecos = await (await _enderecoService.GetEnderecos()).ToPagedListAsync(1, 6);
 
-            return View("AtualizarEndereco", endereco);
+            return View("Index", endereco);
         }
 
         [HttpGet]
@@ -123,10 +123,10 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             EnderecoViewModel endereco = new EnderecoViewModel()
             {
-                Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6)
+                Enderecos = await (await _enderecoService.GetEnderecos()).ToPagedListAsync(1, 6)
             };
 
-            return View(endereco);
+            return View("Index", endereco);
         }
 
         [HttpPost]
@@ -136,7 +136,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o endereço (Guid inválido).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             Endereco? resultadoDeletar;
@@ -149,21 +149,21 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = exception.Message;
 
-                return View("CriarEndereco", endereco);
+                return View("Index", endereco);
             }
 
             if (resultadoDeletar == null)
             {
                 ViewData["Falha"] = "Não foi possível deletar o endereço (falha ao deletar).";
 
-                return View(endereco);
+                return View("Index", endereco);
             }
 
             ViewData["Sucesso"] = "Endereço deletado com sucesso!";
 
-            endereco.Enderecos = (await _enderecoService.GetEnderecos()).ToPagedList(1, 6);
+            endereco.Enderecos = await (await _enderecoService.GetEnderecos()).ToPagedListAsync(1, 6);
 
-            return View("DeletarEndereco", endereco);
+            return View("Index", endereco);
         }
 
     }

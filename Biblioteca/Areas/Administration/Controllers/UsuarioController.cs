@@ -29,7 +29,7 @@ namespace Biblioteca.Areas.Administration.Controllers
         {
             UsuarioViewModel usuario = new UsuarioViewModel();
 
-            usuario.Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(paginaAtual ?? 1, 6);
+            usuario.Usuarios = await (await _usuarioService.GetUsuarios()).ToPagedListAsync(paginaAtual ?? 1, 6);
 
             if (usuario.Usuarios.IsNullOrEmpty())
             {
@@ -131,7 +131,7 @@ namespace Biblioteca.Areas.Administration.Controllers
 
             UsuarioViewModel proximoUsuario = new UsuarioViewModel()
             {
-                Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6)
+                Usuarios = await (await _usuarioService.GetUsuarios()).ToPagedListAsync(1, 6)
             };
 
             return View("Index", proximoUsuario);
@@ -146,7 +146,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o usuário (Guid inválido).";
 
-                return View("Index", new UsuarioViewModel() { Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6) });
+                return View("Index", new UsuarioViewModel() { Usuarios = await (await _usuarioService.GetUsuarios()).ToPagedListAsync(1, 6) });
             }
 
             Usuario? resultadoDeletar;
@@ -166,14 +166,14 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 ViewData["Falha"] = "Não foi possível deletar o usuário (falha ao deletar).";
 
-                return View("Index", new UsuarioViewModel() { Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6) });
+                return View("Index", new UsuarioViewModel() { Usuarios = await (await _usuarioService.GetUsuarios()).ToPagedListAsync(1, 6) });
             }
 
             ViewData["Sucesso"] = "Usuário deletado com sucesso!";
 
             UsuarioViewModel proximoUsuario = new UsuarioViewModel()
             {
-                Usuarios = (await _usuarioService.GetUsuarios()).ToPagedList(1, 6)
+                Usuarios = await (await _usuarioService.GetUsuarios()).ToPagedListAsync(1, 6)
             };
 
             return View("Index", proximoUsuario);

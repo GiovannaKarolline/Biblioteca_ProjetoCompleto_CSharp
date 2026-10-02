@@ -24,6 +24,12 @@ else
         </span>
 
     }
+    else if (Model.CopiasDisponiveis is null || Model.CopiasDisponiveis.Count() < 1)
+    {
+        <span title="Não há registros de cópias disponíveis para empréstimo.">
+            <button class="btn btn-primary" disabled>+ Adicionar novo empréstimo</button>
+        </span>
+    }
     else
     {
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#criar">+ Adicionar novo empréstimo</button>
@@ -68,11 +74,11 @@ else
                             <input id="possuiDataDevolucao" type="checkbox" />
                             <label>Possui data de devolução?</label>
 
-                            <div id="campoDataDevolucao" class="d-none">
+                            <div id="campoDataDevolucaoCriacao" class="d-none">
 
                                 <br />
 
-                                <label asp-for="DataDevolucao">Data da Devolucao</label>
+                                <label asp-for="DataDevolucao">Data da Devolução</label>
                                 <input asp-for="DataDevolucao" type="date" value="@null" class="form-control" placeholder="Data da Devolucao" />
                                 <span asp-validation-for="DataDevolucao"></span>
 
@@ -85,9 +91,9 @@ else
                             <label>Escolha as cópias inclusas: </label>
                             <br />
 
-                            @if (Model.CopiasExistentes is not null)
+                            @if (Model.CopiasDisponiveis is not null)
                             {
-                                @foreach (Copia copia in Model.CopiasExistentes)
+                                @foreach (Copia copia in Model.CopiasDisponiveis)
                                 {
                                     <input name="CopiasSelecionadas" value="@copia.Id" type="checkbox" />
                                     <label>@(copia.ObraLiteraria.Titulo + " - ISBN: " + copia.ObraLiteraria.ISBN)</label>
@@ -183,8 +189,8 @@ else
 
                                                 <br />
 
-                                                <label asp-for="DataDevolucao">Data da Devolucao</label>
-                                                <input asp-for="DataDevolucao" type="date" class="form-control" placeholder="Data da Devolucao" value="@(emprestimo.DataDevolucao?.ToString("yyyy-MM-dd") ?? "Não houve devolução.")" />
+                                                <label asp-for="DataDevolucao">Data da Devolução</label>
+                                                <input asp-for="DataDevolucao" type="date" value="@emprestimo.DataDevolucao?.ToString("yyyy-MM-dd")" class="form-control" placeholder="Data da Devolucao" />
                                                 <span asp-validation-for="DataDevolucao"></span>
 
                                                 <br />
@@ -193,7 +199,7 @@ else
 
                                                 <fieldset class="fieldsetParaModal">
                                                     <div class="form-group">
-                                                        
+
                                                         <fieldset>
 
                                                             @if (Model.CopiasExistentes is not null)
@@ -225,12 +231,12 @@ else
 
                                                 <fieldset class="fieldsetParaModal">
 
-                                                    <input asp-for="Finalizado" value="@true" type="radio" />
+                                                    <input name="Finalizado" value="@true" type="radio" checked />
                                                     <label>Finalizado</label>
 
                                                     <br />
 
-                                                    <input asp-for="Finalizado" value="@false" type="radio" />
+                                                    <input name="Finalizado" id="emprestimoAberto" value="@false" type="radio" />
                                                     <label>Aberto</label>
 
                                                     <br />
@@ -327,17 +333,17 @@ else
 <script>
 
     let checkbox = document.getElementById("possuiDataDevolucao");
-    let campoDataDevolucao = document.getElementById("campoDataDevolucao");
+    let campoDataDevolucaoCriacao = document.getElementById("campoDataDevolucaoCriacao");
 
     checkbox.addEventListener("change", function(){
 
-        if(campoDataDevolucao.classList.contains("d-none")){
+        if(campoDataDevolucaoCriacao.classList.contains("d-none")){
 
-            campoDataDevolucao.classList.remove("d-none")
+            campoDataDevolucaoCriacao.classList.remove("d-none")
 
         }else{
 
-            campoDataDevolucao.classList.add("d-none")
+            campoDataDevolucaoCriacao.classList.add("d-none")
         }
 
     })

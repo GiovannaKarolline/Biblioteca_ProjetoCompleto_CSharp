@@ -53,3 +53,18 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(){
+
+        if(typeof $.validator !== 'undefined'){
+
+            $.validator.setDefaults({
+                ignore: []
+            });
+
+        }
+    });
+
+</script>

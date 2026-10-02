@@ -32,6 +32,8 @@ namespace Biblioteca.ViewModels
 
         public IEnumerable<Copia>? CopiasExistentes { get; set; }
 
+        public IEnumerable<Copia>? CopiasDisponiveis { get; set; }
+
         public IEnumerable<Guid>? CopiasSelecionadas { get; set; }
     }
 }

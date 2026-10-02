@@ -68,6 +68,7 @@
                         <option value="" disabled>Selecione um tipo de logradouro</option>
 
                     </select>
+                    <span asp-validation-for="Endereco.TipoLogradouro"></span>
                 </fieldset>
 
                 <br />
@@ -75,6 +76,7 @@
                 <div class="form-group">
                     <label asp-for="@Model.Endereco.Logradouro">Logradouro: </label>
                     <input class="form-control" asp-for="@Model.Endereco.Logradouro" type="text" />
+                    <span asp-validation-for="Endereco.Logradouro"></span>
                 </div>
 
                 <br />
@@ -82,6 +84,7 @@
                 <div class="form-group">
                     <label asp-for="@Model.Endereco.Numero">Número: </label>
                     <input class="form-control" asp-for="@Model.Endereco.Numero" type="text" />
+                    <span asp-validation-for="Endereco.Numero"></span>
                 </div>
 
                 <br />
@@ -89,6 +92,7 @@
                 <div class="form-group">
                     <label asp-for="@Model.Endereco.Complemento">Complemento: </label>
                     <input class="form-control" asp-for="@Model.Endereco.Complemento" />
+                    <span asp-validation-for="Endereco.Complemento"></span>
                 </div>
 
                 <br />
@@ -96,6 +100,7 @@
                 <div class="form-group">
                     <label asp-for="@Model.Endereco.Cep">CEP: </label>
                     <input class="form-control" asp-for="@Model.Endereco.Cep" />
+                    <span asp-validation-for="Endereco.Cep"></span>
                 </div>
 
             </div>
@@ -117,6 +122,17 @@
 </div>
 
 <script defer>
+
+    document.addEventListener("DOMContentLoaded", function(){
+
+        if(typeof $.validator !== 'undefined'){
+
+            $.validator.setDefaults({
+                ignore: []
+            });
+
+        }
+    });
 
     let formConta = document.getElementById('divConta')
 

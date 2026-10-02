@@ -255,6 +255,17 @@ else
                                                     <input asp-for="FotoCapa" type="url" class="form-control" placeholder="Foto de Capa" value="@obra.FotoCapa" />
                                                     <span asp-validation-for="FotoCapa"></span>
 
+                                                    @* 
+                                                        futura prévia da imagem posta no campo acima
+
+                                                    <br />
+
+                                                    <div class="card">
+                                                        <img style="width: 100px;" id="imagemDeCapaPreview" src="@Model.FotoCapa"/>
+                                                    </div> 
+                                                    
+                                                    *@
+
                                                     <br />
 
                                                     <div class="form-group">
@@ -381,3 +392,36 @@ else
     }
 
 }
+
+<script defer>
+
+    document.addEventListener("DOMContentLoaded", function(){
+
+        if(typeof $.validator !== 'undefined'){
+
+            $.validator.setDefaults({
+                ignore: []
+            });
+
+        }
+    });
+
+    //futura prévia da imagem escolhida para a obra literária
+
+    // let imagemDeCapaPreview = document.getElementById('ImagemDeCapaPreview')
+    
+    // let linkDaImagemDeCapa = document.getElementById('FotoCapa')
+    
+    // linkDaImagemDeCapa.addEventListener('input', function (){
+        
+    //     let valorLinkDaImagemDeCapa = linkDaImagemDeCapa.getAttribute('value')
+
+    //     if(URL.canParse(valorLinkDaImagemDeCapa)){
+
+    //         imagemDeCapaPreview.setAttribute("src", valorLinkDaImagemDeCapa)
+
+    //     }
+
+    // })
+
+</script>

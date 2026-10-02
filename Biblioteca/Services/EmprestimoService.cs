@@ -28,7 +28,18 @@ namespace Biblioteca.Services
                 emprestimoRegistrado.DataDevolucao = emprestimo.DataDevolucao;
                 emprestimoRegistrado.Finalizado = emprestimo.Finalizado;
 
-                await EditarCopiasEmprestimo(emprestimo.CopiasSelecionadas, emprestimo.Id);
+                if(emprestimo.CopiasSelecionadas is not null)
+                {
+                    await EditarCopiasEmprestimo(emprestimo.CopiasSelecionadas, emprestimo.Id);
+                }
+                else
+                {
+                    if (emprestimoRegistrado.DataDevolucao is not null || emprestimoRegistrado.DataDevolucao == DateOnly.MinValue)
+                    {
+                        await RealizarDevolucao(emprestimoRegistrado.Id);
+                    }
+
+                }
 
                 await _emprestimoRepository.AtualizarEmprestimo(emprestimoRegistrado);
 
@@ -181,10 +192,7 @@ namespace Biblioteca.Services
 
                             if (emprestimo.Finalizado == true && emprestimo.DataDevolucao == null)
                             {
-                                if (emprestimo.DataDevolucao is null)
-                                {
-                                    copia.StatusDisponibilidade = false;
-                                }
+                                copia.StatusDisponibilidade = false;
                             }
 
                             if (emprestimo.Copias is null) //preencher o modelo
@@ -214,12 +222,9 @@ namespace Biblioteca.Services
                         {
                             copiasAtualizadas.Remove(copia);
 
-                            if (emprestimo.Finalizado == true && emprestimo.DataDevolucao == null)
+                            if (emprestimo.Finalizado == true && emprestimo.DataDevolucao is not null)
                             {
-                                if (emprestimo.DataDevolucao is null)
-                                {
-                                    copia.StatusDisponibilidade = true;
-                                }
+                                copia.StatusDisponibilidade = true;
                             }
                         }
                     }

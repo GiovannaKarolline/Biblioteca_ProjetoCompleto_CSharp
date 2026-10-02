@@ -116,5 +116,16 @@ namespace Biblioteca.Services
                 throw new ArgumentException("Lista de cópias nula.");
             }
         }
+
+        public async Task<Copia?> EmprestarCopia(Copia copia)
+        {
+            if(copia is not null)
+            {
+                copia.StatusDisponibilidade = false;
+                await _copiaRepository.AtualizarCopia(copia);
+            }
+
+            return copia;
+        }
     }
 }

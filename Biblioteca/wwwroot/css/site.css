@@ -2,12 +2,18 @@ html {
     font-size: 14px;
     margin: 0;
     padding: 0;
+    font-size: 16px;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+@media (max-width: 1300px) {
+
+    .card {
+        min-width: 30vh
     }
+
+        .card img {
+            height: 60vh;
+        }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -44,6 +50,7 @@ span {
 .navbar {
     margin-bottom: 2vh !important;
     vertical-align: middle;
+    height: 7.5vh;
 }
 
 .navbar-dark {
@@ -79,14 +86,27 @@ span {
     padding: 10px;
     border-radius: 10px;
     filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+    width: 31vh;
+    
 }
 
+    .card .card-body{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
     .card img {
-        border-radius: 10px
+        border-radius: 10px;
+        height: 43vh;
+        object-fit: cover
     }
 
     .card button {
         border-radius: 5px;
+        width: 100%;
+        margin-bottom: 0;
+        
     }
 
 .material-symbols-rounded {
@@ -132,7 +152,7 @@ span {
         background-color: #313946;
     }
 
-.btn-danger {
+.table .btn-danger {
     border: 1px solid #a70404;
     margin-left: 1vh;
 }
@@ -200,6 +220,11 @@ th {
 
 .dropdown-toggle {
     margin: 0 auto;
+    background-color: #252c37;
+}
+
+.dropdown-menu {
+    background-color: #252c37;
 }
 
 .icone-emprestimo {
@@ -214,6 +239,7 @@ th {
     color: #cbdae1ff;
     font-weight: 600;
     font-size: 1.7vh;
+    margin-bottom: 2.5vh;
 }
 
 .contador {
