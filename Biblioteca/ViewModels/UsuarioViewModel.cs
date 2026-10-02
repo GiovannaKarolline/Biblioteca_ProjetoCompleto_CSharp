@@ -2,6 +2,8 @@
 using Biblioteca.Models;
 using JetBrains.Annotations;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
+using System.Runtime.ConstrainedExecution;
 using X.PagedList;
 
 namespace Biblioteca.ViewModels
@@ -15,7 +17,8 @@ namespace Biblioteca.ViewModels
         public string NomeUsuario { get; set; }
 
         [Required(ErrorMessage = "A senha precisa ser fornecida.")]
-        [DataType(DataType.Password, ErrorMessage = "A senha precisa ser válida (pelo menos 6 caracteres, caractere especial e números)")]
+        [DataType(DataType.Password)]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,}$", ErrorMessage = "A senha precisa ser válida (pelo menos 6 caracteres, uma letra maiúscula, caractere especial e números)")]
         public string Senha { get; set; }
 
         [Required(ErrorMessage = "O cargo do usuário precisa ser definido.")]

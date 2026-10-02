@@ -95,7 +95,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             {
                 resultadoCriacao = await _emprestimoService.CriarEmprestimo(emprestimo);
 
-                if (emprestimo.DataDevolucao is null || emprestimo.DataDevolucao != DateOnly.MinValue)
+                if (emprestimo.DataDevolucao is null || emprestimo.DataDevolucao == DateOnly.MinValue)
                 {
                     await _copiaService.EmprestarCopias(emprestimo.Copias);
                 }
@@ -145,6 +145,7 @@ namespace Biblioteca.Areas.Administration.Controllers
                 emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -162,6 +163,7 @@ namespace Biblioteca.Areas.Administration.Controllers
                 emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -173,6 +175,7 @@ namespace Biblioteca.Areas.Administration.Controllers
                 emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -182,6 +185,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
             emprestimo.Usuarios = await _usuarioService.GetUsuarios();
             emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+            emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
             return View("Index", emprestimo);
         }
@@ -196,6 +200,7 @@ namespace Biblioteca.Areas.Administration.Controllers
                 emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -213,6 +218,7 @@ namespace Biblioteca.Areas.Administration.Controllers
                 emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -224,6 +230,7 @@ namespace Biblioteca.Areas.Administration.Controllers
                 emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
                 emprestimo.Usuarios = await _usuarioService.GetUsuarios();
                 emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+                emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
                 return View("Index", emprestimo);
             }
@@ -233,6 +240,7 @@ namespace Biblioteca.Areas.Administration.Controllers
             emprestimo.Emprestimos = await (await _emprestimoService.GetEmprestimos()).ToPagedListAsync(1, 6);
             emprestimo.Usuarios = await _usuarioService.GetUsuarios();
             emprestimo.CopiasExistentes = await _copiaService.GetCopias();
+            emprestimo.CopiasDisponiveis = await _copiaService.GetCopiasDisponiveis();
 
             return View("Index", emprestimo);
         }

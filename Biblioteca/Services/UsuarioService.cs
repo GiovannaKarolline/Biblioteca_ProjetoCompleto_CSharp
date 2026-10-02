@@ -27,6 +27,8 @@ namespace Biblioteca.Services
                 throw new ArgumentException("Já existe um usuário com este e-mail, então o usuário não pôde ser cadastrado.");
             }
 
+
+
             Usuario novoUsuario = new Usuario() 
             { 
                 UserName = usuario.NomeUsuario,

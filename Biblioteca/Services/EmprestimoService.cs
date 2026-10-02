@@ -10,10 +10,12 @@ namespace Biblioteca.Services
     {
         private readonly IEmprestimoRepository _emprestimoRepository;
         private readonly ICopiaService _copiaService;
-        public EmprestimoService(IEmprestimoRepository emprestimoRepository, ICopiaService copiaService)
+        private readonly ICopiaRepository _copiaRepository;
+        public EmprestimoService(IEmprestimoRepository emprestimoRepository, ICopiaService copiaService, ICopiaRepository copiaRepository)
         {
             _emprestimoRepository = emprestimoRepository;
             _copiaService = copiaService;
+            _copiaRepository = copiaRepository;
         }
 
         public async Task<Emprestimo> AtualizarEmprestimo(Guid id, EmprestimoViewModel emprestimo)
@@ -245,7 +247,7 @@ namespace Biblioteca.Services
         {
             Emprestimo? emprestimo = (await GetEmprestimosByUsuarioId(idUsuario)).FirstOrDefault(emprestimo => emprestimo.Finalizado == false);
 
-            Copia? copia = await _copiaService.GetCopiaById(idCopia);
+            Copia? copia = await _copiaRepository.GetCopiaById(idCopia);
 
             if(copia is null)
             {

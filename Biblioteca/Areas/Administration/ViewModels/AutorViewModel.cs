@@ -7,7 +7,6 @@ namespace Biblioteca.Areas.Administration.ViewModels
     public class AutorViewModel
     {
         [Required(ErrorMessage = "O autor a ser atualizado precisa ser definido.")]
-
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "O primeiro nome do autor precisa ser preenchido.")]

@@ -104,7 +104,7 @@ else
                         </fieldset>
                         <span asp-validation-for="CopiasSelecionadas"></span>
 
-                        <input asp-for="Finalizado" value="@true" type="checkbox" checked hidden />
+                        <input asp-for="Finalizado" value="true" type="checkbox" checked hidden />
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -231,12 +231,12 @@ else
 
                                                 <fieldset class="fieldsetParaModal">
 
-                                                    <input name="Finalizado" value="@true" type="radio" checked />
+                                                    <input name="Finalizado" value="true" type="radio" checked />
                                                     <label>Finalizado</label>
 
                                                     <br />
 
-                                                    <input name="Finalizado" id="emprestimoAberto" value="@false" type="radio" />
+                                                    <input name="Finalizado" id="emprestimoAberto" value="false" type="radio" />
                                                     <label>Aberto</label>
 
                                                     <br />

@@ -50,6 +50,18 @@ namespace Biblioteca.Controllers
                 emprestimoViewModel.UsuarioId = Guid.Parse(_userManager.GetUserId(User));
             }
 
+            List<Copia>? copiasDeletadas = emprestimo.Copias.Where(copia => copia.Deletado == true).ToList();
+
+            if(copiasDeletadas is not null && copiasDeletadas.Count() > 0)
+            {
+                foreach(Copia copia in copiasDeletadas)
+                {
+                    await _emprestimoService.RemoverCopia(copia.Id, emprestimo.UsuarioId);
+
+                    emprestimoViewModel.Copias.Remove(copia);
+                }
+            }
+
             return View("Emprestimo", emprestimoViewModel);
         }
 

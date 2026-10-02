@@ -1,10 +1,12 @@
 ﻿using Biblioteca.Areas.Administration.Services.Interfaces;
+using Biblioteca.Areas.Administration.Views.Emprestimo;
 using Biblioteca.Models;
 using Biblioteca.Repositories;
 using Biblioteca.Repositories.Interfaces;
 using Biblioteca.Services.Interfaces;
 using Biblioteca.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
 
 namespace Biblioteca.Services
 {
@@ -13,12 +15,14 @@ namespace Biblioteca.Services
         private readonly IObraLiterariaRepository _obraRepository;
         private readonly IAutorService _autorService;
         private readonly ICopiaService _copiaService;
+        private readonly IEmprestimoService _emprestimoService;
 
-        public ObraLiterariaService(IObraLiterariaRepository obraRepository, IAutorService autorService, ICopiaService copiaService)
+        public ObraLiterariaService(IObraLiterariaRepository obraRepository, IAutorService autorService, ICopiaService copiaService, IEmprestimoService emprestimoService)
         {
             _obraRepository = obraRepository;
             _autorService = autorService;
             _copiaService = copiaService;
+            _emprestimoService = emprestimoService;
         }
 
         public async Task<ObraLiteraria> AtualizarObraLiteraria(Guid id, ObraLiterariaViewModel obraViewModel)
@@ -113,9 +117,11 @@ namespace Biblioteca.Services
 
                 if(copias is not null)
                 {
+     
                     foreach (Copia copia in copias)
                     {
                         copia.Deletado = true;
+
                     }
                 }
 

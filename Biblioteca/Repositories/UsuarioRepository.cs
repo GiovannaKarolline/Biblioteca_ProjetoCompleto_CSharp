@@ -89,12 +89,12 @@ namespace Biblioteca.Repositories
             return Task.FromResult(usuario);
         }
 
-        public Task<Usuario> AtualizarUsuario(Usuario usuario)
+        public async Task<Usuario> AtualizarUsuario(Usuario usuario)
         {
-            _context.Usuarios.Update(usuario);
+            await _userManager.UpdateAsync(usuario);
             _context.SaveChanges();
 
-            return Task.FromResult(usuario);
+            return await Task.FromResult(usuario);
         }
     }
 }

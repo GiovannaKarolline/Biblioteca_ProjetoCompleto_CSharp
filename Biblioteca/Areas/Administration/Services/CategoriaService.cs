@@ -31,7 +31,7 @@ namespace Biblioteca.Areas.Administration.Services
             throw new ArgumentException("Não foi possível atualizar esta categoria porque não existe uma categoria com este Id.");
         }
 
-        public Task<Categoria> CriarCategoria(CategoriaViewModel categoria)
+        public async Task<Categoria> CriarCategoria(CategoriaViewModel categoria)
         {
             Categoria novaCategoria = new Categoria()
             {
@@ -40,14 +40,14 @@ namespace Biblioteca.Areas.Administration.Services
 
             if (novaCategoria is not null)
             {
-                _categoriaRepository.CriarCategoria(novaCategoria);
+                await _categoriaRepository.CriarCategoria(novaCategoria);
             }
             else
             {
                 throw new ArgumentException("Não foi possível criar a categoria porque o modelo era inválido/nulo.");
             }
 
-            return Task.FromResult(novaCategoria);
+            return await Task.FromResult(novaCategoria);
 
         }
 
@@ -86,7 +86,7 @@ namespace Biblioteca.Areas.Administration.Services
 
             categorias = categorias.Except(categorias.Where(categoria => categoria.Deletado == true));
 
-            return categorias;
+            return await Task.FromResult(categorias);
         }
     }
 }

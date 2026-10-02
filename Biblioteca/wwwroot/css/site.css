@@ -82,31 +82,33 @@ span {
     filter: drop-shadow(0 5px 3px #31394656)
 }
 
-.card {
+.card{
     padding: 10px;
     border-radius: 10px;
     filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
-    width: 31vh;
-    
 }
-
-    .card .card-body{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
+    .card button {
+        border-radius: 5px;
     }
 
-    .card img {
+.card-obra{
+    width: 31vh;
+}
+
+.card-obra .card-body, .card-obra {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+    .card-obra .btn{
+        width: 100%;
+    }
+
+    .card-obra img {
         border-radius: 10px;
         height: 43vh;
         object-fit: cover
-    }
-
-    .card button {
-        border-radius: 5px;
-        width: 100%;
-        margin-bottom: 0;
-        
     }
 
 .material-symbols-rounded {
